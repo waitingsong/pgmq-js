@@ -4,7 +4,8 @@
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/npm-mono-base.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![](https://img.shields.io/badge/lang-TypeScript-blue.svg)]()
-[![ci](https://github.com/waitingsong/npm-mono-base/workflows/ci/badge.svg)](https://github.com/waitingsong/npm-mono-base/actions?query=workflow%3A%22ci%22)
+[![ci](https://github.com/waitingsong/npm-mono-base/actions/workflows/nodejs.yml/badge.svg
+)](https://github.com/waitingsong/npm-mono-base/actions)
 [![codecov](https://codecov.io/gh/waitingsong/npm-mono-base/branch/main/graph/badge.svg?token=Voxor5PtnG)](https://codecov.io/gh/waitingsong/npm-mono-base)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
@@ -14,7 +15,7 @@
 
 ## 安装全局依赖
 ```sh
-npm i -g c8 lerna rollup tsx
+npm i -g c8 lerna madge rollup tsx zx
 ```
 
 ## 创建新项目
@@ -37,7 +38,7 @@ curl -kL https://github.com.cnpmjs.org/waitingsong/npm-mono-base/raw/main/packag
 git add package.json
 git commit -m "chore: initialize"
 npm run bp:add
-git fetch bp -v && git merge bp/main --allow-unrelated-histories -m "Merge remote-tracking branch 'bp/main'"
+npm run bp:sync-force
 
 # 使用目录名作为项目名
 sh init-project.sh

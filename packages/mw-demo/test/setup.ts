@@ -3,10 +3,10 @@
 import assert from 'node:assert'
 
 import { createApp, close, createHttpRequest } from '@midwayjs/mock'
-import { Application } from '@mwcp/share'
+import type { Application } from '@mwcp/share'
 import type { Suite } from 'mocha'
 
-import { TestConfig, testConfig } from './root.config.js'
+import { type TestConfig, testConfig } from './root.config.js'
 
 
 let app: Application
@@ -61,9 +61,11 @@ async function updateConfig(mockApp: Application, config: TestConfig): Promise<v
 }
 
 async function updateConfig2(mockApp: Application, config: TestConfig): Promise<void> {
-  void mockApp, config
+  void mockApp
+  void config
 }
 
 async function clean(mockApp: Application, config: TestConfig): Promise<void> {
-  void mockApp, config
+  void mockApp
+  void config
 }
