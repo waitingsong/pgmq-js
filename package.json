@@ -18,7 +18,7 @@
     "@waiting/shared-types": "^23.20.2",
     "autocannon": "7",
     "cross-env": "7",
-    "eslint": "8",
+    "eslint": "9",
     "mocha": "10",
     "mwtsc": "^1.11.2",
     "swagger-ui-dist": "^5.17.14",
