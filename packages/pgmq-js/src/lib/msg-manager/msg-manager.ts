@@ -35,6 +35,7 @@ export class MsgManager {
   // #region read
 
   /**
+   * Read a message from the queue
    * @param vt Time in seconds that the message become invisible after reading
    */
   async read<T extends object = object>(queue: string, vt = 0): Promise<Message<T> | null> {
@@ -43,6 +44,7 @@ export class MsgManager {
   }
 
   /**
+   * Read multiple messages from the queue
    * @param vt Time in seconds that the message become invisible after reading
    */
   async readBatch<T extends object = object>(queue: string, vt: number, numMessages: number): Promise<Message<T>[]> {
@@ -93,7 +95,6 @@ export class MsgManager {
     const ret = res.rows.map(row => row.archive)
     return ret
   }
-
 
   // #region setVt
 
