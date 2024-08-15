@@ -1,4 +1,4 @@
-# NPM mono repository
+# @waiting/pgmq-js repository
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/npm-mono-base.svg)]()
@@ -17,57 +17,6 @@
 ```sh
 npm i -g c8 lerna madge rollup tsx zx
 ```
-
-## 创建新项目
-
-### 克隆新项目仓库
-
-```sh
-git clone git@git.foo.com:<group>/<project> && cd <project>
-# 比如
-git clone git@git.foo.com:foo/uc && cd uc
-```
-
-### 初始化仓库
-
-```sh
-# GitLab
-git archive --remote=git@github.com:waitingsong/npm-mono-base.git HEAD package.json | tar -x > package.json
-# GitHub
-curl -kL https://github.com.cnpmjs.org/waitingsong/npm-mono-base/raw/main/package.json > package.json
-git add package.json
-git commit -m "chore: initialize"
-npm run bp:add
-npm run bp:sync-force
-
-# 使用目录名作为项目名
-sh init-project.sh
-# 或者指定项目名
-sh init-project.sh @foo/my_project
-
-# 初始化依赖
-npm install
-```
-
-### 根据模板选择初始化子包
-
-#### 创建目录
-```sh
-npm run add:pkg my_pkg
-```
-
-#### 更新项目配置
-
-1. 更新仓库顶级 `package.json` 文件 `description` 等字段
-2. 修改**新建**各子包配置文件 `package.json`
-3. 更新本文档 [Packages](#packages) 表格的子包信息
-
----
-
-
-
-
-
 
 
 
