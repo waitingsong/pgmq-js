@@ -1,13 +1,16 @@
 {
-  "name": "pgmq-js",
+  "name": "@waiting/pgmq-js",
   "author": "waiting",
   "version": "0.0.0",
-  "description": "npm boilerplate",
+  "description": "Postgres Message Queue (PGMQ) JavaScript Client Library for Midway.js",
   "private": false,
   "keywords": [
-    "种子项目",
-    "ESM",
-    "typescript",
+    "pgmq",
+    "message-queue",
+    "queues",
+    "postgres",
+    "midway",
+    "plugin",
     "ts"
   ],
   "type": "module",
@@ -23,15 +26,17 @@
     "./package.json": "./package.json"
   },
   "bugs": {
-    "url": "https://github.com/waitingsong/npm-mono-base/issues"
+    "url": "https://github.com/waitingsong/pgmq-js/issues"
   },
-  "homepage": "https://github.com/waitingsong/npm-mono-base#readme",
+  "homepage": "https://github.com/waitingsong/pgmq-js#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/waitingsong/npm-mono-base"
+    "url": "https://github.com/waitingsong/pgmq-js"
   },
   "license": "MIT",
   "dependencies": {
+    "knex": "^3.1.0",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
   },
@@ -45,10 +50,10 @@
     "tsconfig.json",
     "tsconfig.base.json",
     "asset",
-    "src/**/*.ts",
     "bin",
     "database",
     "dist",
+    "src",
     "!**/*.spec.*",
     "!**/*.tsbuildinfo"
   ],
