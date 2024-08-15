@@ -1,12 +1,12 @@
 # @waiting/pgmq-js repository
 
 
-[![GitHub tag](https://img.shields.io/github/tag/waitingsong/npm-mono-base.svg)]()
+[![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![](https://img.shields.io/badge/lang-TypeScript-blue.svg)]()
-[![ci](https://github.com/waitingsong/npm-mono-base/actions/workflows/nodejs.yml/badge.svg
-)](https://github.com/waitingsong/npm-mono-base/actions)
-[![codecov](https://codecov.io/gh/waitingsong/npm-mono-base/branch/main/graph/badge.svg?token=Voxor5PtnG)](https://codecov.io/gh/waitingsong/npm-mono-base)
+[![ci](https://github.com/waitingsong/pgmq-js/actions/workflows/nodejs.yml/badge.svg
+)](https://github.com/waitingsong/pgmq-js/actions)
+[![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
@@ -24,10 +24,10 @@ npm i -g c8 lerna madge rollup tsx zx
 
 ## Packages
 
-| Package      | Version                | Dependencies                 | DevDependencies                |
-| ------------ | ---------------------- | ---------------------------- | ------------------------------ |
-| [`demo`]     | [![main-svg]][main-ch] | [![main-d-svg]][main-d-link] | [![main-dd-svg]][main-dd-link] |
-| [`demo-cli`] | [![cli-svg]][cli-ch]   | [![cli-d-svg]][cli-d-link]   | [![cli-dd-svg]][cli-dd-link]   |
+| Package           | Version                |
+| ----------------- | ---------------------- |
+| [`pgmq-js`]       | [![main-svg]][main-ch] |
+| [`@mwcp/pgmq-js`] | [![cli-svg]][cli-ch]   |
 
 ## Initialize and install dependencies
 
@@ -91,14 +91,13 @@ npm run purge
 
 <br>
 
-[`demo`]: https://github.com/waitingsong/npm-mono-base/tree/main/packages/demo
-[main-svg]: https://img.shields.io/npm/v/kmore.svg?maxAge=7200
-[main-ch]: https://github.com/waitingsong/kmore/tree/main/packages/demo/CHANGELOG.md
+[`pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js
+[main-svg]: https://img.shields.io/npm/v/@waiting/pgmq-js.svg?maxAge=7200
+[main-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/CHANGELOG.md
 
 
-[`demo-cli`]: https://github.com/waitingsong/kmore/tree/main/packages/kmore-cli
-[cli-svg]: https://img.shields.io/npm/v/kmore-cli.svg?maxAge=7200
-[cli-ch]: https://github.com/waitingsong/kmore/tree/main/packages/kmore-clie/CHANGELOG.md
-
+[`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
+[cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq-js.svg?maxAge=7200
+[cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
 

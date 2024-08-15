@@ -1,7 +1,7 @@
 {
-  "name": "npm-mono-base",
+  "name": "pgmq-js",
   "version": "1.0.0",
-  "description": "nodejs模板",
+  "description": "Postgres Message Queue (PGMQ) JavaScript Client Library for Midway.js",
   "private": true,
   "type": "module",
   "devDependencies": {
