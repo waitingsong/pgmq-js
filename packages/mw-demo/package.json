@@ -1,0 +1,81 @@
+{
+  "name": "@mwcp/demo",
+  "author": "waiting",
+  "version": "0.0.0",
+  "description": "midway component boilerplate",
+  "private": true,
+  "keywords": [
+    "midway",
+    "IoC",
+    "plugin",
+    "ts"
+  ],
+  "type": "module",
+  "bin": {},
+  "types": "dist/index.d.ts",
+  "imports": {
+    "#package.json": "./package.json",
+    "##/*": "./src/*",
+    "#@/*": "./test/*"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "bugs": {
+    "url": "https://github.com/waitingsong/npm-mono-base/issues"
+  },
+  "homepage": "https://github.com/waitingsong/npm-mono-base#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waitingsong/npm-mono-base"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@mwcp/otel": "37"
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=18.12.0",
+    "@midwayjs/core": ">=3.16.0"
+  },
+  "files": [
+    "README.*.md",
+    "Dockerfile",
+    "npm-shrinkwrap.json",
+    "tsconfig.json",
+    "tsconfig.base.json",
+    "asset",
+    "bin",
+    "database",
+    "dist",
+    "src",
+    "!**/*.spec.*",
+    "!**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm run tsc && tsc-alias",
+    "build:prod": "npm run tsc -- --declaration --declarationMap && tsc-alias",
+    "build:unit": "tsc -p test/tsconfig.json",
+    "clean": "npm run clean:lock && npm run clean:dist && npm run clean:log",
+    "clean:cache": "rm -rf .eslintcache .tsbuildinfo",
+    "clean:dist": "npm run clean:cache && rm -rf dist/*",
+    "clean:lock": "rm -f package-lock.json",
+    "clean:log": "rm -rf ./logs ./run",
+    "cov": "c8 --all npm run test -- --parallel=false",
+    "db:gen": "kmore gen --path ./src",
+    "dev": "cross-env MIDWAY_SERVER_ENV=local mwtsc --watch --run @midwayjs/mock/app",
+    "lint": "eslint --fix --cache src test",
+    "lint:nofix": "eslint --cache src test",
+    "predev": "npm run build",
+    "pretest": "npm run build:unit",
+    "start": "cross-env NODE_ENV=production node ./bootstrap.js",
+    "start:gc": "cross-env NODE_ENV=local node --trace_gc ./bootstrap.js",
+    "test": "cross-env MIDWAY_SERVER_ENV=unittest TS_NODE_PROJECT=test/tsconfig.json mocha --parallel=false",
+    "tsc": "tsc -b"
+  }
+}

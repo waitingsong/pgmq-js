@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "${configDir}/demo/**/*.mts",
+    "${configDir}/demo/**/*.ts",
+    "${configDir}/src/**/*.ts",
+    "${configDir}/src/**/*.mts",
+    "${configDir}/test/**/*.ts",
+    "${configDir}/test/**/*.mts",
+    "${configDir}/test_browser/**/*.ts",
+    "${configDir}/packages/*/src/**/*.ts",
+    "${configDir}/packages/*/test/**/*.ts"
+  ]
+}

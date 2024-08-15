@@ -1,0 +1,112 @@
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: ci-win
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[perf]') }}
+    # if:  github.actor != 'dependabot[bot]'
+
+    strategy:
+      matrix:
+        node: ['lts/*']
+        os: [windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # - name: Cache
+      #   uses: actions/cache@v4
+      #   id: cache-lerna-win
+      #   env:
+      #     cache-name: cache-lerna-win
+      #   with:
+      #     path: |
+      #       node_modules
+      #       package-lock.json
+      #       packages/*/.tsbuildinfo
+      #       packages/*/dist
+      #       packages/*/node_modules
+      #       C:\npm\prefix\node_modules
+      #     key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node }}-
+
+      - name: Prepare
+        shell: bash
+        run: |
+          pwd
+          uname -a
+          npm -v && node -v
+          git --version
+          openssl version
+          git config --local core.autocrlf false
+          git config --local core.eol lf
+
+      - name: Install Dependencies
+        timeout-minutes: 15
+        shell: bash
+        run: |
+          export cwd=`pwd`
+          npm i --no-audit -g c8 lerna madge rollup tsx zx
+          npm i
+        env:
+          CI: true
+
+      - name: Build
+        shell: bash
+        run: |
+          pwd
+          whoami
+          export cwd=`pwd`
+          . .scripts/ci/ci-env.sh
+          .scripts/ci/ci-prepare.sh
+          npm run build --if-present
+        env:
+          CI: true
+
+      # - name: Lint
+      #   shell: bash
+      #   run: |
+      #     export cwd=`pwd`
+      #     . .scripts/ci/ci-env.sh
+      #     .scripts/ci/ci-prepare.sh
+      #     npm run lint:s
+      #     npm run lint:cycle
+      #   env:
+      #     CI: true
+
+      - name: Testing
+        shell: bash
+        run: |
+          export cwd=`pwd`
+          . .scripts/ci/ci-env.sh
+          .scripts/ci/ci-prepare.sh
+          npm run test
+        env:
+          CI: true
+
+      - name: Coverage
+        shell: bash
+        run: |
+          export cwd=`pwd`
+          . .scripts/ci/ci-env.sh
+          .scripts/ci/ci-prepare.sh
+          npm run ci
+        env:
+          CI: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+

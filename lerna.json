@@ -1,0 +1,35 @@
+{
+  "version": "0.0.0",
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        ".githooks",
+        ".scripts",
+        ".vscode",
+        "package-lock.json",
+        "packages/demo",
+        "packages/mw-demo"
+      ],
+      "verifyAccess": false
+    },
+    "version": {
+      "conventionalCommits": true,
+      "allowBranch": [
+        "main",
+        "fix",
+        "release",
+        "versioning_*"
+      ],
+      "ignoreChanges": [
+        ".githooks",
+        ".scripts",
+        ".vscode",
+        "package-lock.json",
+        "packages/demo",
+        "packages/mw-demo"
+      ],
+      "registry": "https://registry.npmjs.org/"
+    }
+  },
+  "npmClient": "npm"
+}
