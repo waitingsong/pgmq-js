@@ -13,25 +13,6 @@ Postgres Message Queue (PGMQ) JavaScript Client Library
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 
-以下所有命令行操作都在 `git-bash` 窗口中执行
-
-## 安装全局依赖
-```sh
-npm i -g c8 lerna madge rollup tsx zx
-```
-
-
-
-
-
-## Packages
-
-| Package           | Version                |
-| ----------------- | ---------------------- |
-| [`pgmq-js`]       | [![main-svg]][main-ch] |
-| [`@mwcp/pgmq-js`] | [![cli-svg]][cli-ch]   |
-
-
 ## Installation
 
 ```sh
@@ -51,6 +32,41 @@ Create the pgmq extension
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
   -f database/ddl/extension.sql 
 ```
+
+## Usage
+
+```ts
+import { Pgmq, type DbConnectionConfig, type Message, type MsgId } from '@waiting/pgmq-js'
+
+const connection: DbConnectionConfig  = {
+  host: process.env['POSTGRES_HOST'] ? process.env['POSTGRES_HOST'] : 'localhost',
+  port: process.env['POSTGRES_PORT'] ? +process.env['POSTGRES_PORT'] : 5432,
+  database: process.env['POSTGRES_DB'] ? process.env['POSTGRES_DB'] : 'postgres',
+  user: process.env['POSTGRES_USER'] ? process.env['POSTGRES_USER'] : 'postgres',
+  password: process.env['POSTGRES_PASSWORD'] ? process.env['POSTGRES_PASSWORD'] : 'password',
+  statement_timeout: 6000, // in milliseconds
+}
+
+const pgmq = new Pgmq('mq1', { connection })
+
+const qName = 'my_queue';
+await pgmq.queue.create(qName)
+
+const msgToSend = { id: 1, name: 'testMsg' }
+
+const msgId: MsgId = await pgmq.msg.send(qName, msgToSend )
+const msgIds: MsgId[] = await pgmq.msg.sendBatch(qName, [msgToSend , msgToSend ])
+
+const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
+const msg: Message = await pgmq.msg.read<Msg>(qName, vt)
+
+const numMessages = 5 // The number of messages to read from the queue, defaults to 10
+const msgs: Message[] = await pgmq.msg.readBatch<Msg>(qName, vt, numMessages)
+
+await pgmq.msg.archive(qName, msg.msgId)
+```
+
+[More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/test/lib)
 
 
 ## Supported API
@@ -81,10 +97,8 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
   - [x] [metrics_all](https://tembo-io.github.io/pgmq/api/sql/functions/#metrics_all)
 
 
-
 ## License
 [MIT](LICENSE)
-
 
 ### Languages
 - [English](README.md)
@@ -100,5 +114,4 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 [`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq-js.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
-
 
