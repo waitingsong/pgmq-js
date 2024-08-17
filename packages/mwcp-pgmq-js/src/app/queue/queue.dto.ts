@@ -1,0 +1,73 @@
+import { ApiProperty } from '@midwayjs/swagger'
+import { Rule } from '@midwayjs/validate'
+import { commonValidSchemas } from '@mwcp/share'
+
+import { Queue, QueueMetrics } from '##/index.js'
+import { ConfigKey } from '##/lib/types.js'
+
+
+export class QueueApi {
+  static readonly base: string = `/${ConfigKey.namespace}/queue`
+  static readonly create = 'create'
+  static readonly createUnlogged = 'create_unlogged'
+  static readonly hasQueue = 'has_queue'
+  static readonly getOne = 'get_one'
+  static readonly list = 'list'
+  static readonly drop = 'drop'
+  static readonly purge = 'purge'
+  static readonly detachArchive = 'detach_archive'
+  static readonly metrics = 'metrics'
+  static readonly metricsAll = 'metrics-all'
+}
+
+export class CommonQueueDto {
+  @ApiProperty({ example: 'my_queue', description: '队列名' })
+  @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
+  name: string
+}
+
+export class QueueDto implements Queue {
+  @ApiProperty({ example: 'my_queue', description: '队列名' })
+  @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
+  name: string
+
+  @ApiProperty({ example: false, description: '是否分区' })
+  @Rule(commonValidSchemas.boolean.required())
+  isPartitioned: boolean
+
+  @ApiProperty({ example: false, description: '是否无日志' })
+  @Rule(commonValidSchemas.boolean.required())
+  isUnlogged: boolean
+
+  @ApiProperty({ example: '2021-01-01T00:00:00.000Z', description: '创建时间' })
+  @Rule(commonValidSchemas.isoDate.required())
+  createdAt: Date
+}
+
+
+export class QueueMetricsDto implements QueueMetrics {
+  @ApiProperty({ example: 'my_queue', description: '队列名' })
+  @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
+  queueName: string
+
+  @ApiProperty({ example: '10', description: '队列中消息数量' })
+  @Rule(commonValidSchemas.bigintString.required())
+  queueLength: string
+
+  @ApiProperty({ example: 1, description: '最新消息年龄（秒）' })
+  @Rule(commonValidSchemas.positiveInt)
+  newestMsgAgeSec: number | null
+
+  @ApiProperty({ example: 300, description: '最旧消息年龄（秒）' })
+  @Rule(commonValidSchemas.positiveInt)
+  oldestMsgAgeSec: number | null
+
+  @ApiProperty({ example: '100', description: '队列接受消息总数' })
+  @Rule(commonValidSchemas.bigintString.required())
+  totalMessages: string
+
+  @ApiProperty({ example: '2021-01-01T00:00:00.000Z', description: '抓取时间' })
+  @Rule(commonValidSchemas.isoDate.required())
+  scrapeTime: Date
+}
+
