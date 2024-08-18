@@ -78,7 +78,7 @@
     "start": "cross-env NODE_ENV=production node ./bootstrap.js",
     "start:gc": "cross-env NODE_ENV=local node --trace_gc ./bootstrap.js",
     "test": "cross-env MIDWAY_SERVER_ENV=unittest TS_NODE_PROJECT=test/tsconfig.json mocha --parallel=false",
-    "test:deb": "num run test",
+    "test:deb": "npm run test",
     "tsc": "tsc -b"
   }
 }
