@@ -32,11 +32,14 @@ describe(fileShortPath(import.meta.url), () => {
     assert(msg)
     assert(msg.msgId === '1')
     assert.deepStrictEqual(msg.message, msgToSend, 'msg.message not equal')
-    assert(msg.enqueuedAt, 'msg.enqueuedAt not exist')
-    assert(new Date(msg.enqueuedAt).getTime() > 0, 'msg.enqueuedAt invalid')
+
+    assert(msg.enqueuedAt instanceof Date, 'msg.enqueuedAt not exist')
+    assert(msg.enqueuedAt.getTime() > 0, 'msg.enqueuedAt invalid')
+
     assert(msg.readCt === 1, 'msg.readCt not equal 1')
-    assert(msg.vt, 'msg.vt not exist')
-    assert(new Date(msg.vt).getTime() > 0, 'msg.vt invalid')
+
+    assert(msg.vt instanceof Date, 'msg.vt not exist')
+    assert(msg.vt.getTime() > 0, 'msg.vt invalid')
   })
 })
 
