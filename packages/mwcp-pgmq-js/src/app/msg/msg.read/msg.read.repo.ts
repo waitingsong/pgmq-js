@@ -1,6 +1,7 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
 
-import type { Pgmq } from '##/index.js'
+import type { Message, Pgmq } from '##/index.js'
+import { convertToDto } from '##/lib/helper.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
 
 import type { MessageDto } from '../msg.dto.js'
@@ -27,17 +28,23 @@ export class MsgReadRepo {
 
   async read(options: MsgReadDto): Promise<MessageDto | null> {
     const { queueName, vt = 1 } = options
-    return this.msg.read(queueName, vt)
+    const res = await this.msg.read(queueName, vt)
+    const ret = res ? convertToDto<Message, MessageDto>(res) : null
+    return ret
   }
 
   async readWithPoll(options: MsgReadWithPollDto): Promise<MessageDto[]> {
     const { queueName, vt = 1, qty = 1, maxPollSeconds = 5, pollIntervalMs = 100 } = options
-    return this.msg.readWithPoll(queueName, vt, qty, maxPollSeconds, pollIntervalMs)
+    const res = await this.msg.readWithPoll(queueName, vt, qty, maxPollSeconds, pollIntervalMs)
+    const ret = res.map(convertToDto<Message, MessageDto>)
+    return ret
   }
 
   async readBatch(options: MsgReadBatchDto): Promise<MessageDto[]> {
     const { queueName, vt = 1, qty = 1 } = options
-    return this.msg.readBatch(queueName, vt, qty)
+    const res = await this.msg.readBatch(queueName, vt, qty)
+    const ret = res.map(convertToDto<Message, MessageDto>)
+    return ret
   }
 
   // #region setVt
@@ -45,7 +52,8 @@ export class MsgReadRepo {
   async setVt(options: MsgSetVtDto): Promise<MessageDto | null> {
     const { queueName, msgId, vtOffset } = options
     const res = await this.msg.setVt(queueName, msgId, vtOffset)
-    return res ?? null
+    const ret = res ? convertToDto<Message, MessageDto>(res) : null
+    return ret
   }
 }
 

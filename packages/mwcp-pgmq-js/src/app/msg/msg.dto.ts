@@ -1,8 +1,9 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
+import { MessageDto as _MessageDto } from '@waiting/pgmq-js'
 
-import { MsgId, Message, MsgContent } from '##/index.js'
+import { MsgId, MsgContent } from '##/index.js'
 import { ConfigKey } from '##/lib/types.js'
 
 
@@ -27,7 +28,7 @@ export class CommonMsgDto {
   queueName: string
 }
 
-export class MessageDto<T extends MsgContent = MsgContent> implements Message<T> {
+export class MessageDto<T extends MsgContent = MsgContent> implements _MessageDto<T> {
   @ApiProperty({ example: '1', description: '消息id' })
   @Rule(commonValidSchemas.bigintString.required())
   msgId: MsgId

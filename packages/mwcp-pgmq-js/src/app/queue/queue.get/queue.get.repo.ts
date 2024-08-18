@@ -1,7 +1,10 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
 
 import type { Pgmq, Queue } from '##/index.js'
+import { convertToDto } from '##/lib/helper.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
+
+import type { QueueDto } from '../queue.dto.js'
 
 
 @Singleton()
@@ -20,12 +23,16 @@ export class QueueGetRepo {
     return this.queue.hasQueue(name)
   }
 
-  async getOne(name: string): Promise<Queue | null> {
-    return this.queue.getOne(name)
+  async getOne(name: string): Promise<QueueDto | null> {
+    const res = await this.queue.getOne(name)
+    const ret = res ? convertToDto<Queue, QueueDto>(res) : null
+    return ret
   }
 
-  async list(): Promise<Queue[]> {
-    return this.queue.list()
+  async list(): Promise<QueueDto[]> {
+    const res = await this.queue.list()
+    const ret = res.map(convertToDto<Queue, QueueDto>)
+    return ret
   }
 
 }

@@ -1,6 +1,7 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
 
-import type { MsgId, Pgmq } from '##/index.js'
+import type { Message, MsgId, Pgmq } from '##/index.js'
+import { convertToDto } from '##/lib/helper.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
 
 import type { CommonMsgDto, MessageDto } from '../msg.dto.js'
@@ -22,7 +23,9 @@ export class MsgDeleteRepo {
 
   async pop(options: CommonMsgDto): Promise<MessageDto | null> {
     const { queueName } = options
-    return this.msg.pop(queueName)
+    const res = await this.msg.pop(queueName)
+    const ret = res ? convertToDto<Message, MessageDto>(res) : null
+    return ret
   }
 
   async delete(options: MsgDeleteDto): Promise<MsgId[]> {

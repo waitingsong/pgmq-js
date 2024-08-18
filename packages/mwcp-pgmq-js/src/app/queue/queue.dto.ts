@@ -1,8 +1,8 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
+import { QueueDto as _QueueDto, QueueMetricsDto as _QueueMetricsDto } from '@waiting/pgmq-js'
 
-import { Queue, QueueMetrics } from '##/index.js'
 import { ConfigKey } from '##/lib/types.js'
 
 
@@ -26,7 +26,7 @@ export class CommonQueueDto {
   name: string
 }
 
-export class QueueDto implements Queue {
+export class QueueDto implements _QueueDto {
   @ApiProperty({ example: 'my_queue', description: '队列名' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
   name: string
@@ -41,11 +41,11 @@ export class QueueDto implements Queue {
 
   @ApiProperty({ example: '2021-01-01T00:00:00.000Z', description: '创建时间' })
   @Rule(commonValidSchemas.isoDate.required())
-  createdAt: Date
+  createdAt: string
 }
 
 
-export class QueueMetricsDto implements QueueMetrics {
+export class QueueMetricsDto implements _QueueMetricsDto {
   @ApiProperty({ example: 'my_queue', description: '队列名' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
   queueName: string
@@ -55,11 +55,11 @@ export class QueueMetricsDto implements QueueMetrics {
   queueLength: string
 
   @ApiProperty({ example: 1, description: '最新消息年龄（秒）' })
-  @Rule(commonValidSchemas.positiveInt)
+  @Rule(commonValidSchemas.positiveInt.allow(null))
   newestMsgAgeSec: number | null
 
   @ApiProperty({ example: 300, description: '最旧消息年龄（秒）' })
-  @Rule(commonValidSchemas.positiveInt)
+  @Rule(commonValidSchemas.positiveInt.allow(null))
   oldestMsgAgeSec: number | null
 
   @ApiProperty({ example: '100', description: '队列接受消息总数' })
@@ -68,6 +68,6 @@ export class QueueMetricsDto implements QueueMetrics {
 
   @ApiProperty({ example: '2021-01-01T00:00:00.000Z', description: '抓取时间' })
   @Rule(commonValidSchemas.isoDate.required())
-  scrapeTime: Date
+  scrapeTime: string
 }
 

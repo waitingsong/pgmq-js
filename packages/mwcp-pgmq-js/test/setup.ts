@@ -3,6 +3,7 @@
 import assert from 'node:assert'
 
 import { createApp, close, createHttpRequest } from '@midwayjs/mock'
+import { ValidateService } from '@midwayjs/validate'
 import type { Application } from '@mwcp/share'
 import type { Suite } from 'mocha'
 
@@ -59,6 +60,7 @@ async function updateConfig(mockApp: Application, config: TestConfig): Promise<v
   config.host = url
 
   config.container = mockApp.getApplicationContext()
+  config.validateService = await config.container.getAsync(ValidateService)
   // const svc = await testConfig.container.getAsync(TaskQueueService)
   config.mqManager = await config.container.getAsync(PgmqManager)
   config.mq = config.mqManager.getDataSource('default')

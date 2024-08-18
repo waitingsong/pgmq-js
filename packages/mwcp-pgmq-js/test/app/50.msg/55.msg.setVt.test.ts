@@ -2,7 +2,8 @@ import assert from 'node:assert/strict'
 
 import { fileShortPath, genRandomString } from '@waiting/shared-core'
 
-import type { MessageDto, MsgSetVtDto } from '##/index.js'
+import type { MsgSetVtDto } from '##/index.js'
+import { MessageDto } from '##/index.js'
 import { MsgApi } from '#@/api-test.js'
 import { testConfig } from '#@/root.config.js'
 
@@ -26,7 +27,7 @@ describe(fileShortPath(import.meta.url), () => {
 
   describe(path, () => {
     it('normal', async () => {
-      const { httpRequest, mq } = testConfig
+      const { httpRequest, mq, validateService } = testConfig
       await mq.msg.sendBatch(rndStr, [msgToSend, msgToSend])
 
       const resp = await httpRequest.post(path).send(data)
@@ -35,10 +36,11 @@ describe(fileShortPath(import.meta.url), () => {
       const msg = resp.body as MessageDto
       assert(msg)
       assert(msg.msgId === '1')
+      validateService.validate(MessageDto, msg)
     })
 
     it('invalid msgId', async () => {
-      const { httpRequest } = testConfig
+      const { httpRequest, validateService } = testConfig
 
       data.msgId = '99999'
       const resp = await httpRequest.post(path).send(data)
@@ -47,6 +49,16 @@ describe(fileShortPath(import.meta.url), () => {
       const msg = resp.body as MessageDto
       assert(msg)
       assert(! msg.msgId) // not found
+
+      try {
+        validateService.validate(MessageDto, msg)
+      }
+      catch (ex) {
+        assert(ex instanceof Error)
+        assert(ex.name === 'MidwayValidationError', ex.name)
+        return
+      }
+      assert(false, 'should not reach here')
     })
 
   })

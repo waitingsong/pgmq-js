@@ -1,6 +1,7 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
 
-import type { Pgmq, QueueMetricsDto } from '##/index.js'
+import type { Pgmq, QueueMetrics, QueueMetricsDto } from '##/index.js'
+import { convertToDto } from '##/lib/helper.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
 
 
@@ -17,11 +18,15 @@ export class QueueMetricsRepo {
   }
 
   async metrics(name: string): Promise<QueueMetricsDto | null> {
-    return this.queue.getMetrics(name)
+    const res = await this.queue.getMetrics(name)
+    const ret = res ? convertToDto<QueueMetrics, QueueMetricsDto>(res) : null
+    return ret
   }
 
   async metricsAll(): Promise<QueueMetricsDto[]> {
-    return this.queue.getAllMetrics()
+    const res = await this.queue.getAllMetrics()
+    const ret = res.map(convertToDto<QueueMetrics, QueueMetricsDto>)
+    return ret
   }
 }
 

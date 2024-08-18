@@ -2,7 +2,8 @@ import assert from 'node:assert/strict'
 
 import { fileShortPath, genRandomString } from '@waiting/shared-core'
 
-import type { MessageDto, MsgReadWithPollDto } from '##/index.js'
+import type { MsgReadWithPollDto } from '##/index.js'
+import { MessageDto } from '##/index.js'
 import { MsgApi } from '#@/api-test.js'
 import { testConfig } from '#@/root.config.js'
 
@@ -39,7 +40,7 @@ describe(fileShortPath(import.meta.url), () => {
     })
 
     it('normal', async () => {
-      const { httpRequest, mq } = testConfig
+      const { httpRequest, mq, validateService } = testConfig
       await mq.msg.sendBatch(rndStr, [msgToSend, msgToSend])
 
       const resp = await httpRequest.post(path).send(data)
@@ -48,6 +49,9 @@ describe(fileShortPath(import.meta.url), () => {
       const msgs = resp.body as MessageDto[]
       assert(msgs)
       assert(msgs.length === 2)
+      msgs.forEach((msg) => {
+        validateService.validate(MessageDto, msg)
+      })
     })
 
   })
