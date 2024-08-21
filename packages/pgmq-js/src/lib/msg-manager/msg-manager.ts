@@ -18,6 +18,7 @@ export class MsgManager {
 
   /**
    * Send a message to the queue
+   * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
    * @param delay Time in seconds before the message becomes visible. Defaults to 0.
    */
   async send<T extends MsgContent>(queue: string, msg: T, delay = 0): Promise<MsgId[]> {
@@ -56,6 +57,7 @@ export class MsgManager {
    * call will wait for max_poll_seconds in duration before returning.
    * If messages reach the queue during that duration, they will be read and returned immediately.
    *
+   * @link https://tembo-io.github.io/pgmq/api/sql/functions/#read_with_poll
    * @note Ensure max_poll_seconds less than the timeout of the statement_timeout in the dbConfig (default 6000ms)
    * @param queue The name of the queue
    * @param vt    Time in seconds that the message become invisible after reading, defaults to 1
