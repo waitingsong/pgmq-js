@@ -78,7 +78,8 @@ export class QueueManager {
       const line = row['list_queues']
       return parseDbQueue(line)
     })
-    return ret
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return ret ?? []
   }
 
   // #region drop
