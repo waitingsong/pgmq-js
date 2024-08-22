@@ -186,7 +186,7 @@ Open url `http://127.0.0.1:7001/swagger-ui/index.html` with browser
 
 
 [`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
-[cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq-js.svg?maxAge=7200
+[cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
 [Midway.js]: https://midwayjs.org/
