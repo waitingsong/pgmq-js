@@ -39,7 +39,7 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 Update project `src/configuration.ts`
 ```ts
 import { Configuration } from '@midwayjs/core'
-import * as pgmq from '@mwcp/pgmq-js'
+import * as pgmq from '@mwcp/pgmq'
 
 @Configuration({
   imports: [ pgmq ],
@@ -185,7 +185,7 @@ Open url `http://127.0.0.1:7001/swagger-ui/index.html` with browser
 [main-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/CHANGELOG.md
 
 
-[`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
+[`@mwcp/pgmq`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 

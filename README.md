@@ -26,16 +26,18 @@ npm i -g c8 lerna madge rollup tsx zx
 
 ## Packages
 
-| Package           | Version                |
-| ----------------- | ---------------------- |
-| [`pgmq-js`]       | [![main-svg]][main-ch] |
-| [`@mwcp/pgmq-js`] | [![cli-svg]][cli-ch]   |
+| Package        | Version                |
+| -------------- | ---------------------- |
+| [`pgmq-js`]    | [![main-svg]][main-ch] |
+| [`@mwcp/pgmq`] | [![cli-svg]][cli-ch]   |
 
 
 ## Installation
 
 ```sh
 npm i @waiting/pgmq-js
+// or
+npm i @mwcp/pgmq
 ```
 
 ## Prepare
@@ -97,7 +99,7 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 [main-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/CHANGELOG.md
 
 
-[`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
+[`@mwcp/pgmq`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 

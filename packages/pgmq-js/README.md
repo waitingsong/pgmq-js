@@ -111,7 +111,7 @@ await pgmq.msg.archive(qName, msg.msgId)
 [main-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/CHANGELOG.md
 
 
-[`@mwcp/pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
+[`@mwcp/pgmq`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
