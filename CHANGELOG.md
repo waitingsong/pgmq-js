@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/waitingsong/pgmq-js/compare/v1.2.0...v1.3.0) (2024-08-22)
+
+
+### Features
+
+* consumer decorator `Consumer()` and `PgmqListener()` ([f2b6170](https://github.com/waitingsong/pgmq-js/commit/f2b61702524f595c59f88d9f5cf3df45c1f0f423))
+
+
+
+
+
 # [1.2.0](https://github.com/waitingsong/pgmq-js/compare/v1.1.0...v1.2.0) (2024-08-22)
 
 
