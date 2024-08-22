@@ -1,13 +1,13 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 import { testConfig } from '#@/root.config.js'
 
 
-const rndString = genRandomString(6)
+const rndString = genRandomName(6)
 const msgToSend = {
   foo: 'bar',
   rnd: rndString,
@@ -31,7 +31,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`queue.getOne(FAKE)`, async () => {
-    const ret = await mq.queue.getOne(genRandomString(7))
+    const ret = await mq.queue.getOne(genRandomName(7))
     assert(! ret, 'hasQueue should return false')
   })
 

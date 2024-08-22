@@ -1,8 +1,8 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -16,7 +16,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   describe(`QueueManager`, () => {
-    const rndString = genRandomString(6)
+    const rndString = genRandomName(6)
 
     it(`create(${rndString})`, async () => {
       await mq.queue.create(rndString)

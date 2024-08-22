@@ -1,12 +1,12 @@
 import assert from 'node:assert'
 
-import { fileShortPath, genRandomString, sleep } from '@waiting/shared-core'
+import { fileShortPath, sleep } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
-const rndString = genRandomString(6)
+const rndString = genRandomName(6)
 const msgToSend = {
   foo: 'bar',
   rnd: rndString,

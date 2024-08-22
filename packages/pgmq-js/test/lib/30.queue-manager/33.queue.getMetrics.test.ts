@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
-const rndString = genRandomString(6)
+const rndString = genRandomName(6)
 const msgToSend = {
   foo: 'bar',
   rnd: rndString,
@@ -50,7 +50,7 @@ describe(fileShortPath(import.meta.url), () => {
 
   it(`queue.getMetrics(FAKE)`, async () => {
     try {
-      await mq.queue.getMetrics(genRandomString(7))
+      await mq.queue.getMetrics(genRandomName(7))
     }
     catch (ex) {
       assert(ex instanceof Error)

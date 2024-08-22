@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 import { assertQueueRow } from '#@/test.helper.js'
 
@@ -17,7 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   describe(`QueueManager`, () => {
-    const rndString = genRandomString(6)
+    const rndString = genRandomName(6)
 
     it(`create(${rndString})`, async () => {
       await mq.queue.create(rndString)
@@ -39,7 +39,7 @@ describe(fileShortPath(import.meta.url), () => {
     })
 
     it(`drop(fake)`, async () => {
-      const dropped = await mq.queue.drop(genRandomString(7))
+      const dropped = await mq.queue.drop(genRandomName(7))
       assert(! dropped, 'drop should failed')
     })
 
