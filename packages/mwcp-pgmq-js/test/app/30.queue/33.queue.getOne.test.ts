@@ -1,13 +1,14 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
+import { genRandomName } from '##/index.js'
 import type { QueueDto } from '##/index.js'
 import { QueueApi } from '#@/api-test.js'
 import { testConfig } from '#@/root.config.js'
 
 
-const rndStr = 'q' + genRandomString(6)
+const rndStr = genRandomName(6)
 const path = `${QueueApi.base}/${QueueApi.getOne}`
 
 describe(fileShortPath(import.meta.url), () => {

@@ -19,7 +19,9 @@ export type {
   Queue,
   QueueMetrics,
 } from '@waiting/pgmq-js'
-export { Pgmq } from '@waiting/pgmq-js'
+export {
+  Pgmq, genRandomName,
+} from '@waiting/pgmq-js'
 
 declare module '@midwayjs/core/dist/interface.js' {
   interface MidwayConfig {

@@ -10,6 +10,8 @@ export const apiBase = {
   root: '/',
   prefix: `/_${ConfigKey.namespace}`,
   demo: '/demo',
+
+  consumer: '/consumer',
 }
 
 export const apiMethod = {

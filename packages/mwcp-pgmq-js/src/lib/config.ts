@@ -16,7 +16,7 @@ export const initDbConfig: DbConfig = {
     database: process.env['POSTGRES_DB'] ? process.env['POSTGRES_DB'] : 'db_ci_test',
     user: process.env['POSTGRES_USER'] ? process.env['POSTGRES_USER'] : 'postgres',
     password: process.env['POSTGRES_PASSWORD'] ? process.env['POSTGRES_PASSWORD'] : '',
-    statement_timeout: 3000, // in milliseconds
+    statement_timeout: 10000, // in milliseconds
   },
   pool: {
     min: 0,

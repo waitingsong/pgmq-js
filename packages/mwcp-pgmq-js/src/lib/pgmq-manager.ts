@@ -30,7 +30,7 @@ export class PgmqManager extends DataSourceManager<Pgmq> {
   @Inject() baseDir: string
 
   getName(): string {
-    return 'DbSourceManager'
+    return 'PgmqManager'
   }
 
   @Init()
@@ -52,7 +52,8 @@ export class PgmqManager extends DataSourceManager<Pgmq> {
     assert(inst, `createDataSource() failed: ${dataSourceName}`)
 
     const connected = await this.checkConnected(inst)
-    assert(connected, `createDataSource() failed: ${dataSourceName}`)
+    const conn: DbConfig['connection'] = { ...dbConfig.connection, password: '***' }
+    assert(connected, `checkConnected() failed: ${dataSourceName}` + JSON.stringify(conn))
 
     // await inst.setTimeZone('Asia/Chongqing') // or 'UTC'
 
@@ -76,7 +77,6 @@ export class PgmqManager extends DataSourceManager<Pgmq> {
     if (await this.checkConnected(dataSource)) {
       try {
         await dataSource.destroy()
-        this.dataSource.delete(dataSource.dbId)
       }
       /* c8 ignore next 4 */
       catch (ex: unknown) {
@@ -84,6 +84,7 @@ export class PgmqManager extends DataSourceManager<Pgmq> {
           \n${(ex as Error).message}`)
       }
     }
+    this.dataSource.delete(dataSource.dbId)
   }
 
   protected getDbConfigByDbId(dbId: string): DbConfig | undefined {

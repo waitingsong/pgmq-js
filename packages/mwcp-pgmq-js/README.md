@@ -51,6 +51,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
 ## Usage
 
+### Send Message
 ```ts
 import { Init, Inject, Singleton } from '@midwayjs/core'
 import { PgmqManager, MsgSendDto, type MsgId } from '@mwcp/pgmq'
@@ -74,6 +75,58 @@ export class MsgRepo {
 }
 
 ```
+
+
+### Consumer Decorator
+
+```ts
+import assert from 'node:assert'
+import { Singleton, Init, Inject } from '@midwayjs/core'
+import { Consumer, ConsumerMessageDto, PgmqListener, PgmqManager } from '@mwcp/pgmq'
+
+@Consumer()
+@Singleton()
+export class DemoConsumerService {
+
+  @Inject() protected readonly pgmqManager: PgmqManager
+
+  readonly msgs1: ConsumerMessageDto[] = []
+  readonly msgs2: ConsumerMessageDto[] = []
+  readonly msgs3: ConsumerMessageDto[] = []
+
+  @Init()
+  async init(): Promise<void> {
+    const pgmq = this.pgmqManager.getDataSource('default')
+    assert(pgmq, `pgmq data source 'default' not found`)
+    await pgmq.queue.create('q1').catch((err) => {
+      assert(err instanceof Error)
+      if (err.message.includes('already exists')) { return }
+      throw err
+    })
+    await pgmq.queue.create('q2').catch(() => { return })
+    await pgmq.queue.create('q3').catch(() => { return })
+  }
+
+  @PgmqListener({ queueName: 'q1' }) // default consumeAction is 'delete'
+  @PgmqListener({ queueName: ['q2', 'q3'], consumeAction: 'archive' })
+  async hello(msg: ConsumerMessageDto): Promise<void> {
+    switch (msg.queueName) {
+      case 'q1':
+        this.msgs1.push(msg)
+        break
+
+      case 'q2':
+        this.msgs2.push(msg)
+        break
+
+      case 'q3':
+        this.msgs3.push(msg)
+        break
+    }
+  }
+}  
+```
+
 
 [More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/test/lib)
 

@@ -1,13 +1,14 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
-import { fileShortPath, genRandomString } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
+import { genRandomName } from '##/index.js'
 import type { MsgArchiveDto, MsgId } from '##/index.js'
 import { MsgApi } from '#@/api-test.js'
 import { testConfig } from '#@/root.config.js'
 
 
-const rndStr = 'q' + genRandomString(6)
+const rndStr = genRandomName(6)
 const path = `${MsgApi.base}/${MsgApi.archive}`
 const msgToSend = {
   foo: 'bar',
