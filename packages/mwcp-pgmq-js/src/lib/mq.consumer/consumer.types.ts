@@ -27,6 +27,11 @@ export interface ConsumerOptions {
    * @default 1(sec)
    */
   vt: NonNullable<MsgReadWithPollDto['vt']>
+  /**
+   * Auto create queue if not exists
+   * @default true
+   */
+  autoCreateQueue: boolean
 
   /**
    * Auto delete/archive message

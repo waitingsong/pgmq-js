@@ -181,13 +181,15 @@ export class PgmqServer extends EventEmitter {
     const mq = this.mqManager.getDataSource(sourceName)
     assert(mq, `sourceName not found: ${sourceName}`)
 
-    let queueExists = false
-    try {
-      queueExists = await mq.queue.hasQueue(queueName)
+    const queueExists = await mq.queue.hasQueue(queueName)
+    if (! queueExists) {
+      if (listenerOptions.autoCreateQueue) {
+        await mq.queue.create(queueName)
+      }
+      else {
+        throw new Error(`queueName not found: ${queueName} in sourceName: ${sourceName}`)
+      }
     }
-    /* c8 ignore next */
-    catch (ex) { void 0 }
-    assert(queueExists, `queueName not found: ${queueName} in sourceName: ${sourceName}`)
 
     const { queueConnectionNumber } = listenerOptions
     assert(queueConnectionNumber > 0, 'queueConnectionNumber must be greater than 0')
