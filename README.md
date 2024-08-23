@@ -1,6 +1,6 @@
-# @waiting/pgmq-js repository
+# pgmq-js 
 
-Postgres Message Queue (PGMQ) JavaScript Client Library
+Postgres Message Queue ([PGMQ]) JavaScript Client Library
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()
@@ -9,8 +9,6 @@ Postgres Message Queue (PGMQ) JavaScript Client Library
 [![ci](https://github.com/waitingsong/pgmq-js/actions/workflows/nodejs.yml/badge.svg
 )](https://github.com/waitingsong/pgmq-js/actions)
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 
 以下所有命令行操作都在 `git-bash` 窗口中执行
@@ -103,4 +101,5 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 [cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
+[PGMQ]: https://tembo-io.github.io/pgmq/
 

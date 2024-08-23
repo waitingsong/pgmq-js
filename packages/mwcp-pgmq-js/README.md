@@ -1,4 +1,4 @@
-# @waiting/pgmq-js repository
+# Midway.js [PGMQ] Component
 
 Postgres Message Queue (PGMQ) Component for [Midway.js]
 
@@ -9,8 +9,6 @@ Postgres Message Queue (PGMQ) Component for [Midway.js]
 [![ci](https://github.com/waitingsong/pgmq-js/actions/workflows/nodejs.yml/badge.svg
 )](https://github.com/waitingsong/pgmq-js/actions)
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 
 ## Installation
@@ -190,3 +188,5 @@ Open url `http://127.0.0.1:7001/swagger-ui/index.html` with browser
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
 [Midway.js]: https://midwayjs.org/
+[PGMQ]: https://tembo-io.github.io/pgmq/
+
