@@ -46,14 +46,24 @@ export class QueueManager {
     await this.dbh.raw(query, [name])
   }
 
+  /**
+   * No error if queue already exists or does not exist
+   */
   async hasQueue(name: string): Promise<boolean> {
-    const list = await this.list()
-    for (const queue of list) {
-      if (queue.name === name) {
-        return true
+    try {
+      const list = await this.list()
+      for (const queue of list) {
+        if (queue.name === name) {
+          return true
+        }
       }
+      return false
     }
-    return false
+    catch (ex) {
+      // list() may throw error queue not found
+      console.warn(ex)
+      return false
+    }
   }
 
   // #region getOne
