@@ -17,7 +17,7 @@ export class QueueApi {
   static readonly purge = 'purge'
   static readonly detachArchive = 'detach_archive'
   static readonly metrics = 'metrics'
-  static readonly metricsAll = 'metrics-all'
+  static readonly metricsAll = 'metrics_all'
 }
 
 export class CommonQueueDto {

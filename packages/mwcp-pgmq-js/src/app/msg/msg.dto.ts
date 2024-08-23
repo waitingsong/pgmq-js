@@ -10,16 +10,16 @@ import { ConfigKey } from '##/lib/types.js'
 export class MsgApi {
   static readonly base: string = `/${ConfigKey.namespace}/msg`
   static readonly send = 'send'
-  static readonly sendBatch = 'sendBatch'
+  static readonly sendBatch = 'send_batch'
   static readonly read = 'read'
-  static readonly readWithPoll = 'readWithPoll'
-  static readonly readBatch = 'readBatch'
+  static readonly readWithPoll = 'read_with_poll'
+  static readonly readBatch = 'read_batch'
   static readonly pop = 'pop'
   static readonly delete = 'delete'
-  static readonly deleteBatch = 'deleteBatch'
+  static readonly deleteBatch = 'delete_batch'
   static readonly archive = 'archive'
-  static readonly archiveBatch = 'archiveBatch'
-  static readonly setVt = 'setVt'
+  static readonly archiveBatch = 'archive_batch'
+  static readonly setVt = 'set_vt'
 }
 
 export class CommonMsgDto {
