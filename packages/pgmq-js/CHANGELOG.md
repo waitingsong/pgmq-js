@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/waitingsong/pgmq-js/compare/v1.3.3...v2.0.0) (2024-08-23)
+
+
+### Features
+
+* **pgmq:** update QueueManager.hasQueue() ([0f82238](https://github.com/waitingsong/pgmq-js/commit/0f822384bde762130aa850d9f65a7c10cc2a815c))
+
+
+
+
+
 ## [1.3.3](https://github.com/waitingsong/pgmq-js/compare/v1.3.2...v1.3.3) (2024-08-23)
 
 **Note:** Version bump only for package @waiting/pgmq-js
