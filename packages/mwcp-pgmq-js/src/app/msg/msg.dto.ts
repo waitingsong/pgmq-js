@@ -23,7 +23,7 @@ export class MsgApi {
 }
 
 export class CommonMsgDto {
-  @ApiProperty({ example: 'my_queue', description: '队列名' })
+  @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
   queueName: string
 }

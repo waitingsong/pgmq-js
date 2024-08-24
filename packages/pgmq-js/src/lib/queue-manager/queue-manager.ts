@@ -22,7 +22,8 @@ export class QueueManager {
 
   /**
    * Create a new queue
-   * @param name - will be converted to lowercase
+   * @param name - will be converted to lowercase,
+   * Maximum 60 characters; alphanumeric characters, underscores (_) are allowed
    * @description * Throws error if queue already exists
    */
   async create(name: string): Promise<void> {

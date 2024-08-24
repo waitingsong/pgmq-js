@@ -1,6 +1,7 @@
 /* c8 ignore start */
 
 export interface Queue {
+  /** Maximum 60 characters; alphanumeric characters, underscores (_) are allowed */
   name: string
   isPartitioned: boolean
   isUnlogged: boolean
