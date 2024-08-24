@@ -79,31 +79,16 @@ export class MsgRepo {
 
 ```ts
 import assert from 'node:assert'
-import { Singleton, Init, Inject } from '@midwayjs/core'
-import { Consumer, ConsumerMessageDto, PgmqListener, PgmqManager } from '@mwcp/pgmq'
+import { Singleton } from '@midwayjs/core'
+import { Consumer, ConsumerMessageDto, PgmqListener } from '@mwcp/pgmq'
 
 @Consumer()
 @Singleton()
 export class DemoConsumerService {
 
-  @Inject() protected readonly pgmqManager: PgmqManager
-
   readonly msgs1: ConsumerMessageDto[] = []
   readonly msgs2: ConsumerMessageDto[] = []
   readonly msgs3: ConsumerMessageDto[] = []
-
-  @Init()
-  async init(): Promise<void> {
-    const pgmq = this.pgmqManager.getDataSource('default')
-    assert(pgmq, `pgmq data source 'default' not found`)
-    await pgmq.queue.create('q1').catch((err) => {
-      assert(err instanceof Error)
-      if (err.message.includes('already exists')) { return }
-      throw err
-    })
-    await pgmq.queue.create('q2').catch(() => { return })
-    await pgmq.queue.create('q3').catch(() => { return })
-  }
 
   @PgmqListener({ queueName: 'q1' }) // default consumeAction is 'delete'
   @PgmqListener({ queueName: ['q2', 'q3'], consumeAction: 'archive' })
