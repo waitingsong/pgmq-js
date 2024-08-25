@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/waitingsong/pgmq-js/compare/v2.0.2...v2.1.0) (2024-08-25)
+
+
+### Features
+
+* **mwcp:** expose type DbConfig ([9aa0ff9](https://github.com/waitingsong/pgmq-js/commit/9aa0ff99b26a665aa583318c791556be258f0dad))
+
+
+
+
+
 ## [2.0.2](https://github.com/waitingsong/pgmq-js/compare/v2.0.1...v2.0.2) (2024-08-24)
 
 **Note:** Version bump only for package pgmq-js
