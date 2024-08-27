@@ -2,7 +2,7 @@ import type { Knex } from 'knex'
 
 
 export interface DbConfig extends Knex.Config {
-  readonly client: DbClient
+  client: DbClient
   connection: DbConnectionConfig
 }
 
