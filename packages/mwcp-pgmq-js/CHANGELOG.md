@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/waitingsong/pgmq-js/compare/v2.1.2...v2.1.3) (2024-09-05)
+
+**Note:** Version bump only for package @mwcp/pgmq
+
+
+
+
+
 ## [2.1.2](https://github.com/waitingsong/pgmq-js/compare/v2.1.1...v2.1.2) (2024-08-27)
 
 **Note:** Version bump only for package @mwcp/pgmq
