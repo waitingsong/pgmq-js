@@ -1,4 +1,5 @@
 import type { Knex } from 'knex'
+// eslint-disable-next-line import/default, import/no-named-as-default, import/no-named-as-default-member
 import _knex from 'knex'
 
 import { initDbConfigPart, initDbConnectionConfig } from './config.js'
