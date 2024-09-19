@@ -3,6 +3,7 @@ import assert from 'node:assert'
 import { EventEmitter } from 'node:events'
 
 import { type ILogger, Inject, Logger, Singleton } from '@midwayjs/core'
+import type { ReadWithPollOptions } from '@waiting/pgmq-js'
 import { sleep } from '@waiting/shared-core'
 
 import { Message, MessageDto, Pgmq } from '##/index.js'
@@ -34,7 +35,7 @@ export class PgmqServer extends EventEmitter {
   ): Promise<void> {
 
     this.closed = false
-    const { queueName } = listenerOptions
+    const { queue: queueName } = listenerOptions
     assert(queueName, 'queueName is required')
     const { sourceName } = listenerOptions
     assert(sourceName, 'sourceName is required')
@@ -44,7 +45,7 @@ export class PgmqServer extends EventEmitter {
         ...initConsumerOptions,
         ...listenerOptions,
         sourceName,
-        queueName,
+        queue: queueName,
       }
       const intv = opts.maxPollSeconds * 1000 + this.intvDelay
       await this.createListener(opts, intv)
@@ -56,7 +57,7 @@ export class PgmqServer extends EventEmitter {
           ...initConsumerOptions,
           ...listenerOptions,
           sourceName,
-          queueName: name,
+          queue: name,
         }
         const intv = opts.maxPollSeconds * 1000 + this.intvDelay
         await this.createListener(opts, intv)
@@ -107,7 +108,7 @@ export class PgmqServer extends EventEmitter {
     msgs: MessageDto[] | Message[],
   ): Promise<void> {
 
-    const { queueName } = listenerOptions
+    const { queue: queueName } = listenerOptions
     const msgIds = msgs.map(msg => msg.msgId)
     if (msgIds.length) {
       await pgmq.msg.archiveBatch(queueName, msgIds)
@@ -120,7 +121,7 @@ export class PgmqServer extends EventEmitter {
     msgs: MessageDto[] | Message[],
   ): Promise<void> {
 
-    const { queueName } = listenerOptions
+    const { queue: queueName } = listenerOptions
     const msgIds = msgs.map(msg => msg.msgId)
     if (msgIds.length) {
       await pgmq.msg.deleteBatch(queueName, msgIds)
@@ -155,12 +156,15 @@ export class PgmqServer extends EventEmitter {
     listenerOptions: PgmqListenerOptionsInner,
   ): Promise<MessageDto[]> {
 
-    const { queueName, vt, qty, maxPollSeconds, pollIntervalMs } = listenerOptions
+    const { vt, maxPollSeconds } = listenerOptions
     const vt2 = vt + maxPollSeconds
-
-    const msgs = await mq.msg.readWithPoll(queueName, vt2, qty, maxPollSeconds, pollIntervalMs)
+    const opts: ReadWithPollOptions = {
+      ...listenerOptions,
+      vt: vt2,
+    }
+    const msgs = await mq.msg.readWithPoll(opts)
     if (this.closed) {
-      this.logger.info(`pgmqServer closed, return empty array, queueName: ${queueName}`)
+      this.logger.info(`pgmqServer closed, return empty array, queueName: ${opts.queue}`)
       return []
     }
     await this.consumeAction(mq, listenerOptions, msgs, 'before')
@@ -177,7 +181,7 @@ export class PgmqServer extends EventEmitter {
     interval: number,
   ): Promise<void> {
 
-    const { sourceName, queueName } = listenerOptions
+    const { sourceName, queue: queueName } = listenerOptions
     const mq = this.mqManager.getDataSource(sourceName)
     assert(mq, `sourceName not found: ${sourceName}`)
 
@@ -209,7 +213,7 @@ export class PgmqServer extends EventEmitter {
   protected pullAndConsume(mq: Pgmq, listenerOptions: PgmqListenerOptionsInner): void {
     if (this.closed) { return }
 
-    const { sourceName, queueName } = listenerOptions
+    const { sourceName, queue: queueName } = listenerOptions
     void this.readMsgsFromQueue(mq, listenerOptions)
       .then(async (msgs) => {
         if (! msgs.length) { return }
@@ -310,7 +314,7 @@ export class PgmqServer extends EventEmitter {
 
 
 interface PgmqListenerOptionsInner extends PgmqListenerOptions {
-  queueName: QueueName
+  queue: QueueName
 }
 type SourceName = string
 type QueueName = string
