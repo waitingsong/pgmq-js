@@ -43,8 +43,13 @@ describe(fileShortPath(import.meta.url), () => {
       assert(! dropped, 'drop should failed')
     })
 
-    it(`create(fake my-queue)`, async () => {
-      const queue = 'my-queue'
+    it(`create(my-queue) valid`, async () => {
+      const queue = 'my-queue-' + genRandomName(7)
+      await mq.queue.create(queue)
+    })
+
+    it(`create(fake my--queue) invalid -`, async () => {
+      const queue = 'my--queue-' + genRandomName(7)
       try {
         await mq.queue.create(queue)
       }
@@ -54,7 +59,6 @@ describe(fileShortPath(import.meta.url), () => {
       }
       assert(false, 'should throw Error')
     })
-
   })
 })
 
