@@ -19,12 +19,12 @@ export class MsgSendRepo {
   }
 
   async send(options: MsgSendDto): Promise<MsgId[]> {
-    const { queueName, msg, delay = 0 } = options
+    const { queue: queueName, msg, delay = 0 } = options
     return this.msg.send(queueName, msg, delay)
   }
 
   async sendBatch(options: MsgSendBatchDto): Promise<MsgId[]> {
-    const { queueName, msgs, delay = 0 } = options
+    const { queue: queueName, msgs, delay = 0 } = options
     return this.msg.sendBatch(queueName, msgs, delay)
   }
 

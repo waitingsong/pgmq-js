@@ -25,7 +25,7 @@ export class MsgApi {
 export class CommonMsgDto {
   @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
-  queueName: string
+  queue: string
 }
 
 export class MessageDto<T extends MsgContent = MsgContent> implements _MessageDto<T> {

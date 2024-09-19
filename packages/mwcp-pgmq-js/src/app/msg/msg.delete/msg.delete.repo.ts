@@ -22,19 +22,19 @@ export class MsgDeleteRepo {
   }
 
   async pop(options: CommonMsgDto): Promise<MessageDto | null> {
-    const { queueName } = options
+    const { queue: queueName } = options
     const res = await this.msg.pop(queueName)
     const ret = res ? convertToDto<Message, MessageDto>(res) : null
     return ret
   }
 
   async delete(options: MsgDeleteDto): Promise<MsgId[]> {
-    const { queueName, msgId } = options
+    const { queue: queueName, msgId } = options
     return this.msg.delete(queueName, msgId)
   }
 
   async deleteBatch(options: MsgDeleteBatchDto): Promise<MsgId[]> {
-    const { queueName, msgIds } = options
+    const { queue: queueName, msgIds } = options
     return this.msg.deleteBatch(queueName, msgIds)
   }
 

@@ -27,21 +27,21 @@ export class MsgReadRepo {
   }
 
   async read(options: MsgReadDto): Promise<MessageDto | null> {
-    const { queueName, vt = 1 } = options
+    const { queue: queueName, vt = 1 } = options
     const res = await this.msg.read(queueName, vt)
     const ret = res ? convertToDto<Message, MessageDto>(res) : null
     return ret
   }
 
   async readWithPoll(options: MsgReadWithPollDto): Promise<MessageDto[]> {
-    const { queueName, vt = 1, qty = 1, maxPollSeconds = 5, pollIntervalMs = 100 } = options
+    const { queue: queueName, vt = 1, qty = 1, maxPollSeconds = 5, pollIntervalMs = 100 } = options
     const res = await this.msg.readWithPoll(queueName, vt, qty, maxPollSeconds, pollIntervalMs)
     const ret = res.map(convertToDto<Message, MessageDto>)
     return ret
   }
 
   async readBatch(options: MsgReadBatchDto): Promise<MessageDto[]> {
-    const { queueName, vt = 1, qty = 1 } = options
+    const { queue: queueName, vt = 1, qty = 1 } = options
     const res = await this.msg.readBatch(queueName, vt, qty)
     const ret = res.map(convertToDto<Message, MessageDto>)
     return ret
@@ -50,7 +50,7 @@ export class MsgReadRepo {
   // #region setVt
 
   async setVt(options: MsgSetVtDto): Promise<MessageDto | null> {
-    const { queueName, msgId, vtOffset } = options
+    const { queue: queueName, msgId, vtOffset } = options
     const res = await this.msg.setVt(queueName, msgId, vtOffset)
     const ret = res ? convertToDto<Message, MessageDto>(res) : null
     return ret
