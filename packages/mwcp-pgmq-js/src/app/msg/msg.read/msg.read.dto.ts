@@ -1,6 +1,7 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
+import type { SetVtOptions } from '@waiting/pgmq-js'
 
 import type { MsgId } from '##/index.js'
 
@@ -39,13 +40,13 @@ export class MsgReadWithPollDto extends CommonMsgDto {
 
 // #region setVt
 
-export class MsgSetVtDto extends CommonMsgDto {
+export class MsgSetVtDto extends CommonMsgDto implements SetVtOptions {
   @ApiProperty({ example: 1, description: '' })
   @Rule(commonValidSchemas.positiveInt.required())
   msgId: MsgId
 
   @ApiProperty({ example: 2, description: '消息延迟可见秒数' })
   @Rule(commonValidSchemas.naturalNumber.required())
-  vtOffset: number
+  vt: number
 }
 
