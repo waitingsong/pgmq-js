@@ -3,7 +3,7 @@ import assert from 'node:assert'
 import { EventEmitter } from 'node:events'
 
 import { type ILogger, Inject, Logger, Singleton } from '@midwayjs/core'
-import type { ReadWithPollOptions } from '@waiting/pgmq-js'
+import type { DeleteBatchOptions, ReadWithPollOptions } from '@waiting/pgmq-js'
 import { sleep } from '@waiting/shared-core'
 
 import { Message, MessageDto, Pgmq } from '##/index.js'
@@ -108,10 +108,14 @@ export class PgmqServer extends EventEmitter {
     msgs: MessageDto[] | Message[],
   ): Promise<void> {
 
-    const { queue: queueName } = listenerOptions
+    const { queue } = listenerOptions
     const msgIds = msgs.map(msg => msg.msgId)
     if (msgIds.length) {
-      await pgmq.msg.archiveBatch(queueName, msgIds)
+      const opts: DeleteBatchOptions = {
+        queue,
+        msgIds,
+      }
+      await pgmq.msg.archiveBatch(opts)
     }
   }
 
@@ -121,10 +125,14 @@ export class PgmqServer extends EventEmitter {
     msgs: MessageDto[] | Message[],
   ): Promise<void> {
 
-    const { queue: queueName } = listenerOptions
+    const { queue } = listenerOptions
     const msgIds = msgs.map(msg => msg.msgId)
     if (msgIds.length) {
-      await pgmq.msg.deleteBatch(queueName, msgIds)
+      const opts: DeleteBatchOptions = {
+        queue,
+        msgIds,
+      }
+      await pgmq.msg.deleteBatch(opts)
     }
   }
 

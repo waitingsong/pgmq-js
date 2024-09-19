@@ -15,7 +15,7 @@ const msgToSend = {
   rnd: rndStr,
 }
 const data: MsgReadBatchDto = {
-  queueName: rndStr,
+  queue: rndStr,
   qty: 2,
   vt: 0,
 }
@@ -39,7 +39,7 @@ describe(fileShortPath(import.meta.url), () => {
 
     it('normal', async () => {
       const { httpRequest, mq, validateService } = testConfig
-      await mq.msg.sendBatch(rndStr, [msgToSend, msgToSend])
+      await mq.msg.sendBatch({ queue: rndStr, msgs: [msgToSend, msgToSend] })
 
       const resp = await httpRequest.post(path).send(data)
       assert(resp.ok, resp.text)

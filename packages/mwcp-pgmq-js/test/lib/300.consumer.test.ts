@@ -28,9 +28,9 @@ describe(fileShortPath(import.meta.url), () => {
     const consumer = await container.getAsync(ConsumerTestService)
     assert(consumer, 'consumer not found')
 
-    await mq.msg.send(q1, msgToSend1, 1)
-    await mq.msg.send(q2, msgToSend2, 2)
-    await mq.msg.send(q3, msgToSend3, 2)
+    await mq.msg.send({ queue: q1, msg: msgToSend1, delay: 1 })
+    await mq.msg.send({ queue: q2, msg: msgToSend2, delay: 2 })
+    await mq.msg.send({ queue: q3, msg: msgToSend3, delay: 2 })
 
     assert(consumer.msgs1.length === 0, 'msgs1.length !== 0')
     assert(consumer.msgs2.length === 0, 'msgs2.length !== 0')

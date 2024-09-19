@@ -15,7 +15,7 @@ const msgToSend = {
   rnd: rndStr,
 }
 const data: MsgPopDto = {
-  queueName: rndStr,
+  queue: rndStr,
 }
 
 describe(fileShortPath(import.meta.url), () => {
@@ -47,7 +47,7 @@ describe(fileShortPath(import.meta.url), () => {
     it('exist', async () => {
       const { httpRequest, mq, validateService } = testConfig
 
-      await mq.msg.sendBatch(rndStr, [msgToSend, msgToSend])
+      await mq.msg.sendBatch({ queue: rndStr, msgs: [msgToSend, msgToSend] })
 
       const resp = await httpRequest.post(path).send(data)
       assert(resp.ok, resp.text)

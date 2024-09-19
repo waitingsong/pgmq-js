@@ -1,7 +1,7 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
-import { MessageDto as _MessageDto } from '@waiting/pgmq-js'
+import { MessageDto as _MessageDto, type OptionsBase } from '@waiting/pgmq-js'
 
 import { MsgId, MsgContent } from '##/index.js'
 import { ConfigKey } from '##/lib/types.js'
@@ -22,7 +22,7 @@ export class MsgApi {
   static readonly setVt = 'set_vt'
 }
 
-export class CommonMsgDto {
+export class CommonMsgDto implements OptionsBase {
   @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
   queue: string

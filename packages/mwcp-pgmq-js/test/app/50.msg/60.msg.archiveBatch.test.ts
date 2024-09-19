@@ -15,7 +15,7 @@ const msgToSend = {
   rnd: rndStr,
 }
 const data: MsgArchiveBatchDto = {
-  queueName: rndStr,
+  queue: rndStr,
   msgIds: ['1', '2', '3'],
 }
 
@@ -39,7 +39,7 @@ describe(fileShortPath(import.meta.url), () => {
     it('exist', async () => {
       const { httpRequest, mq } = testConfig
 
-      await mq.msg.sendBatch(rndStr, [msgToSend, msgToSend])
+      await mq.msg.sendBatch({ queue: rndStr, msgs: [msgToSend, msgToSend] })
 
       const resp = await httpRequest.post(path).send(data)
       assert(resp.ok, resp.text)

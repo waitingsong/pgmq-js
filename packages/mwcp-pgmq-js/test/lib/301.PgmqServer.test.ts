@@ -28,7 +28,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(consumer.msgs4.length === 0, 'msgs4.length !== 0')
       mqServer.unregisterListener('default', q4)
 
-      await mq.msg.send(q4, msgToSend4)
+      await mq.msg.send({ queue: q4, msg: msgToSend4 })
       await sleep(2500)
       assert(consumer.msgs4.length === 0, 'msgs4.length !== 0')
 
@@ -47,7 +47,7 @@ describe(fileShortPath(import.meta.url), () => {
       mqServer.close()
       assert(mqServer.closed, 'mqServer.closed !== true')
 
-      await mq.msg.send(q4, msgToSend4)
+      await mq.msg.send({ queue: q4, msg: msgToSend4 })
       await sleep(2500)
       assert(consumer.msgs4.length === 0, 'msgs4.length !== 0')
 

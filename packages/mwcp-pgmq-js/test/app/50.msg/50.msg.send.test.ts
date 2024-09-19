@@ -11,7 +11,7 @@ import { testConfig } from '#@/root.config.js'
 const rndStr = genRandomName(6)
 const path = `${MsgApi.base}/${MsgApi.send}`
 const data: MsgSendDto = {
-  queueName: rndStr,
+  queue: rndStr,
   msg: { foo: 'bar' },
   delay: 0,
 }

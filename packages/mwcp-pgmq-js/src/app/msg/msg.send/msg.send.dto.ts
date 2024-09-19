@@ -1,13 +1,14 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
+import type { SendBatchOptions, SendOptions } from '@waiting/pgmq-js'
 
 import { CommonMsgDto } from '../msg.dto.js'
 
 
 // #region send
 
-export class MsgSendDto extends CommonMsgDto {
+export class MsgSendDto extends CommonMsgDto implements SendOptions {
   @ApiProperty({ example: { foo: 'bar' }, description: '消息内容' })
   @Rule(commonValidSchemas.object.allow(null))
   msg: object | null
@@ -17,7 +18,7 @@ export class MsgSendDto extends CommonMsgDto {
   delay?: number
 }
 
-export class MsgSendBatchDto extends CommonMsgDto {
+export class MsgSendBatchDto extends CommonMsgDto implements SendBatchOptions {
   @ApiProperty({ example: [{ id: 1 }, { id: 2 }], description: '消息内容' })
   @Rule(commonValidSchemas.array.items(commonValidSchemas.object))
   msgs: object[]

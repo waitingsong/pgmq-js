@@ -23,9 +23,9 @@ export class ConsumerTestService {
   readonly msgs3: ConsumerMessageDto[] = []
   readonly msgs4: ConsumerMessageDto[] = []
 
-  @PgmqListener({ queueName: 'q1' })
-  @PgmqListener({ queueName: ['q2', 'q3'], consumeAction: 'archive' })
-  @PgmqListener({ queueName: ['q4'] })
+  @PgmqListener({ queue: 'q1' })
+  @PgmqListener({ queue: ['q2', 'q3'], consumeAction: 'archive' })
+  @PgmqListener({ queue: ['q4'] })
   async hello(msg: ConsumerMessageDto): Promise<void> {
     switch (msg.queueName) {
       case this.q1:
