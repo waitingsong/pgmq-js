@@ -11,17 +11,6 @@ Postgres Message Queue ([PGMQ]) JavaScript Client Library
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
 
 
-以下所有命令行操作都在 `git-bash` 窗口中执行
-
-## 安装全局依赖
-```sh
-npm i -g c8 lerna madge rollup tsx zx
-```
-
-
-
-
-
 ## Packages
 
 | Package        | Version                |
@@ -34,7 +23,7 @@ npm i -g c8 lerna madge rollup tsx zx
 
 ```sh
 npm i @waiting/pgmq-js
-// or
+// or for midway.js
 npm i @mwcp/pgmq
 ```
 
@@ -43,7 +32,7 @@ npm i @mwcp/pgmq
 Start a Postgres instance with the PGMQ extension installed:
 
 ```sh
-docker run -d --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 quay.io/tembo/pgmq-pg:latest
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg16-pgmq:latest
 ```
 
 Create the pgmq extension

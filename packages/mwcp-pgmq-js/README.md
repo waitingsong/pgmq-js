@@ -22,12 +22,12 @@ npm i @mwcp/pgmq
 Start a Postgres instance with the PGMQ extension installed:
 
 ```sh
-docker run -d --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 quay.io/tembo/pgmq-pg:latest
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg16-pgmq:latest
 ```
 
 Create the pgmq extension
 ```sh
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
   -f database/ddl/extension.sql 
 ```
 
@@ -67,8 +67,7 @@ export class MsgRepo {
   }
 
   async send(options: MsgSendDto): Promise<MsgId[]> {
-    const { queueName, msg, delay = 0 } = options
-    return this.msg.send(queueName, msg, delay)
+    return this.msg.send(options)
   }
 }
 
@@ -90,10 +89,10 @@ export class DemoConsumerService {
   readonly msgs2: ConsumerMessageDto[] = []
   readonly msgs3: ConsumerMessageDto[] = []
 
-  @PgmqListener({ queueName: 'q1' }) // default consumeAction is 'delete'
-  @PgmqListener({ queueName: ['q2', 'q3'], consumeAction: 'archive' })
+  @PgmqListener({ queue: 'q1' }) // default consumeAction is 'delete'
+  @PgmqListener({ queue: ['q2', 'q3'], consumeAction: 'archive' })
   async hello(msg: ConsumerMessageDto): Promise<void> {
-    switch (msg.queueName) {
+    switch (msg.queue) {
       case 'q1':
         this.msgs1.push(msg)
         break

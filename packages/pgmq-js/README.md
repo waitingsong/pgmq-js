@@ -22,12 +22,12 @@ npm i @waiting/pgmq-js
 Start a Postgres instance with the PGMQ extension installed:
 
 ```sh
-docker run -d --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 quay.io/tembo/pgmq-pg:latest
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg16-pgmq:latest
 ```
 
 Create the pgmq extension
 ```sh
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
   -f database/ddl/extension.sql 
 ```
 
@@ -37,31 +37,31 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 import { Pgmq, type DbConnectionConfig, type Message, type MsgId } from '@waiting/pgmq-js'
 
 const connection: DbConnectionConfig  = {
-  host: process.env['POSTGRES_HOST'] ? process.env['POSTGRES_HOST'] : 'localhost',
-  port: process.env['POSTGRES_PORT'] ? +process.env['POSTGRES_PORT'] : 5432,
-  database: process.env['POSTGRES_DB'] ? process.env['POSTGRES_DB'] : 'postgres',
-  user: process.env['POSTGRES_USER'] ? process.env['POSTGRES_USER'] : 'postgres',
-  password: process.env['POSTGRES_PASSWORD'] ? process.env['POSTGRES_PASSWORD'] : 'password',
+  host: process.env['PGMQ_HOST'] ? process.env['PGMQ_HOST'] : 'localhost',
+  port: process.env['PGMQ_PORT'] ? +process.env['PGMQ_PORT'] : 5432,
+  database: process.env['PGMQ_DB'] ? process.env['PGMQ_DB'] : 'postgres',
+  user: process.env['PGMQ_USER'] ? process.env['PGMQ_USER'] : 'postgres',
+  password: process.env['PGMQ_PASSWORD'] ? process.env['PGMQ_PASSWORD'] : 'password',
   statement_timeout: 6000, // in milliseconds
 }
 
 const pgmq = new Pgmq('mq1', { connection })
 
-const qName = 'my_queue';
-await pgmq.queue.create(qName)
+const queue = 'my_queue';
+await pgmq.queue.create(queue)
 
 const msgToSend = { id: 1, name: 'testMsg' }
 
-const msgId: MsgId = await pgmq.msg.send(qName, msgToSend )
-const msgIds: MsgId[] = await pgmq.msg.sendBatch(qName, [msgToSend , msgToSend ])
+const msgId: MsgId = await pgmq.msg.send({ queue, msg: msgToSend })
+const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgToSend ]})
 
 const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
-const msg: Message = await pgmq.msg.read<Msg>(qName, vt)
+const msg: Message = await pgmq.msg.read<Msg>({ queue, vt })
 
 const numMessages = 5 // The number of messages to read from the queue, defaults to 10
-const msgs: Message[] = await pgmq.msg.readBatch<Msg>(qName, vt, numMessages)
+const msgs: Message[] = await pgmq.msg.readBatch<Msg>({ queue, vt, numMessages })
 
-await pgmq.msg.archive(qName, msg.msgId)
+await pgmq.msg.archive({ queue, msgId: msg.msgId })
 ```
 
 [More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/test/lib)
