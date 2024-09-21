@@ -29,8 +29,8 @@ export function parseDbQueue(queue: QueueString): Queue {
 }
 
 export function parseQueueMetrics(input: MetricsResp): QueueMetrics {
-  const ret = {
-    queueName: input.queue_name,
+  const ret: QueueMetrics = {
+    queue: input.queue_name,
     queueLength: input.queue_length,
     newestMsgAgeSec: input.newest_msg_age_sec === null ? null : parseInt(input.newest_msg_age_sec, 10),
     oldestMsgAgeSec: input.oldest_msg_age_sec === null ? null : parseInt(input.oldest_msg_age_sec, 10),

@@ -16,7 +16,7 @@ export interface QueueDto {
 }
 
 export interface QueueMetrics {
-  queueName: string
+  queue: string
   /** Number of messages currently in the queue */
   queueLength: string
   newestMsgAgeSec: number | null
@@ -28,7 +28,7 @@ export interface QueueMetrics {
 }
 
 export interface QueueMetricsDto {
-  queueName: string
+  queue: string
   /** Number of messages currently in the queue */
   queueLength: string
   newestMsgAgeSec: number | null
