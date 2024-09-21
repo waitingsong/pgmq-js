@@ -1,4 +1,6 @@
 /* c8 ignore start */
+import type { Knex } from 'knex'
+
 
 export interface QueryResponse<T = unknown> {
   command: string // 'SELECT', 'DROP'
@@ -8,5 +10,7 @@ export interface QueryResponse<T = unknown> {
   rowCount: number | null // 1
   rows: T[]
 }
+
+export type Transaction = Knex.Transaction
 
 /* c8 ignore stop */

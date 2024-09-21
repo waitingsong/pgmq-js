@@ -1,5 +1,7 @@
 import type { BigIntStr } from '@waiting/shared-types'
 
+import type { Transaction } from '../knex.types.js'
+
 
 export type MsgId = `${bigint}`
 
@@ -26,6 +28,7 @@ export interface MessageDto<T extends MsgContent = MsgContent> {
 
 export interface OptionsBase {
   queue: string
+  trx?: Transaction | undefined
 }
 export type PopOptions = OptionsBase
 
@@ -70,7 +73,7 @@ export interface ReadOptions extends OptionsBase {
  * @link https://tembo-io.github.io/pgmq/api/sql/functions/#read_with_poll
  * @note Ensure max_poll_seconds less than the timeout of the statement_timeout in the dbConfig (default 6000ms)
  */
-export interface ReadWithPollOptions extends ReadOptions {
+export interface ReadWithPollOptions extends Omit<ReadOptions, 'trx'> {
   /**
    * The number of messages to read from the queue
    * @default 1

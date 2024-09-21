@@ -4,6 +4,7 @@ import _knex from 'knex'
 
 import { initDbConfigPart, initDbConnectionConfig } from './config.js'
 import { type RespCommon, parseRespCommon } from './helper.js'
+import type { Transaction } from './knex.types.js'
 import { MsgManager } from './msg-manager/msg-manager.js'
 import { QueueManager } from './queue-manager/queue-manager.js'
 import type { DbConfig, DbConnectionConfig } from './types.js'
@@ -46,6 +47,11 @@ export class Pgmq {
         return rows.rows[0] ? rows.rows[0].TimeZone : 'N/A'
       })
     return ret as string
+  }
+
+  async startTransaction(): Promise<Transaction> {
+    const ret = await this.dbh.transaction()
+    return ret
   }
 
 
