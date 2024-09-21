@@ -65,16 +65,16 @@ export class PgmqServer extends EventEmitter {
     }
   }
 
-  unregisterListener(sourceName: SourceName, queueName: QueueName): void {
-    this.stopListener(sourceName, queueName)
-    this.removeQueueNameFromSource(sourceName, queueName)
+  unregisterListener(sourceName: SourceName, queue: QueueName): void {
+    this.stopListener(sourceName, queue)
+    this.removeQueueNameFromSource(sourceName, queue)
   }
 
   close(): void {
     this.closed = true
     this.listenerList.forEach((queueMap, sourceName) => {
-      queueMap.forEach((_, queueName) => {
-        this.unregisterListener(sourceName, queueName)
+      queueMap.forEach((_, queue) => {
+        this.unregisterListener(sourceName, queue)
       })
     })
     this.consumerList.clear()
@@ -137,17 +137,17 @@ export class PgmqServer extends EventEmitter {
 
   protected async processMsgs(
     sourceName: SourceName,
-    queueName: QueueName,
+    queue: QueueName,
     msgs: MessageDto[],
   ): Promise<void> {
 
-    const callbackSet = this.getListenerCallbackSet(sourceName, queueName)
+    const callbackSet = this.getListenerCallbackSet(sourceName, queue)
     if (! callbackSet?.size) { return }
 
     for (const msg of msgs) {
       const cbArr = Array.from(callbackSet)
       const pms: Promise<void>[] = cbArr.map((cb) => {
-        return this.executeListenerCallback(queueName, msg, cb)
+        return this.executeListenerCallback(queue, msg, cb)
           /* c8 ignore next 3 */
           .catch((err) => {
             this.logger.error(err)
@@ -171,13 +171,12 @@ export class PgmqServer extends EventEmitter {
     }
     const msgs = await mq.msg.readWithPoll(opts)
     if (this.closed) {
-      this.logger.info(`pgmqServer closed, return empty array, queueName: ${opts.queue}`)
+      this.logger.info(`pgmqServer closed, return empty array, queue: ${opts.queue}`)
       return []
     }
     await this.consumeAction(mq, listenerOptions, msgs, 'before')
 
     const ret = msgs.map(convertToDto<Message, MessageDto>)
-    // console.info('msg.readWithPoll: ' + queueName, ret)
     return ret
   }
 
@@ -188,17 +187,17 @@ export class PgmqServer extends EventEmitter {
     interval: number,
   ): Promise<void> {
 
-    const { sourceName, queue: queueName } = listenerOptions
+    const { sourceName, queue } = listenerOptions
     const mq = this.mqManager.getDataSource(sourceName)
     assert(mq, `sourceName not found: ${sourceName}`)
 
-    const queueExists = await mq.queue.hasQueue(queueName)
+    const queueExists = await mq.queue.hasQueue(queue)
     if (! queueExists) {
       if (listenerOptions.autoCreateQueue) {
-        await mq.queue.create(queueName)
+        await mq.queue.create(queue)
       }
       else {
-        throw new Error(`queueName not found: ${queueName} in sourceName: ${sourceName}`)
+        throw new Error(`queue not found: ${queue} in sourceName: ${sourceName}`)
       }
     }
 
@@ -213,21 +212,21 @@ export class PgmqServer extends EventEmitter {
       const intv = setInterval((clz, mq1, opts) => {
         clz.pullAndConsume(mq1, opts)
       }, interval, this, mq, listenerOptions)
-      this.setQueryInterval(sourceName, queueName, intv)
+      this.setQueryInterval(sourceName, queue, intv)
     }
   }
 
   protected pullAndConsume(mq: Pgmq, listenerOptions: PgmqListenerOptionsInner): void {
     if (this.closed) { return }
 
-    const { sourceName, queue: queueName } = listenerOptions
+    const { sourceName, queue } = listenerOptions
     void this.readMsgsFromQueue(mq, listenerOptions)
       .then(async (msgs) => {
         if (! msgs.length) { return }
         /* c8 ignore next */
         if (this.closed) { return }
 
-        await this.processMsgs(sourceName, queueName, msgs)
+        await this.processMsgs(sourceName, queue, msgs)
         await this.consumeAction(mq, listenerOptions, msgs, 'after')
       })
       /* c8 ignore next 3 */
@@ -237,45 +236,45 @@ export class PgmqServer extends EventEmitter {
   }
 
   protected async executeListenerCallback(
-    queueName: QueueName,
+    queue: QueueName,
     msg: MessageDto,
     listenerCallback: ConsumerCallback,
   ): Promise<void> {
 
     const consumerMsg: ConsumerMessageDto = {
       ...msg,
-      queue: queueName,
+      queue,
     }
     await listenerCallback(consumerMsg)
   }
 
 
-  getQueryIntervals(sourceName: SourceName, queueName: QueueName): NodeJS.Timeout[] {
+  getQueryIntervals(sourceName: SourceName, queue: QueueName): NodeJS.Timeout[] {
     const queueMap = this.listenerList.get(sourceName)
     if (! queueMap?.size) {
       return []
     }
-    const intvSet = queueMap.get(queueName)
+    const intvSet = queueMap.get(queue)
     return Array.from(intvSet ?? [])
   }
 
-  protected setQueryInterval(sourceName: string, queueName: QueueName, interval: NodeJS.Timeout): void {
+  protected setQueryInterval(sourceName: string, queue: QueueName, interval: NodeJS.Timeout): void {
     let queueMap = this.listenerList.get(sourceName)
     if (! queueMap?.size) {
       queueMap = new Map()
-      queueMap.set(queueName, new Set())
+      queueMap.set(queue, new Set())
       this.listenerList.set(sourceName, queueMap)
     }
-    let intvSet = queueMap.get(queueName)
+    let intvSet = queueMap.get(queue)
     if (! intvSet?.size) {
       intvSet = new Set()
-      queueMap.set(queueName, intvSet)
+      queueMap.set(queue, intvSet)
     }
     intvSet.add(interval)
   }
 
-  protected stopListener(sourceName: SourceName, queueName: QueueName): void {
-    const intvArr = this.getQueryIntervals(sourceName, queueName)
+  protected stopListener(sourceName: SourceName, queue: QueueName): void {
+    const intvArr = this.getQueryIntervals(sourceName, queue)
     intvArr.forEach((intv) => {
       clearInterval(intv)
     })
@@ -283,15 +282,15 @@ export class PgmqServer extends EventEmitter {
 
   // #region consumerList methods
 
-  protected getListenerCallbackSet(sourceName: string, queueName: string): Set<ConsumerCallback> | undefined {
+  protected getListenerCallbackSet(sourceName: string, queue: string): Set<ConsumerCallback> | undefined {
     const queueMap = this.consumerList.get(sourceName)
     if (! queueMap) { return }
-    return queueMap.get(queueName)
+    return queueMap.get(queue)
   }
 
   protected updateSourceQueueSet(
     sourceName: string,
-    queueName: string,
+    queue: string,
     listenerCallback: ConsumerCallback,
   ): void {
 
@@ -300,10 +299,10 @@ export class PgmqServer extends EventEmitter {
       queueMap = new Map()
       this.consumerList.set(sourceName, queueMap)
     }
-    let cbSet = queueMap.get(queueName)
+    let cbSet = queueMap.get(queue)
     if (! cbSet?.size) {
       cbSet = new Set()
-      queueMap.set(queueName, cbSet)
+      queueMap.set(queue, cbSet)
     }
     cbSet.add(listenerCallback)
   }
@@ -311,9 +310,9 @@ export class PgmqServer extends EventEmitter {
 
   // #region clean
 
-  protected removeQueueNameFromSource(sourceName: string, queueName: string): void {
+  protected removeQueueNameFromSource(sourceName: string, queue: string): void {
     const queueMap = this.consumerList.get(sourceName)
-    queueMap?.delete(queueName)
+    queueMap?.delete(queue)
   }
 
 

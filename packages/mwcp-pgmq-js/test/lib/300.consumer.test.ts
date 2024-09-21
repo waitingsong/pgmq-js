@@ -44,9 +44,9 @@ describe(fileShortPath(import.meta.url), () => {
     assert(msgs3.length === 1, 'msgs3.length !== 1')
 
     const [msg1, msg2, msg3] = [msgs1[0], msgs2[0], msgs3[0]]
-    assert(msg1?.queue === q1, `msg1.queueName !== 'q1'`)
-    assert(msg2?.queue === q2, `msg2.queueName !== 'q2'`)
-    assert(msg3?.queue === q3, `msg3.queueName !== 'q3`)
+    assert(msg1?.queue === q1, `msg1.queue !== 'q1'`)
+    assert(msg2?.queue === q2, `msg2.queue !== 'q2'`)
+    assert(msg3?.queue === q3, `msg3.queue !== 'q3`)
 
     assert.deepStrictEqual(msg1.message, msgToSend1)
     assert.deepStrictEqual(msg2.message, msgToSend2)
