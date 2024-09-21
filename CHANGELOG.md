@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/waitingsong/pgmq-js/compare/v2.2.0...v3.0.0) (2024-09-21)
+
+
+### Features
+
+* **mwcp:** breaking change property MsgSetVtDto['vtOffset'] to MsgSetVtDto['vt'} ([85bdbec](https://github.com/waitingsong/pgmq-js/commit/85bdbec2f0886a55f39c7ba027e3e0ac6b796bb9))
+* **mwcp:** breaking change rename property  queueName to queue of QueueMetricsDto, ConsumerMessageDto ([3aca14d](https://github.com/waitingsong/pgmq-js/commit/3aca14d81326346cf305f3e23443407d5ff2464a))
+* **pgmq:** breaking change rename property  queueName to queue of QueueMetrics, QueueMetricsDto ([8b69a98](https://github.com/waitingsong/pgmq-js/commit/8b69a98210f192275bbb1a964b3cddd04ac8daab))
+* use prefix PGMQ_ as env variable name instead of POSTGRES_ ([1aaff5b](https://github.com/waitingsong/pgmq-js/commit/1aaff5bac3476bc1c44a98c61677431c800fa41b))
+
+
+
+
+
 # [2.2.0](https://github.com/waitingsong/pgmq-js/compare/v2.1.5...v2.2.0) (2024-09-21)
 
 
