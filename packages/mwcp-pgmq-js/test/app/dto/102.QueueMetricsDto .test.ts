@@ -13,7 +13,7 @@ describe(fileShortPath(import.meta.url), () => {
       const { validateService } = testConfig
 
       const row: Dto = new Dto()
-      row.queueName = 'foo'
+      row.queue = 'foo'
       row.queueLength = '1'
       row.newestMsgAgeSec = null
       row.oldestMsgAgeSec = 1
@@ -27,7 +27,7 @@ describe(fileShortPath(import.meta.url), () => {
       const { validateService } = testConfig
 
       const row = new Dto()
-      row.queueName = 'foo'
+      row.queue = 'foo'
       row.newestMsgAgeSec = 0
 
       try {

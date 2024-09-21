@@ -25,7 +25,7 @@ describe(fileShortPath(import.meta.url), () => {
 
       const ret = resp.body as QueueMetricsDto
       assert(ret)
-      assert(ret.queueName === rndStr, ret.queueName)
+      assert(ret.queue === rndStr, ret.queue)
       assert(ret.newestMsgAgeSec === null)
       assert(ret.oldestMsgAgeSec === null)
       assert(ret.queueLength === '0')

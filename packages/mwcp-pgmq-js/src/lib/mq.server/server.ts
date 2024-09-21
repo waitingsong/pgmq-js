@@ -23,7 +23,6 @@ export class PgmqServer extends EventEmitter {
 
   closed = false
   intvDelay = 100 // ms
-  // sourceName -> Map<queueName, Set<ConsumerCallback>>
   protected readonly consumerList = new Map<SourceName, Map<QueueName, Set<ConsumerCallback>>>()
   protected readonly listenerList = new Map<SourceName, Map<QueueName, Set<NodeJS.Timeout>>>()
 
@@ -35,24 +34,24 @@ export class PgmqServer extends EventEmitter {
   ): Promise<void> {
 
     this.closed = false
-    const { queue: queueName } = listenerOptions
-    assert(queueName, 'queueName is required')
+    const { queue } = listenerOptions
+    assert(queue, 'queue is required')
     const { sourceName } = listenerOptions
     assert(sourceName, 'sourceName is required')
 
-    if (typeof queueName === 'string') {
+    if (typeof queue === 'string') {
       const opts: PgmqListenerOptionsInner = {
         ...initConsumerOptions,
         ...listenerOptions,
         sourceName,
-        queue: queueName,
+        queue: queue,
       }
       const intv = opts.maxPollSeconds * 1000 + this.intvDelay
       await this.createListener(opts, intv)
-      this.updateSourceQueueSet(sourceName, queueName, listenerCallback)
+      this.updateSourceQueueSet(sourceName, queue, listenerCallback)
     }
     else {
-      for (const name of queueName) {
+      for (const name of queue) {
         const opts: PgmqListenerOptionsInner = {
           ...initConsumerOptions,
           ...listenerOptions,
@@ -245,7 +244,7 @@ export class PgmqServer extends EventEmitter {
 
     const consumerMsg: ConsumerMessageDto = {
       ...msg,
-      queueName,
+      queue: queueName,
     }
     await listenerCallback(consumerMsg)
   }

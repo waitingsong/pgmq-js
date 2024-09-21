@@ -8,7 +8,7 @@ import { MessageDto as _MessageDto, MsgReadWithPollDto } from '##/app/index.app.
 export class ConsumerMessageDto extends _MessageDto {
   @ApiProperty({ example: 'my_queue', description: '队列名' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
-  queueName: string
+  queue: string
 }
 
 export interface ConsumerOptions {

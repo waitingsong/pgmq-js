@@ -27,7 +27,7 @@ export class ConsumerTestService {
   @PgmqListener({ queue: ['q2', 'q3'], consumeAction: 'archive' })
   @PgmqListener({ queue: ['q4'] })
   async hello(msg: ConsumerMessageDto): Promise<void> {
-    switch (msg.queueName) {
+    switch (msg.queue) {
       case this.q1:
         this.msgs1.push(msg)
         break

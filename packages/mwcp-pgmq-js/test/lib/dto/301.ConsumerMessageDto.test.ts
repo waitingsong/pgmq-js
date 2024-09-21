@@ -13,7 +13,7 @@ describe(fileShortPath(import.meta.url), () => {
       const { validateService } = testConfig
 
       const row = new Dto()
-      row.queueName = 'queue'
+      row.queue = 'queue'
       row.msgId = '1'
       row.message = null
       row.enqueuedAt = new Date().toISOString()
@@ -27,7 +27,7 @@ describe(fileShortPath(import.meta.url), () => {
       const { validateService } = testConfig
 
       const row = new Dto()
-      row.queueName = 'queue'
+      row.queue = 'queue'
       row.msgId = '1'
       row.message = null
       row.enqueuedAt = new Date().toISOString()

@@ -48,7 +48,7 @@ export class QueueDto implements _QueueDto {
 export class QueueMetricsDto implements _QueueMetricsDto {
   @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
-  queueName: string
+  queue: string
 
   @ApiProperty({ example: '10', description: '队列中消息数量' })
   @Rule(commonValidSchemas.bigintString.required())
