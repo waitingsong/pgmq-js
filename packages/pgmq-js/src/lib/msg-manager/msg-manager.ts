@@ -154,7 +154,7 @@ export class MsgManager {
   // #region setVt
 
   /**
-   * @param vtOffset Duration from now, in seconds, that the message's VT should be set to
+   * @param vt Duration from now, in seconds, that the message's VT should be set to
    */
   async setVt<T extends MsgContent>(options: SetVtOptions): Promise<Message<T> | null> {
     const { queue, msgId, vt: vtOffset, trx } = options
