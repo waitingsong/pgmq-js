@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/waitingsong/pgmq-js/compare/v3.0.1...v4.0.0) (2024-09-21)
+
+
+### Features
+
+* **pgmq:** methods of MsgManager support pass transaction (except readWithPoll()) ([ad14a24](https://github.com/waitingsong/pgmq-js/commit/ad14a249c490bded6a5cd118a87d1c2237a5b04e))
+
+
+
+
+
 ## [3.0.1](https://github.com/waitingsong/pgmq-js/compare/v3.0.0...v3.0.1) (2024-09-21)
 
 **Note:** Version bump only for package pgmq-js
