@@ -31,7 +31,7 @@ export class QueueManager {
       throw new Error(`Queue '${name}' already exists`)
     }
     const query = QueueSql.create
-    await this.dbh.raw(query, [name])
+    await this.execute(query, [name])
   }
 
   /**
@@ -44,7 +44,7 @@ export class QueueManager {
       throw new Error(`Queue '${name}' already exists`)
     }
     const query = QueueSql.createUnlogged
-    await this.dbh.raw(query, [name])
+    await this.execute(query, [name])
   }
 
   /**
@@ -83,7 +83,7 @@ export class QueueManager {
 
   async list(): Promise<Queue[]> {
     const query = QueueSql.list
-    const res = await this.dbh.raw(query) as unknown as QueryResponse<ListResp>
+    const res = await this.execute<QueryResponse<ListResp>>(query, void 0)
 
     const ret = res.rows.map((row) => {
       const line = row['list_queues']
@@ -101,7 +101,7 @@ export class QueueManager {
   async drop(name: string): Promise<boolean> {
     const query = QueueSql.drop
     try {
-      const res = await this.dbh.raw(query, [name]) as unknown as QueryResponse<DropResp>
+      const res = await this.execute<QueryResponse<DropResp>>(query, [name])
       const [row] = res.rows
       const ret = !! row?.drop_queue
       return ret
@@ -120,7 +120,7 @@ export class QueueManager {
    */
   async purge(name: string): Promise<string> {
     const query = QueueSql.purge
-    const res = await this.dbh.raw(query, [name]) as unknown as QueryResponse<PurgeResp>
+    const res = await this.execute<QueryResponse<PurgeResp>>(query, [name])
     const [row] = res.rows
     const ret = row?.purge_queue ?? '0'
     return ret
@@ -130,14 +130,14 @@ export class QueueManager {
 
   async detachArchive(name: string): Promise<void> {
     const query = QueueSql.detachArchive
-    await this.dbh.raw(query, [name]) as unknown as QueryResponse<DetachArchiveResp>
+    await this.execute<QueryResponse<DetachArchiveResp>>(query, [name])
   }
 
   // #region getMetrics
 
   async getMetrics(name: string): Promise<QueueMetrics | null> {
     const query = QueueSql.getMetrics
-    const res = await this.dbh.raw(query, [name]) as unknown as QueryResponse<MetricsResp>
+    const res = await this.execute<QueryResponse<MetricsResp>>(query, [name])
     const data = res.rows[0]
     const ret = data ? parseQueueMetrics(data) : null
     return ret
@@ -147,9 +147,15 @@ export class QueueManager {
 
   async getAllMetrics(): Promise<QueueMetrics[]> {
     const query = QueueSql.getAllMetrics
-    const res = await this.dbh.raw(query) as unknown as QueryResponse<MetricsResp>
+    const res = await this.execute<QueryResponse<MetricsResp>>(query, void 0)
     const ret = res.rows.map(parseQueueMetrics)
     return ret
   }
 
+  protected async execute<T = unknown>(sql: string, params: unknown[] | undefined): Promise<T> {
+    const { dbh } = this
+    const res = await (params ? dbh.raw(sql, params) : dbh.raw(sql)) as T
+    return res
+  }
 }
+
