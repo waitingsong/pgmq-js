@@ -31,7 +31,7 @@ export class MsgManager {
 
     assert(typeof msg === 'object', 'msg must be object')
     const query = MsgSql.send
-    const res = await this.dbh.raw(query, [queue, msg, delay]) as unknown as QueryResponse<SendResp>
+    const res = await this.execute<QueryResponse<SendResp>>(query, [queue, msg, delay])
     const [row] = res.rows
     assert(row, 'send failed')
     return [row.send]
@@ -45,7 +45,7 @@ export class MsgManager {
     const { queue, msgs, delay = 0 } = options
 
     const query = MsgSql.sendBatch
-    const res = await this.dbh.raw(query, [queue, msgs, delay]) as unknown as QueryResponse<SendBatchResp>
+    const res = await this.execute<QueryResponse<SendBatchResp>>(query, [queue, msgs, delay])
     const ret = res.rows.map(row => row.send_batch)
     return ret
   }
@@ -74,10 +74,10 @@ export class MsgManager {
     const { queue, vt = 1, qty = 1, maxPollSeconds = 5, pollIntervalMs = 100 } = options
 
     const query = MsgSql.read_with_poll
-    const res = await this.dbh.raw(
+    const res = await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(
       query,
       [queue, vt, qty, maxPollSeconds, pollIntervalMs],
-    ) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
+    )
     const ret = res.rows.map(parseMessage)
     return ret as Message<T>[]
   }
@@ -89,7 +89,7 @@ export class MsgManager {
     const { queue, vt = 1, qty = 1 } = options
 
     const query = MsgSql.read
-    const res = await this.dbh.raw(query, [queue, vt, qty]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
+    const res = await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue, vt, qty])
     const ret = res.rows.map(parseMessage)
     return ret as Message<T>[]
   }
@@ -100,7 +100,7 @@ export class MsgManager {
     const { queue } = options
 
     const query = MsgSql.pop
-    const res = await this.dbh.raw(query, [queue]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
+    const res = await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue])
     const rows = res.rows.map(parseMessage)
     const ret = rows[0]
     return ret as Message<T> | null
@@ -112,7 +112,7 @@ export class MsgManager {
     const { queue, msgId } = options
 
     const query = MsgSql.delete
-    const res = await this.dbh.raw(query, [queue, msgId]) as unknown as QueryResponse<DeleteResp>
+    const res = await this.execute<QueryResponse<DeleteResp>>(query, [queue, msgId])
     const status = res.rows[0]?.delete
     const ret = status ? [msgId.toString()] : []
     return ret as MsgId[]
@@ -122,7 +122,7 @@ export class MsgManager {
     const { queue, msgIds } = options
 
     const query = MsgSql.deleteBatch
-    const res = await this.dbh.raw(query, [queue, msgIds]) as unknown as QueryResponse<DeleteBatchResp>
+    const res = await this.execute<QueryResponse<DeleteBatchResp>>(query, [queue, msgIds])
     const ret = res.rows.map(row => row.delete)
     return ret
   }
@@ -133,7 +133,7 @@ export class MsgManager {
     const { queue, msgId } = options
 
     const query = MsgSql.archive
-    const res = await this.dbh.raw(query, [queue, msgId]) as unknown as QueryResponse<ArchiveResp>
+    const res = await this.execute<QueryResponse<ArchiveResp>>(query, [queue, msgId])
     const status = res.rows[0]?.archive
     const ret = status ? [msgId.toString()] : []
     return ret as MsgId[]
@@ -143,7 +143,7 @@ export class MsgManager {
     const { queue, msgIds } = options
 
     const query = MsgSql.archiveBatch
-    const res = await this.dbh.raw(query, [queue, msgIds]) as unknown as QueryResponse<ArchiveBatchResp>
+    const res = await this.execute<QueryResponse<ArchiveBatchResp>>(query, [queue, msgIds])
     const ret = res.rows.map(row => row.archive)
     return ret
   }
@@ -158,10 +158,16 @@ export class MsgManager {
     const { queue, msgId, vt: vtOffset } = options
 
     const query = MsgSql.setVt
-    const res = await this.dbh.raw(query, [queue, msgId, vtOffset]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
+    const res = await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue, msgId, vtOffset])
     const rows = res.rows.map(parseMessage)
     const ret = rows[0] ?? null
     return ret as Message<T> | null
+  }
+
+  protected async execute<T = unknown>(sql: string, params: unknown[]): Promise<T> {
+    const { dbh } = this
+    const res = await dbh.raw(sql, params) as T
+    return res
   }
 }
 
