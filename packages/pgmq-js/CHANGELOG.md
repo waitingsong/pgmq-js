@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/waitingsong/pgmq-js/compare/v2.1.5...v2.2.0) (2024-09-21)
+
+
+### Features
+
+* **pgmq:** queue name accepts hyphen - with new version of pgmq v1.4.4 ([476a059](https://github.com/waitingsong/pgmq-js/commit/476a059a8847c86cf2f1bc62e58c87ce2212a55e))
+
+
+
+
+
 ## [2.1.5](https://github.com/waitingsong/pgmq-js/compare/v2.1.4...v2.1.5) (2024-09-18)
 
 **Note:** Version bump only for package @waiting/pgmq-js
