@@ -84,7 +84,6 @@ export class AutoConfiguration implements ILifeCycle {
       const metadata: ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module)
       return metadata.type === 'pgmq'
     })
-    console.info({ subscriberModules })
 
     const moduleCache = new Map<object, unknown>()
 
