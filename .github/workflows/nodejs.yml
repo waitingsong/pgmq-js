@@ -65,16 +65,15 @@ jobs:
         run: |
           psql -V
           dig postgres
-          echo "\l" | psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d postgres
-          psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "\d+"
-          psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SHOW TIMEZONE;"
+          echo "\l" | psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d postgres
+          psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "\d+"
+          psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SHOW TIMEZONE;"
         env:
           CI: true
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
-          POSTGRES_DB: db_ci_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: postgres
           PGPASSWORD: postgres
 
       - name: Install Dependencies
@@ -116,11 +115,11 @@ jobs:
           .scripts/ci/ci-init-db.sh
         env:
           CI: true
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-          POSTGRES_DB: db_ci_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: postgres
+          PGMQ_PASSWORD: postgres
           PGPASSWORD: postgres
 
       - name: Testing
@@ -133,12 +132,11 @@ jobs:
           CI: true
           # use `localhost` if running the job on the VM
           # use `postgres` if running the job on a container
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
-          POSTGRES_DB: db_ci_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          PGPASSWORD: postgres
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: postgres
+          PGMQ_PASSWORD: postgres
           # redis
           REDIS_HOST: redis
           REDIS_PORT: 6379

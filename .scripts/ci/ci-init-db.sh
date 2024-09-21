@@ -5,7 +5,8 @@ psql -V
 # netstat -tunpl
 dig postgres
 
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SHOW TIMEZONE;"
+PGPASSWORD="$PGMQ_PASSWORD"
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SHOW TIMEZONE;"
 
 echo -e "\n"
 

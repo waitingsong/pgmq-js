@@ -3,7 +3,8 @@ set -e
 
 echo -e "\n"
 
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
+PGPASSWORD="$PGMQ_PASSWORD"
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
   -f ddl/extension.sql \
 
 

@@ -2,7 +2,8 @@
 set -e
 
 echo -e "\n"
-echo "\l" | psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d postgres
+PGPASSWORD="$PGMQ_PASSWORD"
+echo "\l" | psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d postgres
 
 
 SQL_DIR='default'
@@ -11,5 +12,5 @@ cd "$SQL_DIR"
 cd -
 
 
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "\d+"
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "\d+"
 
