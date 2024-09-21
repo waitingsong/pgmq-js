@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type DeleteBatchOptions, type SendBatchOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -25,8 +25,17 @@ describe(fileShortPath(import.meta.url), () => {
 
   it(`msg.archiveBatch(${rndString})`, async () => {
     const fakeMsgId = '999999999'
-    const msgIds = await mq.msg.sendBatch(rndString, [msgToSend, msgToSend])
-    const ids = await mq.msg.archiveBatch(rndString, [...msgIds, fakeMsgId])
+    const sendOpts: SendBatchOptions = {
+      queue: rndString,
+      msgs: [msgToSend, msgToSend],
+    }
+    const msgIds = await mq.msg.sendBatch(sendOpts)
+
+    const opts: DeleteBatchOptions = {
+      queue: rndString,
+      msgIds: [...msgIds, fakeMsgId],
+    }
+    const ids = await mq.msg.archiveBatch(opts)
     assert(ids.length === 2, 'archiveBatch failed')
     assert(! ids.includes(fakeMsgId), 'archiveBatch failed')
   })

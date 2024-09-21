@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -35,7 +35,11 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`queue.getMetrics(${rndString}) after send()`, async () => {
-    await mq.msg.send(rndString, msgToSend)
+    const opts: SendOptions = {
+      queue: rndString,
+      msg: msgToSend,
+    }
+    await mq.msg.send(opts)
 
     const row = await mq.queue.getMetrics(rndString)
     assert(row, 'getMetrics failed')

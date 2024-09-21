@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, genRandomString } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, type ReadOptions, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -13,7 +13,11 @@ describe(fileShortPath(import.meta.url), () => {
   before(async () => {
     mq = new Pgmq('test', dbConfig)
     await mq.queue.createUnlogged(rndString)
-    await mq.msg.send(rndString, null)
+    const opts: SendOptions = {
+      queue: rndString,
+      msg: null,
+    }
+    await mq.msg.send(opts)
   })
   after(async () => {
     await mq.queue.drop(rndString)
@@ -21,7 +25,10 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`send null and then read it`, async () => {
-    const msg = await mq.msg.read(rndString)
+    const opts: ReadOptions = {
+      queue: rndString,
+    }
+    const msg = await mq.msg.read(opts)
     assert(msg)
     assert(msg.msgId === '1')
     assert(msg.message === null, 'msg.message not exist')

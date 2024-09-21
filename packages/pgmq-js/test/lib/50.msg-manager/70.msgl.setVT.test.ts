@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, genRandomString, sleep } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, type ReadOptions, type SendOptions, type SetVtOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -24,20 +24,33 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`msg.setVt(${rndString})`, async () => {
-    const msgIds = await mq.msg.send(rndString, msgToSend)
+    const sendOpts: SendOptions = {
+      queue: rndString,
+      msg: msgToSend,
+    }
+    const msgIds = await mq.msg.send(sendOpts)
     assert(msgIds[0])
-    const msg = await mq.msg.setVt(rndString, msgIds[0], 1)
+
+    const opts: SetVtOptions = {
+      queue: rndString,
+      msgId: msgIds[0],
+      vt: 1,
+    }
+    const msg = await mq.msg.setVt(opts)
     console.log({ msg })
     assert(msg)
     assert(msg.msgId === '1')
     assert.deepStrictEqual(msg.message, msgToSend, 'msg.message not equal')
     assert(msg.vt, 'msg.vt not exist')
 
-    const msg2 = await mq.msg.read(rndString)
+    const readOpts: ReadOptions = {
+      queue: rndString,
+    }
+    const msg2 = await mq.msg.read(readOpts)
     assert(msg2 === null, 'msg2 not null') // still invisible
 
     await sleep(1000)
-    const msg3 = await mq.msg.read(rndString)
+    const msg3 = await mq.msg.read(readOpts)
     assert(msg3, 'msg3 not exist')
     assert.deepStrictEqual(msg3.message, msgToSend, 'msg.message not equal')
     assert(msg3.vt, 'msg.vt not exist')

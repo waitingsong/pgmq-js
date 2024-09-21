@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type DeleteBatchOptions, type SendBatchOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -25,8 +25,17 @@ describe(fileShortPath(import.meta.url), () => {
 
   it(`msg.deleteBatch(${rndString})`, async () => {
     const fakeId = '999'
-    const msgIds = await mq.msg.sendBatch(rndString, [msgToSend, msgToSend])
-    const deletedMsgIds = await mq.msg.deleteBatch(rndString, [...msgIds, fakeId])
+    const sendOpts: SendBatchOptions = {
+      queue: rndString,
+      msgs: [msgToSend, msgToSend],
+    }
+    const msgIds = await mq.msg.sendBatch(sendOpts)
+
+    const opts: DeleteBatchOptions = {
+      queue: rndString,
+      msgIds: [...msgIds, fakeId],
+    }
+    const deletedMsgIds = await mq.msg.deleteBatch(opts)
     assert(deletedMsgIds.length === 2, 'deleteBatch() failed')
     assert(deletedMsgIds.includes(fakeId) === false, 'deleteBatch() failed')
   })

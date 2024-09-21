@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, genRandomString, sleep } from '@waiting/shared-core'
 
-import { Pgmq } from '##/index.js'
+import { Pgmq, type ReadWithPollOptions, type SendBatchOptions, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -27,12 +27,23 @@ describe(fileShortPath(import.meta.url), () => {
     let msgIds: string[] = []
     const now = Date.now()
 
+    const opts: ReadWithPollOptions = {
+      queue: rndString,
+      vt: 0,
+      qty: 2,
+      maxPollSeconds: 2,
+    }
+    const sendOpts: SendBatchOptions = {
+      queue: rndString,
+      msgs: [msgToSend, msgToSend],
+    }
+
     await Promise.all([
-      mq.msg.readWithPoll(rndString, 0, 2, 2),
+      mq.msg.readWithPoll(opts),
       Promise.resolve()
         .then(async () => {
           await sleep(3000)
-          msgIds = await mq.msg.sendBatch(rndString, [msgToSend, msgToSend])
+          msgIds = await mq.msg.sendBatch(sendOpts)
         }),
     ])
     const cost = Date.now() - now

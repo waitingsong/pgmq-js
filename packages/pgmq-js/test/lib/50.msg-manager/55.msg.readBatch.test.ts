@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type ReadBatchOptions, type SendBatchOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -14,10 +14,20 @@ const msgToSend = {
 
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
+  const opts: ReadBatchOptions = {
+    queue: rndString,
+    vt: 0,
+    qty: 3,
+  }
+
   before(async () => {
+    const sendOpts: SendBatchOptions = {
+      queue: rndString,
+      msgs: [msgToSend, msgToSend],
+    }
     mq = new Pgmq('test', dbConfig)
     await mq.queue.createUnlogged(rndString)
-    await mq.msg.sendBatch(rndString, [msgToSend, msgToSend])
+    await mq.msg.sendBatch(sendOpts)
   })
   after(async () => {
     await mq.queue.drop(rndString)
@@ -25,7 +35,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`msg.readBatch(${rndString})`, async () => {
-    const msgs = await mq.msg.readBatch(rndString, 0, 3)
+    const msgs = await mq.msg.readBatch(opts)
     assert(msgs.length === 2, 'msgs.length not equal 2')
 
     const [msg] = msgs

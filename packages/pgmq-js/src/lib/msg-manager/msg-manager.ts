@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 
-import type { BigIntStr, RecordSnakeKeys } from '@waiting/shared-types'
+import type { RecordSnakeKeys } from '@waiting/shared-types'
 import type { Knex } from 'knex'
 
 import type { QueryResponse } from '../knex.types.js'
@@ -8,7 +8,13 @@ import type { QueryResponse } from '../knex.types.js'
 import type { ArchiveBatchResp, ArchiveResp, DeleteBatchResp, DeleteResp, SendBatchResp, SendResp } from './db.types.js'
 import { parseMessage } from './msg.helpers.js'
 import { MsgSql } from './msg.sql.js'
-import type { Message, MsgContent, MsgId } from './msg.types.js'
+import type {
+  DeleteBatchOptions, DeleteOptions,
+  Message, MsgContent, MsgId,
+  PopOptions,
+  ReadBatchOptions, ReadOptions, ReadWithPollOptions,
+  SendBatchOptions, SendOptions, SetVtOptions,
+} from './msg.types.js'
 
 
 export class MsgManager {
@@ -19,9 +25,10 @@ export class MsgManager {
   /**
    * Send a message to the queue
    * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
-   * @param delay Time in seconds before the message becomes visible. Defaults to 0.
    */
-  async send<T extends MsgContent>(queue: string, msg: T, delay = 0): Promise<MsgId[]> {
+  async send<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
+    const { queue, msg, delay = 0 } = options
+
     assert(typeof msg === 'object', 'msg must be object')
     const query = MsgSql.send
     const res = await this.dbh.raw(query, [queue, msg, delay]) as unknown as QueryResponse<SendResp>
@@ -34,7 +41,9 @@ export class MsgManager {
    * Send multiple messages to the queue
    * @param delay Time in seconds before the message becomes visible. Defaults to 0.
    */
-  async sendBatch<T extends MsgContent>(queue: string, msgs: T[], delay = 0): Promise<MsgId[]> {
+  async sendBatch<T extends MsgContent>(options: SendBatchOptions<T>): Promise<MsgId[]> {
+    const { queue, msgs, delay = 0 } = options
+
     const query = MsgSql.sendBatch
     const res = await this.dbh.raw(query, [queue, msgs, delay]) as unknown as QueryResponse<SendBatchResp>
     const ret = res.rows.map(row => row.send_batch)
@@ -46,8 +55,9 @@ export class MsgManager {
   /**
    * @param vt Time in seconds that the message become invisible after reading, defaults to 1
    */
-  async read<T extends MsgContent>(queue: string, vt = 1): Promise<Message<T> | null> {
-    const rows = await this.readBatch<T>(queue, vt, 1)
+  async read<T extends MsgContent>(options: ReadOptions): Promise<Message<T> | null> {
+    const opts: ReadBatchOptions = { ...options, qty: 1 }
+    const rows = await this.readBatch<T>(opts)
     return rows[0] ?? null
   }
 
@@ -58,25 +68,15 @@ export class MsgManager {
    * If messages reach the queue during that duration, they will be read and returned immediately.
    *
    * @link https://tembo-io.github.io/pgmq/api/sql/functions/#read_with_poll
-   * @note Ensure max_poll_seconds less than the timeout of the statement_timeout in the dbConfig (default 6000ms)
-   * @param queue The name of the queue
-   * @param vt    Time in seconds that the message become invisible after reading, defaults to 1
-   * @param qty   The number of messages to read from the queue
-   * @param max_poll_seconds Time in seconds to wait for new messages to reach the queue, defaults to 5(s)
-   * @param poll_interval_ms Milliseconds between the internal poll operations, defaults to 100(ms)
+   * @note Ensure max_poll_seconds less than the timeout of the statement_timeout in the dbConfig (default 5s)
    */
-  async readWithPoll<T extends MsgContent>(
-    queue: string,
-    vt = 1,
-    qty = 1,
-    max_poll_seconds = 5,
-    poll_interval_ms = 100,
-  ): Promise<Message<T>[]> {
+  async readWithPoll<T extends MsgContent>(options: ReadWithPollOptions): Promise<Message<T>[]> {
+    const { queue, vt = 1, qty = 1, maxPollSeconds = 5, pollIntervalMs = 100 } = options
 
     const query = MsgSql.read_with_poll
     const res = await this.dbh.raw(
       query,
-      [queue, vt, qty, max_poll_seconds, poll_interval_ms],
+      [queue, vt, qty, maxPollSeconds, pollIntervalMs],
     ) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
     const ret = res.rows.map(parseMessage)
     return ret as Message<T>[]
@@ -84,10 +84,10 @@ export class MsgManager {
 
   /**
    * Read multiple messages from the queue
-   * @param vt Time in seconds that the message become invisible after reading, defaults to 1
-   * @param qty The number of messages to read from the queue, defaults to 1
    */
-  async readBatch<T extends MsgContent = MsgContent>(queue: string, vt = 1, qty = 1): Promise<Message<T>[]> {
+  async readBatch<T extends MsgContent = MsgContent>(options: ReadBatchOptions): Promise<Message<T>[]> {
+    const { queue, vt = 1, qty = 1 } = options
+
     const query = MsgSql.read
     const res = await this.dbh.raw(query, [queue, vt, qty]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
     const ret = res.rows.map(parseMessage)
@@ -96,7 +96,9 @@ export class MsgManager {
 
   // #region pop
 
-  async pop<T extends MsgContent = object>(queue: string): Promise<Message<T> | null> {
+  async pop<T extends MsgContent = object>(options: PopOptions): Promise<Message<T> | null> {
+    const { queue } = options
+
     const query = MsgSql.pop
     const res = await this.dbh.raw(query, [queue]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
     const rows = res.rows.map(parseMessage)
@@ -106,7 +108,9 @@ export class MsgManager {
 
   // #region delete
 
-  async delete(queue: string, msgId: BigIntStr | number): Promise<MsgId[]> {
+  async delete(options: DeleteOptions): Promise<MsgId[]> {
+    const { queue, msgId } = options
+
     const query = MsgSql.delete
     const res = await this.dbh.raw(query, [queue, msgId]) as unknown as QueryResponse<DeleteResp>
     const status = res.rows[0]?.delete
@@ -114,7 +118,9 @@ export class MsgManager {
     return ret as MsgId[]
   }
 
-  async deleteBatch(queue: string, msgIds: (BigIntStr | number)[]): Promise<MsgId[]> {
+  async deleteBatch(options: DeleteBatchOptions): Promise<MsgId[]> {
+    const { queue, msgIds } = options
+
     const query = MsgSql.deleteBatch
     const res = await this.dbh.raw(query, [queue, msgIds]) as unknown as QueryResponse<DeleteBatchResp>
     const ret = res.rows.map(row => row.delete)
@@ -123,7 +129,9 @@ export class MsgManager {
 
   // #region archive
 
-  async archive(queue: string, msgId: BigIntStr | number): Promise<MsgId[]> {
+  async archive(options: DeleteOptions): Promise<MsgId[]> {
+    const { queue, msgId } = options
+
     const query = MsgSql.archive
     const res = await this.dbh.raw(query, [queue, msgId]) as unknown as QueryResponse<ArchiveResp>
     const status = res.rows[0]?.archive
@@ -131,7 +139,9 @@ export class MsgManager {
     return ret as MsgId[]
   }
 
-  async archiveBatch(queue: string, msgIds: (BigIntStr | number)[]): Promise<MsgId[]> {
+  async archiveBatch(options: DeleteBatchOptions): Promise<MsgId[]> {
+    const { queue, msgIds } = options
+
     const query = MsgSql.archiveBatch
     const res = await this.dbh.raw(query, [queue, msgIds]) as unknown as QueryResponse<ArchiveBatchResp>
     const ret = res.rows.map(row => row.archive)
@@ -144,7 +154,9 @@ export class MsgManager {
   /**
    * @param vtOffset Duration from now, in seconds, that the message's VT should be set to
    */
-  async setVt<T extends MsgContent>(queue: string, msgId: BigIntStr | number, vtOffset: number): Promise<Message<T> | null> {
+  async setVt<T extends MsgContent>(options: SetVtOptions): Promise<Message<T> | null> {
+    const { queue, msgId, vt: vtOffset } = options
+
     const query = MsgSql.setVt
     const res = await this.dbh.raw(query, [queue, msgId, vtOffset]) as unknown as QueryResponse<RecordSnakeKeys<Message<T>>>
     const rows = res.rows.map(parseMessage)

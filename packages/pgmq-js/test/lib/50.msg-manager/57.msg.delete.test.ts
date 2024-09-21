@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type DeleteOptions, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -10,6 +10,10 @@ const rndString = genRandomName(6)
 const msgToSend = {
   foo: 'bar',
   rnd: rndString,
+}
+const sendOpts: SendOptions = {
+  queue: rndString,
+  msg: msgToSend,
 }
 
 describe(fileShortPath(import.meta.url), () => {
@@ -24,34 +28,54 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`Msg.delete(${rndString}, string)`, async () => {
-    const msgIds = await mq.msg.send(rndString, msgToSend)
+    const msgIds = await mq.msg.send(sendOpts)
     assert(msgIds[0])
-    const deleted = await mq.msg.delete(rndString, msgIds[0])
+
+    const opts: DeleteOptions = {
+      queue: rndString,
+      msgId: msgIds[0],
+    }
+    const deleted = await mq.msg.delete(opts)
     assert(deleted)
     assert(deleted.length === 1)
   })
 
   it(`Msg.delete(${rndString}, number)`, async () => {
-    const msgIds = await mq.msg.send(rndString, msgToSend)
+    const msgIds = await mq.msg.send(sendOpts)
     assert(msgIds[0])
-    const deleted = await mq.msg.delete(rndString, +msgIds[0])
+
+    const opts: DeleteOptions = {
+      queue: rndString,
+      msgId: +msgIds[0],
+    }
+    const deleted = await mq.msg.delete(opts)
     assert(deleted)
     assert(deleted.length === 1)
     assert(deleted[0] === msgIds[0])
   })
 
   it(`Msg.delete(${rndString}, bigint)`, async () => {
-    const msgIds = await mq.msg.send(rndString, msgToSend)
+    const msgIds = await mq.msg.send(sendOpts)
     assert(msgIds[0])
-    const deleted = await mq.msg.delete(rndString, BigInt(msgIds[0]))
+
+    const opts: DeleteOptions = {
+      queue: rndString,
+      msgId: BigInt(msgIds[0]),
+    }
+    const deleted = await mq.msg.delete(opts)
     assert(deleted)
     assert(deleted.length === 1)
     assert(deleted[0] === msgIds[0])
   })
 
   it(`Msg.delete(${rndString}, fake string)`, async () => {
-    await mq.msg.send(rndString, msgToSend)
-    const deleted = await mq.msg.delete(rndString, '99999')
+    await mq.msg.send(sendOpts)
+
+    const opts: DeleteOptions = {
+      queue: rndString,
+      msgId: '99999', // fake
+    }
+    const deleted = await mq.msg.delete(opts)
     assert(deleted)
     assert(deleted.length === 0)
   })
