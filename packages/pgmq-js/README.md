@@ -1,6 +1,6 @@
 # pgmq-js
 
-Postgres Message Queue ([PGMQ]) JavaScript Client Library
+Postgres Message Queue ([PGMQ]) JavaScript Client Library, supports Transaction
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()
@@ -33,6 +33,7 @@ psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
 
 ## Usage
 
+### init
 ```ts
 import { Pgmq, type DbConnectionConfig, type Message, type MsgId } from '@waiting/pgmq-js'
 
@@ -44,7 +45,11 @@ const connection: DbConnectionConfig  = {
   password: process.env['PGMQ_PASSWORD'] ? process.env['PGMQ_PASSWORD'] : 'password',
   statement_timeout: 6000, // in milliseconds
 }
+```
 
+### Crate Queue and Send Message
+
+```ts
 const pgmq = new Pgmq('mq1', { connection })
 
 const queue = 'my_queue';
@@ -62,6 +67,31 @@ const numMessages = 5 // The number of messages to read from the queue, defaults
 const msgs: Message[] = await pgmq.msg.readBatch<Msg>({ queue, vt, numMessages })
 
 await pgmq.msg.archive({ queue, msgId: msg.msgId })
+
+```
+
+### Transaction
+
+```ts
+const trx = await mq.startTransaction() // start a transaction
+
+const queue = 'my_queue';
+await pgmq.queue.create({ queue, trx })
+
+const msgToSend = { id: 1, name: 'testMsg' }
+
+const msgId: MsgId = await pgmq.msg.send({ queue, msg: msgToSend, trx })
+const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgToSend ], trx})
+
+const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
+const msg: Message = await pgmq.msg.read<Msg>({ queue, vt, trx })
+
+const numMessages = 5 // The number of messages to read from the queue, defaults to 10
+const msgs: Message[] = await pgmq.msg.readBatch<Msg>({ queue, vt, numMessages, trx })
+
+await pgmq.msg.archive({ queue, msgId: msg.msgId, trx })
+
+await trx.commit() // commit transaction
 ```
 
 [More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/test/lib)
