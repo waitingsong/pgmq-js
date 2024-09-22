@@ -19,8 +19,8 @@ export function parseDbQueue(queue: QueueString): Queue {
   const time = new Date(createdAt.slice(1, -1))
   assert(time instanceof Date, `Invalid date format: ${createdAt}`)
 
-  const ret = {
-    name,
+  const ret: Queue = {
+    queue: name,
     createdAt: time,
     isPartitioned: isPartitioned === 't',
     isUnlogged: isUnlogged === 't',

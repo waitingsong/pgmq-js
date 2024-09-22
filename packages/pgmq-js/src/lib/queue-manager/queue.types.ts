@@ -2,14 +2,14 @@
 
 export interface Queue {
   /** Maximum 60 characters; alphanumeric characters, underscores (_) are allowed */
-  name: string
+  queue: string
   isPartitioned: boolean
   isUnlogged: boolean
   createdAt: Date
 }
 
 export interface QueueDto {
-  name: string
+  queue: string
   isPartitioned: boolean
   isUnlogged: boolean
   createdAt: string

@@ -1,5 +1,7 @@
 import type { Knex } from 'knex'
 
+import type { Transaction } from './knex.types.js'
+
 
 export interface DbConfig extends Knex.Config {
   client: DbClient
@@ -23,4 +25,9 @@ export interface DbConnectionConfig {
   keepAliveInitialDelayMillis?: number
   idle_in_transaction_session_timeout?: number
   connectionTimeoutMillis?: number
+}
+
+export interface OptionsBase {
+  queue: string
+  trx?: Transaction | undefined | null
 }

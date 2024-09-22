@@ -1,6 +1,6 @@
 import type { BigIntStr } from '@waiting/shared-types'
 
-import type { Transaction } from '../knex.types.js'
+import type { OptionsBase } from '../types.js'
 
 
 export type MsgId = `${bigint}`
@@ -26,10 +26,6 @@ export interface MessageDto<T extends MsgContent = MsgContent> {
 }
 
 
-export interface OptionsBase {
-  queue: string
-  trx?: Transaction | undefined
-}
 export type PopOptions = OptionsBase
 
 /**

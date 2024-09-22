@@ -48,7 +48,7 @@ const connection: DbConnectionConfig  = {
 const pgmq = new Pgmq('mq1', { connection })
 
 const queue = 'my_queue';
-await pgmq.queue.create(queue)
+await pgmq.queue.create({ queue })
 
 const msgToSend = { id: 1, name: 'testMsg' }
 

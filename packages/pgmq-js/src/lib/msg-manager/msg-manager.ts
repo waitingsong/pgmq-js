@@ -166,7 +166,7 @@ export class MsgManager {
     return ret as Message<T> | null
   }
 
-  protected async execute<T = unknown>(sql: string, params: unknown[], trx: Transaction | undefined): Promise<T> {
+  protected async execute<T = unknown>(sql: string, params: unknown[], trx: Transaction | undefined | null): Promise<T> {
     const dbh = trx ?? this.dbh
     const res = await dbh.raw(sql, params) as T
     return res

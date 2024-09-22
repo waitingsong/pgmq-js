@@ -2,34 +2,40 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type OptionsBase } from '##/index.js'
+import { Pgmq, genRandomName, type OptionsBase, type Transaction } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
-import { assertQueueRow } from '#@/test.helper.js'
 
-
-const rndString = genRandomName(6)
 
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
-  const createOpts: OptionsBase = { queue: rndString }
+  let trx: Transaction
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
+    trx = await mq.startTransaction()
   })
   after(async () => {
-    await mq.queue.drop(createOpts)
+    await trx.rollback()
     await mq.destroy()
   })
 
   describe(`QueueManager`, () => {
+    const rndString = genRandomName(6)
+    const createOpts: OptionsBase = { queue: rndString, trx }
+
     it(`createUnlogged(${rndString})`, async () => {
       await mq.queue.createUnlogged(createOpts)
     })
 
-    it(`getOne(${rndString})`, async () => {
-      const queue = await mq.queue.getOne(createOpts)
-      assertQueueRow(queue)
-      assert(queue?.isUnlogged, 'queue is not unlogged')
+    it(`createUnlogged(${rndString}) duplicate got error`, async () => {
+      try {
+        await mq.queue.createUnlogged(createOpts)
+      }
+      catch (ex) {
+        assert(ex instanceof Error)
+        return
+      }
+      assert(false, 'create duplicate should throw error')
     })
 
     it(`drop(${rndString})`, async () => {

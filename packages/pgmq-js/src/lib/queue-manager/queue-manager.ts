@@ -1,6 +1,7 @@
 import type { Knex } from 'knex'
 
-import type { QueryResponse } from '../knex.types.js'
+import type { QueryResponse, Transaction } from '../knex.types.js'
+import type { OptionsBase } from '../types.js'
 
 import type {
   DetachArchiveResp,
@@ -26,12 +27,13 @@ export class QueueManager {
    * Maximum 60 characters; alphanumeric characters, underscores (_) and hyphen (-) are allowed
    * @description * Throws error if queue already exists
    */
-  async create(name: string): Promise<void> {
-    if (await this.hasQueue(name)) {
-      throw new Error(`Queue '${name}' already exists`)
+  async create(options: OptionsBase): Promise<void> {
+    const { queue, trx } = options
+    if (await this.hasQueue(options)) {
+      throw new Error(`Queue '${queue}' already exists`)
     }
     const query = QueueSql.create
-    await this.execute(query, [name])
+    await this.execute(query, [queue], trx)
   }
 
   /**
@@ -39,22 +41,24 @@ export class QueueManager {
    * @param name - will be converted to lowercase
    * @description * Throws error if queue already exists
    */
-  public async createUnlogged(name: string) {
-    if (await this.hasQueue(name)) {
-      throw new Error(`Queue '${name}' already exists`)
+  public async createUnlogged(options: OptionsBase) {
+    const { queue, trx } = options
+    if (await this.hasQueue(options)) {
+      throw new Error(`Queue '${queue}' already exists`)
     }
     const query = QueueSql.createUnlogged
-    await this.execute(query, [name])
+    await this.execute(query, [queue], trx)
   }
 
   /**
    * No error if queue already exists or does not exist
    */
-  async hasQueue(name: string): Promise<boolean> {
+  async hasQueue(options: OptionsBase): Promise<boolean> {
+    const { queue: name, trx } = options
     try {
-      const list = await this.list()
+      const list = await this.list(trx)
       for (const queue of list) {
-        if (queue.name === name) {
+        if (queue.queue === name) {
           return true
         }
       }
@@ -69,10 +73,11 @@ export class QueueManager {
 
   // #region getOne
 
-  async getOne(name: string): Promise<Queue | null> {
-    const list = await this.list()
+  async getOne(options: OptionsBase): Promise<Queue | null> {
+    const { queue: name, trx } = options
+    const list = await this.list(trx)
     for (const queue of list) {
-      if (queue.name === name) {
+      if (queue.queue === name) {
         return queue
       }
     }
@@ -81,9 +86,9 @@ export class QueueManager {
 
   // #region list
 
-  async list(): Promise<Queue[]> {
+  async list(trx?: Transaction | undefined | null): Promise<Queue[]> {
     const query = QueueSql.list
-    const res = await this.execute<QueryResponse<ListResp>>(query, void 0)
+    const res = await this.execute<QueryResponse<ListResp>>(query, null, trx)
 
     const ret = res.rows.map((row) => {
       const line = row['list_queues']
@@ -98,10 +103,11 @@ export class QueueManager {
   /**
    * Return false if queue does not exist
    */
-  async drop(name: string): Promise<boolean> {
+  async drop(options: OptionsBase): Promise<boolean> {
+    const { queue: name, trx } = options
     const query = QueueSql.drop
     try {
-      const res = await this.execute<QueryResponse<DropResp>>(query, [name])
+      const res = await this.execute<QueryResponse<DropResp>>(query, [name], trx)
       const [row] = res.rows
       const ret = !! row?.drop_queue
       return ret
@@ -118,9 +124,10 @@ export class QueueManager {
    * Permanently deletes all messages in a queue. Returns the number of messages that were deleted.
    * **NOT delete the queue itself**.
    */
-  async purge(name: string): Promise<string> {
+  async purge(options: OptionsBase): Promise<string> {
+    const { queue: name, trx } = options
     const query = QueueSql.purge
-    const res = await this.execute<QueryResponse<PurgeResp>>(query, [name])
+    const res = await this.execute<QueryResponse<PurgeResp>>(query, [name], trx)
     const [row] = res.rows
     const ret = row?.purge_queue ?? '0'
     return ret
@@ -128,16 +135,21 @@ export class QueueManager {
 
   // #region  detachArchive
 
-  async detachArchive(name: string): Promise<void> {
+  async detachArchive(options: OptionsBase): Promise<void> {
+    const { queue: name, trx } = options
     const query = QueueSql.detachArchive
-    await this.execute<QueryResponse<DetachArchiveResp>>(query, [name])
+    await this.execute<QueryResponse<DetachArchiveResp>>(query, [name], trx)
   }
 
   // #region getMetrics
 
-  async getMetrics(name: string): Promise<QueueMetrics | null> {
+  /**
+   * @returns totalMessages visible if out of transaction
+   */
+  async getMetrics(options: OptionsBase): Promise<QueueMetrics | null> {
+    const { queue: name, trx } = options
     const query = QueueSql.getMetrics
-    const res = await this.execute<QueryResponse<MetricsResp>>(query, [name])
+    const res = await this.execute<QueryResponse<MetricsResp>>(query, [name], trx)
     const data = res.rows[0]
     const ret = data ? parseQueueMetrics(data) : null
     return ret
@@ -145,15 +157,16 @@ export class QueueManager {
 
   // #region getAllMetrics
 
-  async getAllMetrics(): Promise<QueueMetrics[]> {
+  async getAllMetrics(trx?: Transaction | undefined): Promise<QueueMetrics[]> {
     const query = QueueSql.getAllMetrics
-    const res = await this.execute<QueryResponse<MetricsResp>>(query, void 0)
+    const res = await this.execute<QueryResponse<MetricsResp>>(query, null, trx)
     const ret = res.rows.map(parseQueueMetrics)
     return ret
   }
 
-  protected async execute<T = unknown>(sql: string, params: unknown[] | undefined): Promise<T> {
-    const { dbh } = this
+
+  protected async execute<T = unknown>(sql: string, params: unknown[] | null, trx: Transaction | undefined | null): Promise<T> {
+    const dbh = trx ?? this.dbh
     const res = await (params ? dbh.raw(sql, params) : dbh.raw(sql)) as T
     return res
   }

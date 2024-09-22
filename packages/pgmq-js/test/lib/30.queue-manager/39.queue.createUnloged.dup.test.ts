@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName } from '##/index.js'
+import { Pgmq, genRandomName, type OptionsBase } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -17,14 +17,15 @@ describe(fileShortPath(import.meta.url), () => {
 
   describe(`QueueManager`, () => {
     const rndString = genRandomName(6)
+    const createOpts: OptionsBase = { queue: rndString }
 
     it(`createUnlogged(${rndString})`, async () => {
-      await mq.queue.createUnlogged(rndString)
+      await mq.queue.createUnlogged(createOpts)
     })
 
     it(`createUnlogged(${rndString}) duplicate got error`, async () => {
       try {
-        await mq.queue.createUnlogged(rndString)
+        await mq.queue.createUnlogged(createOpts)
       }
       catch (ex) {
         assert(ex instanceof Error)
@@ -34,7 +35,7 @@ describe(fileShortPath(import.meta.url), () => {
     })
 
     it(`drop(${rndString})`, async () => {
-      const dropped = await mq.queue.drop(rndString)
+      const dropped = await mq.queue.drop(createOpts)
       assert(dropped, 'drop failed')
     })
 
