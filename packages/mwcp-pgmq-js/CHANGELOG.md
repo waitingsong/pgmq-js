@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/waitingsong/pgmq-js/compare/v4.0.0...v5.0.0) (2024-09-22)
+
+
+### Features
+
+* **mwcp:** use new parameter style of pgmq-js ([adec22a](https://github.com/waitingsong/pgmq-js/commit/adec22aba614c19647c2438a00dcb7733fa086e2))
+
+
+
+
+
 # [4.0.0](https://github.com/waitingsong/pgmq-js/compare/v3.0.1...v4.0.0) (2024-09-21)
 
 **Note:** Version bump only for package @mwcp/pgmq

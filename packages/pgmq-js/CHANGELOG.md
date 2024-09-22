@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/waitingsong/pgmq-js/compare/v4.0.0...v5.0.0) (2024-09-22)
+
+
+### Features
+
+* **pgmq:** breaking change parameter to single options of QueueManager methods ([5210ec6](https://github.com/waitingsong/pgmq-js/commit/5210ec69d5ea5712b1b82b595a61c92b5871146c))
+
+
+
+
+
 # [4.0.0](https://github.com/waitingsong/pgmq-js/compare/v3.0.1...v4.0.0) (2024-09-21)
 
 
