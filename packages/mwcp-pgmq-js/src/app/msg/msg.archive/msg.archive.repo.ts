@@ -1,9 +1,8 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
+import type { DeleteBatchOptions, DeleteOptions } from '@waiting/pgmq-js'
 
 import type { MsgId, Pgmq } from '##/index.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
-
-import type { MsgArchiveBatchDto, MsgArchiveDto } from './msg.archive.dto.js'
 
 
 @Singleton()
@@ -18,11 +17,11 @@ export class MsgArchiveRepo {
     this.msg = mq.msg
   }
 
-  async archive(options: MsgArchiveDto): Promise<MsgId[]> {
+  async archive(options: DeleteOptions): Promise<MsgId[]> {
     return this.msg.archive(options)
   }
 
-  async archiveBatch(options: MsgArchiveBatchDto): Promise<MsgId[]> {
+  async archiveBatch(options: DeleteBatchOptions): Promise<MsgId[]> {
     return this.msg.archiveBatch(options)
   }
 

@@ -1,5 +1,6 @@
 import assert from 'node:assert'
 
+import type { OptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import { genRandomName } from '##/index.js'
@@ -12,14 +13,15 @@ const path = `${QueueApi.base}/${QueueApi.createUnlogged}`
 
 describe(fileShortPath(import.meta.url), () => {
 
-  after(async () => { await testConfig.mq.queue.drop(rndStr) })
+  const opts: OptionsBase = { queue: rndStr }
+  after(async () => { await testConfig.mq.queue.drop(opts) })
 
   describe(path, () => {
     it('normal', async () => {
       const { httpRequest } = testConfig
 
       const resp = await httpRequest.post(path)
-        .send({ name: rndStr })
+        .send(opts)
       assert(resp.ok, resp.text)
 
       const ret = resp.text as 'ok'

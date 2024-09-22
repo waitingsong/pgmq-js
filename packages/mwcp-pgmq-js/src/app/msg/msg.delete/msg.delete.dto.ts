@@ -13,13 +13,13 @@ export class MsgPopDto extends CommonMsgDto { }
 
 // #region delete
 
-export class MsgDeleteDto extends CommonMsgDto implements DeleteOptions {
+export class MsgDeleteDto extends CommonMsgDto implements Omit<DeleteOptions, 'trx'> {
   @ApiProperty({ example: 1, description: '' })
   @Rule(commonValidSchemas.positiveInt.required())
   msgId: MsgId
 }
 
-export class MsgDeleteBatchDto extends CommonMsgDto implements DeleteBatchOptions {
+export class MsgDeleteBatchDto extends CommonMsgDto implements Omit<DeleteBatchOptions, 'trx'> {
   @ApiProperty({ example: [1, 2], description: '' })
   @Rule(commonValidSchemas.array.items(commonValidSchemas.positiveInt.required()).required())
   msgIds: MsgId[]

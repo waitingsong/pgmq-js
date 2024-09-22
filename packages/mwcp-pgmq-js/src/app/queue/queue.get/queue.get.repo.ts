@@ -1,4 +1,5 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
+import type { OptionsBase, Transaction } from '@waiting/pgmq-js'
 
 import type { Pgmq, Queue } from '##/index.js'
 import { convertToDto } from '##/lib/helper.js'
@@ -19,18 +20,18 @@ export class QueueGetRepo {
     this.queue = mq.queue
   }
 
-  async hasQueue(name: string): Promise<boolean> {
-    return this.queue.hasQueue(name)
+  async hasQueue(options: OptionsBase): Promise<boolean> {
+    return this.queue.hasQueue(options)
   }
 
-  async getOne(name: string): Promise<QueueDto | null> {
-    const res = await this.queue.getOne(name)
+  async getOne(options: OptionsBase): Promise<QueueDto | null> {
+    const res = await this.queue.getOne(options)
     const ret = res ? convertToDto<Queue, QueueDto>(res) : null
     return ret
   }
 
-  async list(): Promise<QueueDto[]> {
-    const res = await this.queue.list()
+  async list(trx?: Transaction | null | undefined): Promise<QueueDto[]> {
+    const res = await this.queue.list(trx)
     const ret = res.map(convertToDto<Queue, QueueDto>)
     return ret
   }

@@ -1,9 +1,8 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
+import type { SendBatchOptions, SendOptions } from '@waiting/pgmq-js'
 
 import type { MsgId, Pgmq } from '##/index.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
-
-import type { MsgSendBatchDto, MsgSendDto } from './msg.send.dto.js'
 
 
 @Singleton()
@@ -18,11 +17,11 @@ export class MsgSendRepo {
     this.msg = mq.msg
   }
 
-  async send(options: MsgSendDto): Promise<MsgId[]> {
+  async send(options: SendOptions): Promise<MsgId[]> {
     return this.msg.send(options)
   }
 
-  async sendBatch(options: MsgSendBatchDto): Promise<MsgId[]> {
+  async sendBatch(options: SendBatchOptions): Promise<MsgId[]> {
     return this.msg.sendBatch(options)
   }
 

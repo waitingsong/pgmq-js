@@ -22,7 +22,7 @@ export class MsgApi {
   static readonly setVt = 'set_vt'
 }
 
-export class CommonMsgDto implements OptionsBase {
+export class CommonMsgDto implements Omit<OptionsBase, 'trx'> {
   @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
   queue: string

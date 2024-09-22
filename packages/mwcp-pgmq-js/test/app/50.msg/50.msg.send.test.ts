@@ -1,5 +1,6 @@
 import assert from 'node:assert'
 
+import type { OptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import type { MsgId, MsgSendDto } from '##/index.js'
@@ -18,8 +19,9 @@ const data: MsgSendDto = {
 
 describe(fileShortPath(import.meta.url), () => {
 
-  before(async () => { await testConfig.mq.queue.createUnlogged(rndStr) })
-  after(async () => { await testConfig.mq.queue.drop(rndStr) })
+  const opts: OptionsBase = { queue: rndStr }
+  before(async () => { await testConfig.mq.queue.createUnlogged(opts) })
+  after(async () => { await testConfig.mq.queue.drop(opts) })
 
   describe(path, () => {
     it('normal', async () => {

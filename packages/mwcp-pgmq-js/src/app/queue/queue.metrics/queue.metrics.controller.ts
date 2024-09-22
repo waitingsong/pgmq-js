@@ -29,7 +29,7 @@ export class QueueMetricsController {
   async metrics(@Param('name') name: string): Promise<QueueMetricsDto | null> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    const res = await this.repo.metrics(name.toLowerCase())
+    const res = await this.repo.metrics({ queue: name.toLowerCase() })
     return res
   }
 

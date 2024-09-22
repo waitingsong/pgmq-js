@@ -29,7 +29,7 @@ export class QueueGetController {
   async hasQueue(@Param('name') name: string): Promise<boolean> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    const res = await this.repo.hasQueue(name.toLowerCase())
+    const res = await this.repo.hasQueue({ queue: name.toLowerCase() })
     return res
   }
 
@@ -44,7 +44,7 @@ export class QueueGetController {
   async getOne(@Param('name') name: string): Promise<QueueDto | null> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    const res = await this.repo.getOne(name.toLowerCase())
+    const res = await this.repo.getOne({ queue: name.toLowerCase() })
     return res
   }
 

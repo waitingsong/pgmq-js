@@ -1,5 +1,6 @@
 import assert from 'node:assert'
 
+import type { OptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import { genRandomName } from '##/index.js'
@@ -21,8 +22,9 @@ const data: MsgDeleteDto = {
 
 describe(fileShortPath(import.meta.url), () => {
 
-  before(async () => { await testConfig.mq.queue.createUnlogged(rndStr) })
-  after(async () => { await testConfig.mq.queue.drop(rndStr) })
+  const opts: OptionsBase = { queue: rndStr }
+  before(async () => { await testConfig.mq.queue.createUnlogged(opts) })
+  after(async () => { await testConfig.mq.queue.drop(opts) })
 
   describe(path, () => {
     it('not exist', async () => {

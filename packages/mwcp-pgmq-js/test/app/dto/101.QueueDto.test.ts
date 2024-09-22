@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
@@ -13,7 +13,7 @@ describe(fileShortPath(import.meta.url), () => {
       const { validateService } = testConfig
 
       const row = new Dto()
-      row.name = 'queue'
+      row.queue = 'queue'
       row.isPartitioned = true
       row.isUnlogged = true
       row.createdAt = new Date().toISOString()

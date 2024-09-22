@@ -28,7 +28,7 @@ export class QueueCreateController {
   async create(@Body() input: CommonQueueDto): Promise<'ok'> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    await this.repo.create(input.name)
+    await this.repo.create({ queue: input.queue })
     return 'ok'
   }
 
@@ -40,7 +40,7 @@ export class QueueCreateController {
   async createUnlogged(@Body() input: CommonQueueDto): Promise<'ok'> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    await this.repo.createUnlogged(input.name)
+    await this.repo.createUnlogged({ queue: input.queue })
     return 'ok'
   }
 

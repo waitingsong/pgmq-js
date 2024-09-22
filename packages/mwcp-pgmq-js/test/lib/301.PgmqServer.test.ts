@@ -51,10 +51,10 @@ describe(fileShortPath(import.meta.url), () => {
       await sleep(2500)
       assert(consumer.msgs4.length === 0, 'msgs4.length !== 0')
 
-      await mq.queue.drop(q1)
-      await mq.queue.drop(q2)
-      await mq.queue.drop(q3)
-      await mq.queue.drop(q4)
+      await mq.queue.drop({ queue: q1 })
+      await mq.queue.drop({ queue: q2 })
+      await mq.queue.drop({ queue: q3 })
+      await mq.queue.drop({ queue: q4 })
 
       const arr = mqServer.getQueryIntervals('default', q1)
       assert(arr.length === 0, 'arr.length !== 0')

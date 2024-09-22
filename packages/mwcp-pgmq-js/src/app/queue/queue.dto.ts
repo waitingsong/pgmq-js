@@ -23,13 +23,13 @@ export class QueueApi {
 export class CommonQueueDto {
   @ApiProperty({ example: 'my_queue', description: '队列名, Maximum 60 characters; alphanumeric characters, underscores (_) are allowed.' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
-  name: string
+  queue: string
 }
 
 export class QueueDto implements _QueueDto {
   @ApiProperty({ example: 'my_queue', description: '队列名' })
   @Rule(commonValidSchemas.identifier.max(60).lowercase().required())
-  name: string
+  queue: string
 
   @ApiProperty({ example: false, description: '是否分区' })
   @Rule(commonValidSchemas.boolean.required())

@@ -1,4 +1,5 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
+import type { OptionsBase } from '@waiting/pgmq-js'
 
 import type { Pgmq } from '##/index.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
@@ -16,16 +17,16 @@ export class QueueDropRepo {
     this.queue = mq.queue
   }
 
-  async drop(name: string): Promise<boolean> {
-    return this.queue.drop(name)
+  async drop(options: OptionsBase): Promise<boolean> {
+    return this.queue.drop(options)
   }
 
-  async purge(name: string): Promise<string> {
-    return this.queue.purge(name)
+  async purge(options: OptionsBase): Promise<string> {
+    return this.queue.purge(options)
   }
 
-  async detachArchive(name: string): Promise<void> {
-    await this.queue.detachArchive(name)
+  async detachArchive(options: OptionsBase): Promise<void> {
+    await this.queue.detachArchive(options)
   }
 
 }

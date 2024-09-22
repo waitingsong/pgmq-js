@@ -1,5 +1,6 @@
 import assert from 'node:assert'
 
+import type { OptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import { genRandomName } from '##/index.js'
@@ -13,8 +14,9 @@ const path = `${QueueApi.base}/${QueueApi.getOne}`
 
 describe(fileShortPath(import.meta.url), () => {
 
-  before(async () => { await testConfig.mq.queue.createUnlogged(rndStr) })
-  after(async () => { await testConfig.mq.queue.drop(rndStr) })
+  const opts: OptionsBase = { queue: rndStr }
+  before(async () => { await testConfig.mq.queue.createUnlogged(opts) })
+  after(async () => { await testConfig.mq.queue.drop(opts) })
 
   describe(path, () => {
     it('normal', async () => {
@@ -25,7 +27,7 @@ describe(fileShortPath(import.meta.url), () => {
 
       const ret = resp.body as QueueDto
       assert(ret, 'resp.body is null')
-      assert(ret.name === rndStr, `ret.name: ${ret.name} !== ${rndStr}`)
+      assert(ret.queue === rndStr, `ret.name: ${ret.queue} !== ${rndStr}`)
       assert(ret.isUnlogged === true, `ret.isUnlogged: ${ret.isUnlogged}`)
     })
 

@@ -8,19 +8,19 @@ import type { MsgId } from '##/index.js'
 import { CommonMsgDto } from '../msg.dto.js'
 
 
-export class MsgReadDto extends CommonMsgDto implements ReadOptions {
+export class MsgReadDto extends CommonMsgDto implements Omit<ReadOptions, 'trx'> {
   @ApiProperty({ example: 1, description: '消息读取后延迟可见时间（秒）', default: 1 })
   @Rule(commonValidSchemas.naturalNumber.default(1))
   vt?: number
 }
 
-export class MsgReadBatchDto extends MsgReadDto implements ReadBatchOptions {
+export class MsgReadBatchDto extends MsgReadDto implements Omit<ReadBatchOptions, 'trx'> {
   @ApiProperty({ example: 2, description: '读取数量', default: 1 })
   @Rule(commonValidSchemas.positiveInt.default(1))
   qty?: number
 }
 
-export class MsgReadWithPollDto extends CommonMsgDto implements ReadWithPollOptions {
+export class MsgReadWithPollDto extends CommonMsgDto implements Omit<ReadWithPollOptions, 'trx'> {
   @ApiProperty({ example: 1, description: '消息读取后延迟可见时间（秒）', default: 1 })
   @Rule(commonValidSchemas.naturalNumber.default(1))
   vt?: number
@@ -40,7 +40,7 @@ export class MsgReadWithPollDto extends CommonMsgDto implements ReadWithPollOpti
 
 // #region setVt
 
-export class MsgSetVtDto extends CommonMsgDto implements SetVtOptions {
+export class MsgSetVtDto extends CommonMsgDto implements Omit<SetVtOptions, 'trx'> {
   @ApiProperty({ example: 1, description: '' })
   @Rule(commonValidSchemas.positiveInt.required())
   msgId: MsgId

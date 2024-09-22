@@ -27,7 +27,7 @@ export class QueueDropController {
   async drop(@Body() input: CommonQueueDto): Promise<boolean> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    const res = await this.repo.drop(input.name)
+    const res = await this.repo.drop({ queue: input.queue })
     return res
   }
 
@@ -41,7 +41,7 @@ export class QueueDropController {
   async purge(@Body() input: CommonQueueDto): Promise<string> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    const res = await this.repo.purge(input.name)
+    const res = await this.repo.purge({ queue: input.queue })
     return res
   }
 
@@ -53,7 +53,7 @@ export class QueueDropController {
   async detachArchive(@Body() input: CommonQueueDto): Promise<void> {
     if (! this.config.enableApi) { throw new ApiNotEnabledHttpError() }
 
-    await this.repo.detachArchive(input.name)
+    await this.repo.detachArchive({ queue: input.queue })
   }
 
 }
