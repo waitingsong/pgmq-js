@@ -145,7 +145,7 @@ export class QueueManager {
   // #region getMetrics
 
   /**
-   * @returns totalMessages visible if out of transaction
+   * @returns totalMessages visible if outside transaction
    */
   async getMetrics(options: OptionsBase): Promise<QueueMetrics | null> {
     const { queue: name, trx } = options
