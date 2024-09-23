@@ -1,8 +1,8 @@
 import assert from 'node:assert'
 
-import { fileShortPath, sleep } from '@waiting/shared-core'
+import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type OptionsBase, type SendOptions } from '##/index.js'
+import { Pgmq, genRandomName, type OptionsBase, type ReadOptions, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -18,6 +18,7 @@ describe(fileShortPath(import.meta.url), () => {
     msg,
   }
   const createOpts: OptionsBase = { queue: rndString }
+  const readOpts: ReadOptions = { queue: rndString, vt: 0 }
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
@@ -32,27 +33,30 @@ describe(fileShortPath(import.meta.url), () => {
     const trx = await mq.startTransaction()
     assert(trx, 'startTransaction failed')
 
+    const trx2 = await mq.startTransaction()
+    assert(trx2 !== trx, 'startTransaction failed')
+
     const msgIds = await mq.msg.send({ ...opts, trx })
     assert(msgIds.length === 1, 'send failed')
     assert(msgIds[0] === '1', 'send failed')
 
-    const res = await mq.msg.read({ queue: rndString, trx })
-    assert(res, 'read failed')
-    assert(res.msgId === '1', 'read failed')
+    const res2 = await mq.msg.read(readOpts)
+    assert(! res2, 'read failed, should be null outside trx')
 
-    const res2 = await mq.msg.read({ queue: rndString })
-    assert(! res2, 'read failed, should be null')
+    const res2a = await mq.msg.read({ ...readOpts, trx: trx2 })
+    assert(! res2a, 'read failed, should be null with another trx')
+
+    const res = await mq.msg.read({ ...readOpts, trx })
+    assert(res, 'read failed')
+    assert(res.msgId === '1', 'read failed inside trx')
 
     await trx.commit()
 
-    const res3 = await mq.msg.read({ queue: rndString })
-    assert(! res3, 'read failed, should be null')
-
-    await sleep(1000)
-
-    const res4 = await mq.msg.read({ queue: rndString })
+    const res4 = await mq.msg.read(readOpts)
     assert(res4, 'read failed, should exist')
     assert(res4.msgId === '1', 'read failed')
+
+    await trx2.rollback()
   })
 
 })
