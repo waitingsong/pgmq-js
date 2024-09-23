@@ -191,15 +191,7 @@ export class PgmqServer extends EventEmitter {
     const mq = this.mqManager.getDataSource(sourceName)
     assert(mq, `sourceName not found: ${sourceName}`)
 
-    const queueExists = await mq.queue.hasQueue({ queue })
-    if (! queueExists) {
-      if (listenerOptions.autoCreateQueue) {
-        await mq.queue.create({ queue })
-      }
-      else {
-        throw new Error(`queue not found: ${queue} in sourceName: ${sourceName}`)
-      }
-    }
+    await this.initQueue(sourceName, mq, queue, listenerOptions.autoCreateQueue)
 
     const { queueConnectionNumber } = listenerOptions
     assert(queueConnectionNumber > 0, 'queueConnectionNumber must be greater than 0')
@@ -213,6 +205,29 @@ export class PgmqServer extends EventEmitter {
         clz.pullAndConsume(mq1, opts)
       }, interval, this, mq, listenerOptions)
       this.setQueryInterval(sourceName, queue, intv)
+    }
+  }
+
+  /**
+   * Check if queue exists,
+   * and create it if not exists when autoCreateQueue is true,
+   * otherwise throw error
+   */
+  protected async initQueue(
+    sourceName: string,
+    mq: Pgmq,
+    queue: string,
+    autoCreateQueue: boolean,
+  ): Promise<void> {
+
+    const queueExists = await mq.queue.hasQueue({ queue })
+    if (queueExists) { return }
+
+    if (autoCreateQueue) {
+      await mq.queue.create({ queue })
+    }
+    else {
+      throw new Error(`queue not found: ${queue} in sourceName: ${sourceName}`)
     }
   }
 
