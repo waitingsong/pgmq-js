@@ -61,10 +61,10 @@ const msgId: MsgId = await pgmq.msg.send({ queue, msg: msgToSend })
 const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgToSend ]})
 
 const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
-const msg: Message = await pgmq.msg.read<Msg>({ queue, vt })
+const msg: Message = await pgmq.msg.read<typeof msgToSend>({ queue, vt })
 
 const numMessages = 5 // The number of messages to read from the queue, defaults to 10
-const msgs: Message[] = await pgmq.msg.readBatch<Msg>({ queue, vt, numMessages })
+const msgs: Message[] = await pgmq.msg.readBatch({ queue, vt, numMessages })
 
 await pgmq.msg.archive({ queue, msgId: msg.msgId })
 
@@ -84,10 +84,10 @@ const msgId: MsgId = await pgmq.msg.send({ queue, msg: msgToSend, trx })
 const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgToSend ], trx})
 
 const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
-const msg: Message = await pgmq.msg.read<Msg>({ queue, vt, trx })
+const msg: Message = await pgmq.msg.read({ queue, vt, trx })
 
 const numMessages = 5 // The number of messages to read from the queue, defaults to 10
-const msgs: Message[] = await pgmq.msg.readBatch<Msg>({ queue, vt, numMessages, trx })
+const msgs: Message[] = await pgmq.msg.readBatch<typeof msgToSend>({ queue, vt, numMessages, trx })
 
 await pgmq.msg.archive({ queue, msgId: msg.msgId, trx })
 

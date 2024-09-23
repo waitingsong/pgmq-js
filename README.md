@@ -11,6 +11,12 @@ Postgres Message Queue ([PGMQ]) JavaScript Client Library
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
 
 
+## Install global deps for development
+```sh
+npm i -g c8 lerna madge rollup tsx zx
+```
+
+
 ## Packages
 
 | Package        | Version                |
