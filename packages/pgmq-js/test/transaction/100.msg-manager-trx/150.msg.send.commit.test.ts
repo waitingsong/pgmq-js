@@ -46,9 +46,10 @@ describe(fileShortPath(import.meta.url), () => {
     const res2a = await mq.msg.read({ ...readOpts, trx: trx2 })
     assert(! res2a, 'read failed, should be null with another trx')
 
-    const res = await mq.msg.read({ ...readOpts, trx })
+    const res = await mq.msg.read<typeof msg>({ ...readOpts, trx })
     assert(res, 'read failed')
     assert(res.msgId === '1', 'read failed inside trx')
+    assert(res.message.foo === msg.foo, 'read failed')
 
     await trx.commit()
 
