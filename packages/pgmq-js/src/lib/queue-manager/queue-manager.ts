@@ -64,6 +64,7 @@ export class QueueManager {
       }
       return false
     }
+    /* c8 ignore next 5 */
     catch (ex) {
       // list() may throw error queue not found
       console.warn(ex)
