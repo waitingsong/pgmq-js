@@ -112,6 +112,7 @@ export class AutoConfiguration implements ILifeCycle {
             ...listenerOptions, // method level
           }
           const pm = this.pgmqServer.registerListener(opts, fn.bind(clzInstance))
+            /* c8 ignore next 4 */
             .catch((ex) => {
               console.error('registerListener error on start:', ex)
               throw ex
