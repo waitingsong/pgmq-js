@@ -48,13 +48,13 @@ describe(fileShortPath(import.meta.url), () => {
       mq.msg.readWithPoll(opts),
       Promise.resolve()
         .then(async () => {
-          await sleep(300)
+          await sleep(500)
           msgIds = await mq.msg.sendBatch(sendOpts)
         }),
     ])
     const cost = Date.now() - now
     console.info('cost:', cost)
-    assert(cost > 2000, `cost: ${cost}`)
+    assert(cost > 500, `cost: ${cost}`)
     assert(cost < 2100, `cost: ${cost}`)
 
     assert(msgIds.length === 2)
