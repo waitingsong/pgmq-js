@@ -9,10 +9,14 @@ import { dbConfig } from '#@/config.unittest.js'
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
   let trx: Transaction
+  const rndString = genRandomName(6)
+  const createOpts: OptionsBase = { queue: rndString }
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
     trx = await mq.startTransaction()
+    assert(trx, 'startTransaction failed')
+    createOpts.trx = trx
   })
   after(async () => {
     await trx.rollback()
@@ -20,10 +24,9 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   describe(`QueueManager`, () => {
-    const rndString = genRandomName(6)
-    const createOpts: OptionsBase = { queue: rndString, trx }
 
     it(`createUnlogged(${rndString})`, async () => {
+      assert(createOpts.trx, 'startTransaction failed')
       await mq.queue.createUnlogged(createOpts)
     })
 
