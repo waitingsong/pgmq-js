@@ -8,6 +8,9 @@ import { dbConfig } from '#@/config.unittest.js'
 
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
+  const rndString = genRandomName(6)
+  const createOpts: OptionsBase = { queue: rndString }
+
   before(async () => {
     mq = new Pgmq('test', dbConfig)
   })
@@ -16,9 +19,6 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   describe(`QueueManager`, () => {
-    const rndString = genRandomName(6)
-    const createOpts: OptionsBase = { queue: rndString }
-
     it(`create(${rndString})`, async () => {
       await mq.queue.create(createOpts)
     })
