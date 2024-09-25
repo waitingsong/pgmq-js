@@ -1,6 +1,6 @@
 # Midway.js [PGMQ] Component
 
-Postgres Message Queue (PGMQ) Component for [Midway.js]
+Postgres Message Queue (PGMQ) Component for [Midway.js], supports Transaction and Decorator `PgmqListener`
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()
