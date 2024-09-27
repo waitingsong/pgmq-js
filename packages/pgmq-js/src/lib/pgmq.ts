@@ -8,6 +8,7 @@ import type { Transaction } from './knex.types.js'
 import { MsgManager } from './msg-manager/msg-manager.js'
 import { QueueManager } from './queue-manager/queue-manager.js'
 import { QueueMetaManager } from './queue-meta-manager/queue-meta-manager.js'
+import { Router } from './router/router.js'
 import type { DbConfig, DbConnectionConfig, OptionsBase } from './types.js'
 
 
@@ -15,6 +16,7 @@ export class Pgmq {
   public readonly queue: QueueManager
   public readonly queueMeta: QueueMetaManager
   public readonly msg: MsgManager
+  public readonly router: Router
   protected readonly dbh: Knex
   protected readonly dbConfig: DbConfig
 
@@ -28,6 +30,7 @@ export class Pgmq {
     this.queueMeta = new QueueMetaManager(this.dbh)
     this.queue = new QueueManager(this.dbh, this.queueMeta)
     this.msg = new MsgManager(this.dbh)
+    this.router = new Router(this.dbh, this.queueMeta)
   }
 
   async getCurrentTime(): Promise<Date> {
