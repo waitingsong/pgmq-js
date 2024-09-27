@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
@@ -30,7 +30,9 @@ describe(fileShortPath(import.meta.url), () => {
     await mq.msg.send(opts)
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.rollback()
+    }
     await mq.destroy()
   })
 

@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
@@ -16,7 +16,7 @@ describe(fileShortPath(import.meta.url), () => {
     mq = new Pgmq('test', dbConfig)
   })
   after(async () => {
-    await mq.queue.drop(createOpts)
+    // await mq.queue.drop(createOpts)
     await mq.destroy()
   })
 
@@ -28,6 +28,11 @@ describe(fileShortPath(import.meta.url), () => {
 
     it(`hasQueue(${rndString})`, async () => {
       const flag = await mq.queue.hasQueue(createOpts)
+      assert(flag, 'queue not exists')
+    })
+
+    it(`QueueMetaManager.hasQueueMeta(${rndString})`, async () => {
+      const flag = await mq.queueMeta.hasQueueMeta(createOpts)
       assert(flag, 'queue not exists')
     })
 

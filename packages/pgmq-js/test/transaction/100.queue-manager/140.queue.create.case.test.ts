@@ -19,7 +19,9 @@ describe(fileShortPath(import.meta.url), () => {
     createOpts.trx = trx
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.rollback()
+    }
     await mq.destroy()
   })
 
@@ -27,13 +29,13 @@ describe(fileShortPath(import.meta.url), () => {
 
     it(`createUnlogged(${rndString}) uppercase name`, async () => {
       assert(createOpts.trx, 'startTransaction failed')
-      await mq.queue.createUnlogged({ queue: rndString.toUpperCase() })
+      await mq.queue.createUnlogged({ ...createOpts, queue: rndString.toUpperCase() })
 
-      const ret = await mq.queue.getOne(createOpts)
-      assert(! ret)
+      const ret = await mq.queue.getOne({ ...createOpts, trx: null })
+      assert(! ret, 'should return null outside transaction')
 
-      const ret2 = await mq.queue.getOne({ queue: rndString.toUpperCase() })
-      assert(ret2, 'should return true')
+      const ret2 = await mq.queue.getOne(createOpts)
+      assert(ret2)
     })
 
   })

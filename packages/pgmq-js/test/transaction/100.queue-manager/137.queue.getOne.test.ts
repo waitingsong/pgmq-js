@@ -6,15 +6,15 @@ import { Pgmq, genRandomName, type OptionsBase, type SendOptions, type Transacti
 import { dbConfig } from '#@/config.unittest.js'
 
 
-const rndString = genRandomName(6)
-const msgToSend = {
-  foo: 'bar',
-  rnd: rndString,
-}
-
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
   let trx: Transaction
+  const rndString = genRandomName(6)
+  const msgToSend = {
+    foo: 'bar',
+    rnd: rndString,
+  }
+
   const createOpts: OptionsBase = { queue: rndString }
 
   before(async () => {
@@ -30,7 +30,9 @@ describe(fileShortPath(import.meta.url), () => {
     await mq.msg.send(opts)
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.rollback()
+    }
     await mq.destroy()
   })
 

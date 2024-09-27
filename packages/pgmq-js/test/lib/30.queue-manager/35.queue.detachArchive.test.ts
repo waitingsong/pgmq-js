@@ -6,14 +6,13 @@ import { Pgmq, genRandomName, type OptionsBase, type SendOptions } from '##/inde
 import { dbConfig } from '#@/config.unittest.js'
 
 
-const rndString = genRandomName(6)
-const msgToSend = {
-  foo: 'bar',
-  rnd: rndString,
-}
-
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
+  const rndString = genRandomName(6)
+  const msgToSend = {
+    foo: 'bar',
+    rnd: rndString,
+  }
   const createOpts: OptionsBase = { queue: rndString }
 
   before(async () => {
@@ -26,7 +25,10 @@ describe(fileShortPath(import.meta.url), () => {
     await mq.msg.send(opts)
   })
   after(async () => {
-    await mq.queue.drop(createOpts) // queue will not be dropped case of archived
+    // await mq.queue.drop(createOpts) // queue will not be dropped case of archived
+    // @ts-expect-error
+    await mq.dbh.raw(`DROP TABLE IF EXISTS pgmq.a_${createOpts.queue}`)
+    // await mq.dbh.raw(`DROP TABLE IF EXISTS pgmq.q_${createOpts.queue}`) // queue will not be dropped case of archived
     await mq.destroy()
   })
 

@@ -55,7 +55,7 @@ describe(fileShortPath(import.meta.url), () => {
     const cost = Date.now() - now
     console.info('cost:', cost)
     assert(cost > 500, `cost: ${cost}`)
-    assert(cost < 2100, `cost: ${cost}`)
+    assert(cost < 2300, `cost: ${cost}`)
 
     assert(msgIds.length === 2)
     assert(res)

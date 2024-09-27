@@ -33,7 +33,9 @@ describe(fileShortPath(import.meta.url), () => {
     msgId = res[0]
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.rollback()
+    }
     // await mq.queue.drop(createOpts)
     await mq.destroy()
   })

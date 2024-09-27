@@ -19,7 +19,9 @@ describe(fileShortPath(import.meta.url), () => {
     createOpts.trx = trx
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.commit()
+    }
     await mq.destroy()
   })
 
@@ -28,20 +30,32 @@ describe(fileShortPath(import.meta.url), () => {
     it(`createUnlogged(${rndString})`, async () => {
       assert(createOpts.trx, 'startTransaction failed')
       await mq.queue.createUnlogged(createOpts)
+      await trx.commit()
     })
 
     it(`createUnlogged(${rndString}) duplicate got error`, async () => {
+      if (trx.isCompleted()) {
+        trx = await mq.startTransaction()
+        createOpts.trx = trx
+      }
+
       try {
         await mq.queue.createUnlogged(createOpts)
       }
       catch (ex) {
         assert(ex instanceof Error)
+        assert(trx.isCompleted())
         return
       }
       assert(false, 'create duplicate should throw error')
     })
 
     it(`drop(${rndString})`, async () => {
+      if (trx.isCompleted()) {
+        trx = await mq.startTransaction()
+        createOpts.trx = trx
+      }
+
       const dropped = await mq.queue.drop(createOpts)
       assert(dropped, 'drop failed')
     })

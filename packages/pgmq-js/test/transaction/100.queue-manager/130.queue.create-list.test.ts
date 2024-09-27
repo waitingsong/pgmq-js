@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict'
+import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
@@ -29,7 +29,9 @@ describe(fileShortPath(import.meta.url), () => {
       const flag2 = await mq.queue.hasQueue({ ...createOpts, trx })
       assert(flag2, 'queue should exist')
 
-      await trx.rollback()
+      if (! trx.isCompleted()) {
+        await trx.rollback()
+      }
     })
 
     it(`getOne()`, async () => {
@@ -43,7 +45,9 @@ describe(fileShortPath(import.meta.url), () => {
       const queue2 = await mq.queue.getOne({ ...createOpts, trx })
       assertQueueRow(queue2)
 
-      await trx.rollback()
+      if (! trx.isCompleted()) {
+        await trx.rollback()
+      }
     })
 
     it(`drop()`, async () => {
@@ -57,7 +61,9 @@ describe(fileShortPath(import.meta.url), () => {
       const dropped2 = await mq.queue.drop({ ...createOpts, trx })
       assert(dropped2, 'drop failed')
 
-      await trx.rollback()
+      if (! trx.isCompleted()) {
+        await trx.rollback()
+      }
 
       const dropped3 = await mq.queue.drop(createOpts)
       assert(! dropped3, 'drop should failed')

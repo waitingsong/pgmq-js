@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 
-import type { Queue } from '##/index.js'
+import type { Queue, QueueMetaDto } from '##/index.js'
 
 
 export function assertQueueRow(queue: Queue | null): queue is Queue {
@@ -13,3 +13,11 @@ export function assertQueueRow(queue: Queue | null): queue is Queue {
   return true
 }
 
+export function assertQueueMetaRow(queue: QueueMetaDto | null | undefined): queue is QueueMetaDto {
+  assert(queue, 'row not exists')
+  assert(queue.queue, 'name not exists')
+  assert(queue.queueId, 'queueId not exists')
+  assert(queue.ctime, 'ctime not exists')
+  assert(typeof queue.queueKey === 'string' || queue.queueKey === null, 'queueKey not string or null')
+  return true
+}

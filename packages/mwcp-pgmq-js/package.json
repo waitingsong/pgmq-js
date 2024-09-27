@@ -8,6 +8,8 @@
     "pgmq",
     "message-queue",
     "queues",
+    "mq",
+    "RSMQ",
     "postgres",
     "midway",
     "plugin",

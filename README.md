@@ -44,7 +44,8 @@ docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io
 Create the pgmq extension
 ```sh
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
-  -f packages/pgmq-js/database/default/ddl/extension.sql
+  -f packages/pgmq-js/database/default/ddl/extension.sql \
+  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql
 ```
 
 

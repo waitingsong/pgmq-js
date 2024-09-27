@@ -3,7 +3,7 @@ import type { BigIntStr } from '@waiting/shared-types'
 import type { OptionsBase } from '../types.js'
 
 
-export type MsgId = `${bigint}`
+export type MsgId = string // bigint as string
 
 export type MsgContent = object | null
 

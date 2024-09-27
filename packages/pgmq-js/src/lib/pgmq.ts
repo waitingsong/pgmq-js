@@ -7,11 +7,13 @@ import { type RespCommon, parseRespCommon } from './helper.js'
 import type { Transaction } from './knex.types.js'
 import { MsgManager } from './msg-manager/msg-manager.js'
 import { QueueManager } from './queue-manager/queue-manager.js'
-import type { DbConfig, DbConnectionConfig } from './types.js'
+import { QueueMetaManager } from './queue-meta-manager/queue-meta-manager.js'
+import type { DbConfig, DbConnectionConfig, OptionsBase } from './types.js'
 
 
 export class Pgmq {
   public readonly queue: QueueManager
+  public readonly queueMeta: QueueMetaManager
   public readonly msg: MsgManager
   protected readonly dbh: Knex
   protected readonly dbConfig: DbConfig
@@ -23,7 +25,8 @@ export class Pgmq {
     this.dbConfig = processDbConfig(dbConfig)
 
     this.dbh = createDbh(this.dbConfig)
-    this.queue = new QueueManager(this.dbh)
+    this.queueMeta = new QueueMetaManager(this.dbh)
+    this.queue = new QueueManager(this.dbh, this.queueMeta)
     this.msg = new MsgManager(this.dbh)
   }
 
@@ -54,9 +57,25 @@ export class Pgmq {
     return ret
   }
 
-
   async destroy(): Promise<void> {
     await this.dbh.destroy()
+  }
+
+  /**
+   * Sync queue meta data from meta to tb_queue_meta
+   */
+  async syncQueueMeta(): Promise<void> {
+    const trx = await this.startTransaction()
+
+    const queues = await this.queue.list(trx)
+    for (const queue of queues) {
+      const opts: OptionsBase = { queue: queue.queue, trx }
+      const flag = await this.queueMeta.hasQueueMeta(opts)
+      if (flag) { continue }
+      await this.queueMeta.create(opts)
+    }
+
+    await trx.commit()
   }
 
 }

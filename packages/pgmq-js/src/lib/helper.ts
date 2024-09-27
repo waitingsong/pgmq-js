@@ -1,4 +1,8 @@
+import assert from 'node:assert'
+
 import { genRandomString as _genRandomString } from '@waiting/shared-core'
+
+import type { Transaction } from './knex.types.js'
 
 
 export interface RespCommon {
@@ -18,3 +22,19 @@ export function genRandomName(length = 32): string {
   return str
 }
 
+export async function assertWithTrx(
+  value: unknown,
+  msg: string | Error,
+  trx: Transaction | undefined | null,
+): Promise<void> {
+
+  try {
+    assert(value, msg)
+  }
+  catch (ex) {
+    if (trx) {
+      await trx.rollback()
+    }
+    throw ex
+  }
+}

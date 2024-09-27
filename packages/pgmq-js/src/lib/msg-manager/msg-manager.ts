@@ -1,9 +1,9 @@
 import assert from 'node:assert'
 
 import type { RecordSnakeKeys } from '@waiting/shared-types'
-import type { Knex } from 'knex'
 
-import type { QueryResponse, Transaction } from '../knex.types.js'
+import { assertWithTrx } from '../helper.js'
+import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
 
 import type { ArchiveBatchResp, ArchiveResp, DeleteBatchResp, DeleteResp, SendBatchResp, SendResp } from './db.types.js'
 import { parseMessage } from './msg.helpers.js'
@@ -29,11 +29,12 @@ export class MsgManager {
   async send<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
     const { queue, msg, delay = 0, trx } = options
 
-    assert(typeof msg === 'object', 'msg must be object')
+    await assertWithTrx(typeof msg === 'object', 'msg must be object', trx)
     const query = MsgSql.send
     const res = await this.execute<QueryResponse<SendResp>>(query, [queue, msg, delay], trx)
     const [row] = res.rows
-    assert(row, 'send failed')
+    await assertWithTrx(row, 'send failed', trx)
+    assert(row)
     return [row.send]
   }
 
@@ -167,6 +168,9 @@ export class MsgManager {
   }
 
   protected async execute<T = unknown>(sql: string, params: unknown[], trx: Transaction | undefined | null): Promise<T> {
+    if (trx) {
+      assert(! trx.isCompleted(), 'parameter trx is completed already')
+    }
     const dbh = trx ?? this.dbh
     const res = await dbh.raw(sql, params) as T
     return res

@@ -6,14 +6,13 @@ import { Pgmq, genRandomName, type OptionsBase, type SendOptions } from '##/inde
 import { dbConfig } from '#@/config.unittest.js'
 
 
-const rndString = genRandomName(6)
-const msgToSend = {
-  foo: 'bar',
-  rnd: rndString,
-}
-
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
+  const rndString = genRandomName(6)
+  const msgToSend = {
+    foo: 'bar',
+    rnd: rndString,
+  }
   const createOpts: OptionsBase = { queue: rndString }
 
   before(async () => {

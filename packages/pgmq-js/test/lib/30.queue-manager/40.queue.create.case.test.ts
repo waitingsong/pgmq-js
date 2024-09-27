@@ -24,7 +24,7 @@ describe(fileShortPath(import.meta.url), () => {
       await mq.queue.createUnlogged({ queue: rndString.toUpperCase() })
 
       const ret = await mq.queue.getOne(createOpts)
-      assert(! ret)
+      assert(ret)
 
       const ret2 = await mq.queue.getOne({ queue: rndString.toUpperCase() })
       assert(ret2, 'should return true')

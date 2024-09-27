@@ -1,6 +1,7 @@
-import type { Knex } from 'knex'
+import assert from 'node:assert'
 
-import type { QueryResponse, Transaction } from '../knex.types.js'
+import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
+import type { QueueMetaManager } from '../queue-meta-manager/index.queue-meta.js'
 import type { OptionsBase } from '../types.js'
 
 import type {
@@ -17,7 +18,10 @@ import type { Queue, QueueMetrics } from './queue.types.js'
 
 export class QueueManager {
 
-  constructor(protected readonly dbh: Knex) { }
+  constructor(
+    protected readonly dbh: Knex,
+    protected readonly queueMeta: QueueMetaManager,
+  ) { }
 
   // #region create
 
@@ -28,12 +32,25 @@ export class QueueManager {
    * @description * Throws error if queue already exists
    */
   async create(options: OptionsBase): Promise<void> {
-    const { queue, trx } = options
-    if (await this.hasQueue(options)) {
+    const opts: OptionsBase = {
+      ...options,
+      trx: options.trx ?? await this.startTransaction(),
+      queue: options.queue.toLowerCase(),
+    }
+    const { queue, trx } = opts
+    assert(trx, 'Transaction is required')
+
+    if (await this.hasQueue(opts)) {
+      await trx.rollback()
       throw new Error(`Queue '${queue}' already exists`)
     }
-    const query = QueueSql.create
-    await this.execute(query, [queue], trx)
+
+    await this._create(opts)
+    await this.queueMeta.create(opts)
+
+    if (! options.trx) {
+      await trx.commit()
+    }
   }
 
   /**
@@ -41,13 +58,26 @@ export class QueueManager {
    * @param name - will be converted to lowercase
    * @description * Throws error if queue already exists
    */
-  public async createUnlogged(options: OptionsBase) {
-    const { queue, trx } = options
-    if (await this.hasQueue(options)) {
+  async createUnlogged(options: OptionsBase) {
+    const opts: OptionsBase = {
+      ...options,
+      trx: options.trx ?? await this.startTransaction(),
+      queue: options.queue.toLowerCase(),
+    }
+    const { queue, trx } = opts
+    assert(trx, 'Transaction is required')
+
+    if (await this.hasQueue(opts)) {
+      await trx.rollback()
       throw new Error(`Queue '${queue}' already exists`)
     }
-    const query = QueueSql.createUnlogged
-    await this.execute(query, [queue], trx)
+
+    await this._createUnlogged(opts)
+    await this.queueMeta.create(opts)
+
+    if (! options.trx) {
+      await trx.commit()
+    }
   }
 
   /**
@@ -55,14 +85,17 @@ export class QueueManager {
    */
   async hasQueue(options: OptionsBase): Promise<boolean> {
     const { queue: name, trx } = options
+
     try {
       const list = await this.list(trx)
+      let found = false
       for (const queue of list) {
         if (queue.queue === name) {
-          return true
+          found = true
+          break
         }
       }
-      return false
+      return found
     }
     /* c8 ignore next 5 */
     catch (ex) {
@@ -75,7 +108,9 @@ export class QueueManager {
   // #region getOne
 
   async getOne(options: OptionsBase): Promise<Queue | null> {
-    const { queue: name, trx } = options
+    const { queue, trx } = options
+    const name = queue.toLowerCase()
+
     const list = await this.list(trx)
     for (const queue of list) {
       if (queue.queue === name) {
@@ -88,8 +123,8 @@ export class QueueManager {
   // #region list
 
   async list(trx?: Transaction | undefined | null): Promise<Queue[]> {
-    const query = QueueSql.list
-    const res = await this.execute<QueryResponse<ListResp>>(query, null, trx)
+    const sql = QueueSql.list
+    const res = await this.execute<QueryResponse<ListResp>>(sql, null, trx)
 
     const ret = res.rows.map((row) => {
       const line = row['list_queues']
@@ -102,15 +137,23 @@ export class QueueManager {
   // #region drop
 
   /**
-   * Return false if queue does not exist
+   * Deletes a queue and its archive table.
+   * @returns false if queue does not exist
    */
   async drop(options: OptionsBase): Promise<boolean> {
-    const { queue: name, trx } = options
-    const query = QueueSql.drop
+    const opts: OptionsBase = {
+      ...options,
+      trx: options.trx ?? await this.startTransaction(),
+    }
+    const { trx } = opts
+    assert(trx, 'Transaction is required')
+
     try {
-      const res = await this.execute<QueryResponse<DropResp>>(query, [name], trx)
-      const [row] = res.rows
-      const ret = !! row?.drop_queue
+      await this.queueMeta.delete(opts)
+      const ret = await this._drop(opts)
+      if (! options.trx) {
+        await trx.commit()
+      }
       return ret
     }
     catch (ex) {
@@ -127,8 +170,9 @@ export class QueueManager {
    */
   async purge(options: OptionsBase): Promise<string> {
     const { queue: name, trx } = options
-    const query = QueueSql.purge
-    const res = await this.execute<QueryResponse<PurgeResp>>(query, [name], trx)
+
+    const sql = QueueSql.purge
+    const res = await this.execute<QueryResponse<PurgeResp>>(sql, [name], trx)
     const [row] = res.rows
     const ret = row?.purge_queue ?? '0'
     return ret
@@ -138,8 +182,9 @@ export class QueueManager {
 
   async detachArchive(options: OptionsBase): Promise<void> {
     const { queue: name, trx } = options
-    const query = QueueSql.detachArchive
-    await this.execute<QueryResponse<DetachArchiveResp>>(query, [name], trx)
+
+    const sql = QueueSql.detachArchive
+    await this.execute<QueryResponse<DetachArchiveResp>>(sql, [name], trx)
   }
 
   // #region getMetrics
@@ -149,8 +194,9 @@ export class QueueManager {
    */
   async getMetrics(options: OptionsBase): Promise<QueueMetrics | null> {
     const { queue: name, trx } = options
-    const query = QueueSql.getMetrics
-    const res = await this.execute<QueryResponse<MetricsResp>>(query, [name], trx)
+
+    const sql = QueueSql.getMetrics
+    const res = await this.execute<QueryResponse<MetricsResp>>(sql, [name], trx)
     const data = res.rows[0]
     const ret = data ? parseQueueMetrics(data) : null
     return ret
@@ -159,17 +205,54 @@ export class QueueManager {
   // #region getAllMetrics
 
   async getAllMetrics(trx?: Transaction | undefined): Promise<QueueMetrics[]> {
-    const query = QueueSql.getAllMetrics
-    const res = await this.execute<QueryResponse<MetricsResp>>(query, null, trx)
+    const sql = QueueSql.getAllMetrics
+    const res = await this.execute<QueryResponse<MetricsResp>>(sql, null, trx)
     const ret = res.rows.map(parseQueueMetrics)
     return ret
   }
 
 
   protected async execute<T = unknown>(sql: string, params: unknown[] | null, trx: Transaction | undefined | null): Promise<T> {
+    if (trx) {
+      assert(! trx.isCompleted(), 'parameter trx is completed already')
+    }
     const dbh = trx ?? this.dbh
-    const res = await (params ? dbh.raw(sql, params) : dbh.raw(sql)) as T
-    return res
+    try {
+      const res = await (params ? dbh.raw(sql, params) : dbh.raw(sql)) as T
+      return res
+    }
+    catch (ex) {
+      await trx?.rollback()
+      throw ex
+    }
+  }
+
+  protected async startTransaction(): Promise<Transaction> {
+    const ret = await this.dbh.transaction()
+    assert(ret, 'Transaction is required')
+    return ret
+  }
+
+
+  protected async _create(options: OptionsBase): Promise<void> {
+    const { queue, trx } = options
+    const sql = QueueSql.create
+    await this.execute(sql, [queue], trx)
+  }
+
+  protected async _createUnlogged(options: OptionsBase) {
+    const { queue, trx } = options
+    const sql = QueueSql.createUnlogged
+    await this.execute(sql, [queue], trx)
+  }
+
+  protected async _drop(options: OptionsBase): Promise<boolean> {
+    const { queue: name, trx } = options
+    const sql = QueueSql.drop
+    const res = await this.execute<QueryResponse<DropResp>>(sql, [name], trx)
+    const [row] = res.rows
+    const ret = !! row?.drop_queue
+    return ret
   }
 }
 

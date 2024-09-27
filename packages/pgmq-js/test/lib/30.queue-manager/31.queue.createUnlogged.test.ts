@@ -17,7 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
     mq = new Pgmq('test', dbConfig)
   })
   after(async () => {
-    await mq.queue.drop(createOpts)
+    // await mq.queue.drop(createOpts)
     await mq.destroy()
   })
 

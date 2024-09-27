@@ -11,6 +11,7 @@ export interface QueryResponse<T = unknown> {
   rows: T[]
 }
 
+export type { Knex }
 export type Transaction = Knex.Transaction
 
 /* c8 ignore stop */

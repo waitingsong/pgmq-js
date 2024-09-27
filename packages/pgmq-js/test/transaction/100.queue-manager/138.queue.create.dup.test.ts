@@ -19,7 +19,9 @@ describe(fileShortPath(import.meta.url), () => {
     createOpts.trx = trx
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.commit()
+    }
     await mq.destroy()
   })
 
@@ -28,6 +30,7 @@ describe(fileShortPath(import.meta.url), () => {
     it(`create(${rndString})`, async () => {
       assert(createOpts.trx, 'startTransaction failed')
       await mq.queue.create(createOpts)
+      await trx.commit()
     })
 
     it(`create(${rndString}) duplicate got error`, async () => {
@@ -36,12 +39,18 @@ describe(fileShortPath(import.meta.url), () => {
       }
       catch (ex) {
         assert(ex instanceof Error)
+        assert(trx.isCompleted(), 'trx is already completed')
         return
       }
       assert(false, 'create duplicate should throw error')
     })
 
     it(`createUnlogged(${rndString}) duplicate no error`, async () => {
+      if (trx.isCompleted()) {
+        trx = await mq.startTransaction()
+        createOpts.trx = trx
+      }
+
       try {
         await mq.queue.createUnlogged(createOpts)
       }
@@ -53,8 +62,21 @@ describe(fileShortPath(import.meta.url), () => {
     })
 
     it(`drop(${rndString})`, async () => {
+      if (trx.isCompleted()) {
+        trx = await mq.startTransaction()
+        createOpts.trx = trx
+      }
       const dropped = await mq.queue.drop(createOpts)
       assert(dropped, 'drop failed')
+    })
+
+    it(`getById(${rndString})`, async () => {
+      if (trx.isCompleted()) {
+        trx = await mq.startTransaction()
+        createOpts.trx = trx
+      }
+      const qu = await mq.queue.getOne(createOpts)
+      assert(! qu, 'should not found queue')
     })
 
   })

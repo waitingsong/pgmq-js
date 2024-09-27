@@ -19,7 +19,9 @@ describe(fileShortPath(import.meta.url), () => {
     trx = await mq.startTransaction()
   })
   after(async () => {
-    await trx.rollback()
+    if (! trx.isCompleted()) {
+      await trx.rollback()
+    }
     await mq.destroy()
   })
 
