@@ -31,7 +31,7 @@ export class QueueManager {
    * Maximum 60 characters; alphanumeric characters, underscores (_) and hyphen (-) are allowed
    * @description * Throws error if queue already exists
    */
-  async create(options: OptionsBase): Promise<void> {
+  async create(options: OptionsBase): Promise<string> {
     const opts: OptionsBase = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
@@ -46,11 +46,12 @@ export class QueueManager {
     }
 
     await this._create(opts)
-    await this.queueMeta.create(opts)
+    const queueId = await this.queueMeta.create(opts)
 
     if (! options.trx) {
       await trx.commit()
     }
+    return queueId
   }
 
   /**
