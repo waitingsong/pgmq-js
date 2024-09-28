@@ -29,7 +29,8 @@ Create the pgmq extension
 ```sh
 psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
   -f packages/pgmq-js/database/default/ddl/extension.sql \
-  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql
+  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql \
+  -f packages/pgmq-js/database/default/ddl/tb_route.sql 
 ```
 
 

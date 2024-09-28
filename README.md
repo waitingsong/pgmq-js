@@ -47,7 +47,8 @@ Create the pgmq extension
 ```sh
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
   -f packages/pgmq-js/database/default/ddl/extension.sql \
-  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql
+  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql \
+  -f packages/pgmq-js/database/default/ddl/tb_route.sql 
 ```
 
 
