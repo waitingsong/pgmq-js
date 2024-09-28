@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type QueueOptionsBase, type SendOptions } from '##/index.js'
+import { Pgmq, genRandomName, type QueueOptionsBase, type SendOptions, type Transaction } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -13,27 +13,29 @@ const msgToSend = {
 }
 
 describe(fileShortPath(import.meta.url), function () {
-  this.retries(2)
-
   let mq: Pgmq
+  let trx: Transaction
   const createOpts: QueueOptionsBase = { queue: rndString }
 
   before(async () => {
+    mq = new Pgmq('test', dbConfig)
+    trx = await mq.startTransaction()
+
     const opts: SendOptions = {
       queue: rndString,
       msg: msgToSend,
+      trx,
     }
-    mq = new Pgmq('test', dbConfig)
     await mq.queue.createUnlogged(createOpts)
     await mq.msg.send(opts)
   })
   after(async () => {
-    await mq.queue.drop(createOpts)
+    await trx.rollback()
     await mq.destroy()
   })
 
   it(`QueueManager.getAllMetrics(${rndString})`, async () => {
-    const rows = await mq.queue.getAllMetrics()
+    const rows = await mq.queue.getAllMetrics({ trx })
     assert(rows.length >= 1, 'getAllMetrics failed')
   })
 
