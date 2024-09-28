@@ -5,7 +5,7 @@ import _knex from 'knex'
 import { initDbConfigPart, initDbConnectionConfig } from './config.js'
 import { type RespCommon, parseRespCommon } from './helper.js'
 import type { Transaction } from './knex.types.js'
-import { MsgManager } from './msg-manager/index.msg.js'
+import { MsgManager, type MsgContent, type MsgId, type SendOptions } from './msg-manager/index.msg.js'
 import { QueueManager } from './queue-manager/index.queue.js'
 import { QueueMetaManager } from './queue-meta-manager/index.queue-meta.js'
 import { RouteMsg, type SendRouteMsgOptions, type SendRouteMsgResultItem } from './route-msg/index.route-msg.js'
@@ -90,6 +90,13 @@ export class Pgmq {
    */
   sendRouteMsg(options: SendRouteMsgOptions): Promise<SendRouteMsgResultItem[]> {
     return this.routeMsg.send(options)
+  }
+
+  /**
+   * Send a message to the queue
+   */
+  sendMsg<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
+    return this.msg.send(options)
   }
 
 }

@@ -61,7 +61,9 @@ await pgmq.queue.create({ queue })
 
 const msgToSend = { id: 1, name: 'testMsg' }
 
+const msgId: MsgId = await pgmq.sendMsg({ queue, msg: msgToSend }) // equal to pgmq.msg.send()
 const msgId: MsgId = await pgmq.msg.send({ queue, msg: msgToSend })
+
 const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgToSend ]})
 
 const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
