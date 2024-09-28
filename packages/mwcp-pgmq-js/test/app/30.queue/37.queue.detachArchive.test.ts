@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 
-import type { OptionsBase } from '@waiting/pgmq-js'
+import type { QueueOptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import { genRandomName } from '##/index.js'
@@ -13,7 +13,7 @@ const path = `${QueueApi.base}/${QueueApi.detachArchive}`
 
 describe(fileShortPath(import.meta.url), () => {
 
-  const opts: OptionsBase = { queue: rndStr }
+  const opts: QueueOptionsBase = { queue: rndStr }
   before(async () => { await testConfig.mq.queue.createUnlogged(opts) })
   after(async () => { await testConfig.mq.queue.drop(opts) })
 
