@@ -1,5 +1,5 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
-import type { OptionsBase } from '@waiting/pgmq-js'
+import type { QueueId, QueueOptionsBase } from '@waiting/pgmq-js'
 
 import type { Pgmq } from '##/index.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
@@ -17,11 +17,11 @@ export class QueueCreateRepo {
     this.queue = mq.queue
   }
 
-  async create(options: OptionsBase): Promise<void> {
-    await this.queue.create(options)
+  create(options: QueueOptionsBase): Promise<QueueId> {
+    return this.queue.create(options)
   }
 
-  async createUnlogged(options: OptionsBase): Promise<void> {
+  async createUnlogged(options: QueueOptionsBase): Promise<void> {
     await this.queue.createUnlogged(options)
   }
 

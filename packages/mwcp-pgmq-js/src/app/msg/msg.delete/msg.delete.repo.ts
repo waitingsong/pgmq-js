@@ -1,5 +1,5 @@
 import { Inject, Init, Singleton } from '@midwayjs/core'
-import type { DeleteBatchOptions, DeleteOptions, OptionsBase } from '@waiting/pgmq-js'
+import type { DeleteBatchOptions, DeleteOptions, QueueOptionsBase } from '@waiting/pgmq-js'
 
 import type { Message, MsgId, Pgmq } from '##/index.js'
 import { convertToDto } from '##/lib/helper.js'
@@ -20,7 +20,7 @@ export class MsgDeleteRepo {
     this.msg = mq.msg
   }
 
-  async pop(options: OptionsBase): Promise<MessageDto | null> {
+  async pop(options: QueueOptionsBase): Promise<MessageDto | null> {
     const res = await this.msg.pop(options)
     const ret = res ? convertToDto<Message, MessageDto>(res) : null
     return ret
