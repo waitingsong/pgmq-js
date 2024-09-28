@@ -1,6 +1,6 @@
 /* c8 ignore start */
 import type { Transaction } from '../knex.types.js'
-import type { OptionsBase } from '../types.js'
+import type { QueueOptionsBase } from '../types.js'
 
 
 export type QueueId = string
@@ -14,14 +14,14 @@ export interface QueueMetaDto {
   mtime: string | null
 }
 
-export type GetQueueMetaOptions = OptionsBase
+export type GetQueueMetaOptions = QueueOptionsBase
 
 export interface GetQueueMetaByIdOptions {
   queueId: QueueId
   trx?: Transaction | undefined | null
 }
 
-export interface ListQueueMetaOptions extends Omit<OptionsBase, 'queue'> {
+export interface ListQueueMetaOptions extends Omit<QueueOptionsBase, 'queue'> {
   /**
    * Maximum get number records
    * @@default 100
@@ -41,15 +41,15 @@ export interface ListQueueMetaOptions extends Omit<OptionsBase, 'queue'> {
   relativeQueueId?: QueueId | bigint | number
 }
 
-export interface CreateQueueMetaOptions extends OptionsBase {
+export interface CreateQueueMetaOptions extends QueueOptionsBase {
   queueKey?: string | null
   json?: object | null
 }
 
-export type DeleteQueueMetaOptions = OptionsBase
+export type DeleteQueueMetaOptions = QueueOptionsBase
 
 
-export interface UpdateQueueMetaOptions extends OptionsBase {
+export interface UpdateQueueMetaOptions extends QueueOptionsBase {
   queueId: QueueId
   /**
    * Maximum 512 characters

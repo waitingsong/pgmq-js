@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type OptionsBase, type Transaction } from '##/index.js'
+import { Pgmq, genRandomName, type QueueOptionsBase, type Transaction } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 import { assertQueueRow } from '#@/test.helper.js'
 
@@ -12,7 +12,7 @@ const rndString = genRandomName(6)
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
   let trx: Transaction
-  const createOpts: OptionsBase = { queue: rndString }
+  const createOpts: QueueOptionsBase = { queue: rndString }
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)

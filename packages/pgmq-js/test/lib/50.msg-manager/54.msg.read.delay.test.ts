@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, sleep } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type OptionsBase, type ReadOptions, type SendOptions } from '##/index.js'
+import { Pgmq, genRandomName, type QueueOptionsBase, type ReadOptions, type SendOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -17,7 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
   const opts: ReadOptions = {
     queue: rndString,
   }
-  const createOpts: OptionsBase = { queue: rndString }
+  const createOpts: QueueOptionsBase = { queue: rndString }
 
   before(async () => {
     const sendOpts: SendOptions = {

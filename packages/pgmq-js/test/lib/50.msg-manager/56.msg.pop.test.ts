@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type DeleteOptions, type OptionsBase, type PopOptions, type SendBatchOptions } from '##/index.js'
+import { Pgmq, genRandomName, type DeleteOptions, type QueueOptionsBase, type PopOptions, type SendBatchOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -17,7 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
   const opts: PopOptions = {
     queue: rndString,
   }
-  const createOpts: OptionsBase = { queue: rndString }
+  const createOpts: QueueOptionsBase = { queue: rndString }
 
   before(async () => {
     const sendOpts: SendBatchOptions = {

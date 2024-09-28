@@ -4,7 +4,7 @@ import { camelToSnake } from '@waiting/shared-core'
 
 import { assertWithTrx } from '../helper.js'
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
-import type { OptionsBase } from '../types.js'
+import type { QueueOptionsBase } from '../types.js'
 
 import type { QueueMetaDo } from './db.types.js'
 import { parseQueueMeta } from './queue-meta.helpers.js'
@@ -25,7 +25,7 @@ export class QueueMetaManager {
   constructor(protected readonly dbh: Knex) { }
 
 
-  async count(options: Omit<OptionsBase, 'queue'> = {}): Promise<bigint> {
+  async count(options: Omit<QueueOptionsBase, 'queue'> = {}): Promise<bigint> {
     const { trx } = options
     const sql = QueueMetaSql.count
     const res = await this.execute<QueryResponse<{ count: string }>>(sql, null, trx)
@@ -45,7 +45,7 @@ export class QueueMetaManager {
 
   // #region getByName
 
-  async getByName(options: OptionsBase): Promise<QueueMetaDto | undefined> {
+  async getByName(options: QueueOptionsBase): Promise<QueueMetaDto | undefined> {
     const { queue: name, trx } = options
     const sql = QueueMetaSql.getByName
     const res = await this.execute<QueryResponse<QueueMetaDo>>(sql, [name.toLowerCase()], trx)
@@ -96,7 +96,7 @@ export class QueueMetaManager {
     return ret
   }
 
-  async hasQueueMeta(options: OptionsBase): Promise<boolean> {
+  async hasQueueMeta(options: QueueOptionsBase): Promise<boolean> {
     const res = await this.getByName(options)
     return !! res
   }

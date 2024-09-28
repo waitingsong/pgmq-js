@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
 import type { QueueMetaManager } from '../queue-meta-manager/index.queue-meta.js'
-import type { OptionsBase } from '../types.js'
+import type { QueueOptionsBase } from '../types.js'
 
 import type {
   DetachArchiveResp,
@@ -31,8 +31,8 @@ export class QueueManager {
    * Maximum 60 characters; alphanumeric characters, underscores (_) and hyphen (-) are allowed
    * @description * Throws error if queue already exists
    */
-  async create(options: OptionsBase): Promise<string> {
-    const opts: OptionsBase = {
+  async create(options: QueueOptionsBase): Promise<string> {
+    const opts: QueueOptionsBase = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
       queue: options.queue.toLowerCase(),
@@ -59,8 +59,8 @@ export class QueueManager {
    * @param name - will be converted to lowercase
    * @description * Throws error if queue already exists
    */
-  async createUnlogged(options: OptionsBase) {
-    const opts: OptionsBase = {
+  async createUnlogged(options: QueueOptionsBase) {
+    const opts: QueueOptionsBase = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
       queue: options.queue.toLowerCase(),
@@ -84,7 +84,7 @@ export class QueueManager {
   /**
    * No error if queue already exists or does not exist
    */
-  async hasQueue(options: OptionsBase): Promise<boolean> {
+  async hasQueue(options: QueueOptionsBase): Promise<boolean> {
     const { queue: name, trx } = options
 
     try {
@@ -108,7 +108,7 @@ export class QueueManager {
 
   // #region getOne
 
-  async getOne(options: OptionsBase): Promise<Queue | null> {
+  async getOne(options: QueueOptionsBase): Promise<Queue | null> {
     const { queue, trx } = options
     const name = queue.toLowerCase()
 
@@ -141,8 +141,8 @@ export class QueueManager {
    * Deletes a queue and its archive table.
    * @returns false if queue does not exist
    */
-  async drop(options: OptionsBase): Promise<boolean> {
-    const opts: OptionsBase = {
+  async drop(options: QueueOptionsBase): Promise<boolean> {
+    const opts: QueueOptionsBase = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
     }
@@ -169,7 +169,7 @@ export class QueueManager {
    * Permanently deletes all messages in a queue. Returns the number of messages that were deleted.
    * **NOT delete the queue itself**.
    */
-  async purge(options: OptionsBase): Promise<string> {
+  async purge(options: QueueOptionsBase): Promise<string> {
     const { queue: name, trx } = options
 
     const sql = QueueSql.purge
@@ -181,7 +181,7 @@ export class QueueManager {
 
   // #region  detachArchive
 
-  async detachArchive(options: OptionsBase): Promise<void> {
+  async detachArchive(options: QueueOptionsBase): Promise<void> {
     const { queue: name, trx } = options
 
     const sql = QueueSql.detachArchive
@@ -193,7 +193,7 @@ export class QueueManager {
   /**
    * @returns totalMessages visible if outside transaction
    */
-  async getMetrics(options: OptionsBase): Promise<QueueMetrics | null> {
+  async getMetrics(options: QueueOptionsBase): Promise<QueueMetrics | null> {
     const { queue: name, trx } = options
 
     const sql = QueueSql.getMetrics
@@ -235,19 +235,19 @@ export class QueueManager {
   }
 
 
-  protected async _create(options: OptionsBase): Promise<void> {
+  protected async _create(options: QueueOptionsBase): Promise<void> {
     const { queue, trx } = options
     const sql = QueueSql.create
     await this.execute(sql, [queue], trx)
   }
 
-  protected async _createUnlogged(options: OptionsBase) {
+  protected async _createUnlogged(options: QueueOptionsBase) {
     const { queue, trx } = options
     const sql = QueueSql.createUnlogged
     await this.execute(sql, [queue], trx)
   }
 
-  protected async _drop(options: OptionsBase): Promise<boolean> {
+  protected async _drop(options: QueueOptionsBase): Promise<boolean> {
     const { queue: name, trx } = options
     const sql = QueueSql.drop
     const res = await this.execute<QueryResponse<DropResp>>(sql, [name], trx)

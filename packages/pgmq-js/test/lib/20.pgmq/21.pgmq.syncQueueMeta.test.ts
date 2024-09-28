@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { genRandomName, Pgmq, type OptionsBase } from '##/index.js'
+import { genRandomName, Pgmq, type QueueOptionsBase } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -18,7 +18,7 @@ describe(fileShortPath(import.meta.url), () => {
   describe(`Pgmq`, () => {
     it(`syncQueueMeta()`, async () => {
       const rndString = genRandomName(6)
-      const createOpts: OptionsBase = { queue: rndString }
+      const createOpts: QueueOptionsBase = { queue: rndString }
 
       await mq.queue.create(createOpts)
       const flag = await mq.queueMeta.hasQueueMeta(createOpts)

@@ -9,7 +9,7 @@ import { MsgManager } from './msg-manager/msg-manager.js'
 import { QueueManager } from './queue-manager/queue-manager.js'
 import { QueueMetaManager } from './queue-meta-manager/queue-meta-manager.js'
 import { Router } from './router/router.js'
-import type { DbConfig, DbConnectionConfig, OptionsBase } from './types.js'
+import type { DbConfig, DbConnectionConfig, QueueOptionsBase } from './types.js'
 
 
 export class Pgmq {
@@ -72,7 +72,7 @@ export class Pgmq {
 
     const queues = await this.queue.list(trx)
     for (const queue of queues) {
-      const opts: OptionsBase = { queue: queue.queue, trx }
+      const opts: QueueOptionsBase = { queue: queue.queue, trx }
       const flag = await this.queueMeta.hasQueueMeta(opts)
       if (flag) { continue }
       await this.queueMeta.create(opts)

@@ -1,6 +1,6 @@
 import type { BigIntStr } from '@waiting/shared-types'
 
-import type { OptionsBase } from '../types.js'
+import type { QueueOptionsBase } from '../types.js'
 
 
 export type MsgId = string // bigint as string
@@ -26,14 +26,14 @@ export interface MessageDto<T extends MsgContent = MsgContent> {
 }
 
 
-export type PopOptions = OptionsBase
+export type PopOptions = QueueOptionsBase
 
 /**
  * Send a message to the queue
  * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+export interface SendOptions<T extends MsgContent = MsgContent> extends QueueOptionsBase {
   msg: T
   /**
    * @default 0
@@ -45,7 +45,7 @@ export interface SendOptions<T extends MsgContent = MsgContent> extends OptionsB
  * Send multiple messages to the queue
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendBatchOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+export interface SendBatchOptions<T extends MsgContent = MsgContent> extends QueueOptionsBase {
   msgs: T[]
   /**
    * @default 0
@@ -53,7 +53,7 @@ export interface SendBatchOptions<T extends MsgContent = MsgContent> extends Opt
   delay?: number
 }
 
-export interface ReadOptions extends OptionsBase {
+export interface ReadOptions extends QueueOptionsBase {
   /**
    * Time in seconds that the message become invisible after reading, defaults to 1
    */
@@ -98,15 +98,15 @@ export interface ReadBatchOptions extends ReadOptions {
   qty?: number
 }
 
-export interface DeleteOptions extends OptionsBase {
+export interface DeleteOptions extends QueueOptionsBase {
   msgId: BigIntStr | number
 }
 
-export interface DeleteBatchOptions extends OptionsBase {
+export interface DeleteBatchOptions extends QueueOptionsBase {
   msgIds: (BigIntStr | number)[]
 }
 
-export interface SetVtOptions extends OptionsBase {
+export interface SetVtOptions extends QueueOptionsBase {
   msgId: BigIntStr | number
   /**
    * Duration from now, in seconds, that the message's VT should be set to

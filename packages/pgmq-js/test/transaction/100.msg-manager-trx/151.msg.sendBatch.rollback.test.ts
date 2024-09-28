@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, sleep } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type OptionsBase, type SendBatchOptions } from '##/index.js'
+import { Pgmq, genRandomName, type QueueOptionsBase, type SendBatchOptions } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -17,7 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
     queue: rndString,
     msgs: [msg, msg],
   }
-  const createOpts: OptionsBase = { queue: rndString }
+  const createOpts: QueueOptionsBase = { queue: rndString }
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
