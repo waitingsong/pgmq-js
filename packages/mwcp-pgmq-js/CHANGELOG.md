@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/waitingsong/pgmq-js/compare/v5.0.2...v6.0.0) (2024-09-28)
+
+
+### Features
+
+* **mwcp:** breaking change parameters from pgmq and update types ([8231111](https://github.com/waitingsong/pgmq-js/commit/823111103b23b41582f52295dc5367ac8a701768))
+* **pgmq:** save extra queue meta with table `pqmq.tb_queue_meta` ([f743ed1](https://github.com/waitingsong/pgmq-js/commit/f743ed12c41df3baf7090f1ab8f08c8ed73ae7c6))
+
+
+
+
+
 ## [5.0.2](https://github.com/waitingsong/pgmq-js/compare/v5.0.1...v5.0.2) (2024-09-23)
 
 **Note:** Version bump only for package @mwcp/pgmq

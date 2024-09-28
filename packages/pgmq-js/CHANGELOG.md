@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/waitingsong/pgmq-js/compare/v5.0.2...v6.0.0) (2024-09-28)
+
+
+### Features
+
+* **pgmq:** add type OptionsBase ([472e13c](https://github.com/waitingsong/pgmq-js/commit/472e13c4634203ace596020f7efd0c3dc1c216c1))
+* **pgmq:** breaking change parameter of methods of QueueManager ([f09d10e](https://github.com/waitingsong/pgmq-js/commit/f09d10e90391caa90d259911865d0683118558ad))
+* **pgmq:** QueueManager.create() return QueueId (string) ([90efd75](https://github.com/waitingsong/pgmq-js/commit/90efd75d7878bdf3a400ce6f2530a7a33bfb710c))
+* **pgmq:** route support with Router ([6ac173b](https://github.com/waitingsong/pgmq-js/commit/6ac173bb7435857f80d8fc90bdb6186737c7e49f))
+* **pgmq:** RouteMsg ([f0507b7](https://github.com/waitingsong/pgmq-js/commit/f0507b7490ce9595095dd0a8c97414e4d2f986a0))
+* **pgmq:** save extra queue meta with table `pqmq.tb_queue_meta` ([f743ed1](https://github.com/waitingsong/pgmq-js/commit/f743ed12c41df3baf7090f1ab8f08c8ed73ae7c6))
+
+
+
+
+
 ## [5.0.2](https://github.com/waitingsong/pgmq-js/compare/v5.0.1...v5.0.2) (2024-09-23)
 
 **Note:** Version bump only for package @waiting/pgmq-js
