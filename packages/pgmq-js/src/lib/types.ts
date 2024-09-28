@@ -27,7 +27,11 @@ export interface DbConnectionConfig {
   connectionTimeoutMillis?: number
 }
 
-export interface QueueOptionsBase {
-  queue: string
+export interface OptionsBase {
   trx?: Transaction | undefined | null
 }
+
+export interface QueueOptionsBase extends OptionsBase {
+  queue: string
+}
+
