@@ -70,7 +70,7 @@ export class Pgmq {
   async syncQueueMeta(): Promise<void> {
     const trx = await this.startTransaction()
 
-    const queues = await this.queue.list(trx)
+    const queues = await this.queue.list({ trx })
     for (const queue of queues) {
       const opts: QueueOptionsBase = { queue: queue.queue, trx }
       const flag = await this.queueMeta.hasQueueMeta(opts)

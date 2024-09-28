@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
 import type { QueueMetaManager } from '../queue-meta-manager/index.queue-meta.js'
-import type { QueueOptionsBase } from '../types.js'
+import type { OptionsBase, QueueOptionsBase } from '../types.js'
 
 import type {
   DetachArchiveResp,
@@ -88,7 +88,7 @@ export class QueueManager {
     const { queue: name, trx } = options
 
     try {
-      const list = await this.list(trx)
+      const list = await this.list({ trx })
       let found = false
       for (const queue of list) {
         if (queue.queue === name) {
@@ -112,7 +112,7 @@ export class QueueManager {
     const { queue, trx } = options
     const name = queue.toLowerCase()
 
-    const list = await this.list(trx)
+    const list = await this.list({ trx })
     for (const queue of list) {
       if (queue.queue === name) {
         return queue
@@ -123,9 +123,9 @@ export class QueueManager {
 
   // #region list
 
-  async list(trx?: Transaction | undefined | null): Promise<Queue[]> {
+  async list(options?: OptionsBase): Promise<Queue[]> {
     const sql = QueueSql.list
-    const res = await this.execute<QueryResponse<ListResp>>(sql, null, trx)
+    const res = await this.execute<QueryResponse<ListResp>>(sql, null, options?.trx)
 
     const ret = res.rows.map((row) => {
       const line = row['list_queues']
@@ -205,9 +205,9 @@ export class QueueManager {
 
   // #region getAllMetrics
 
-  async getAllMetrics(trx?: Transaction | undefined): Promise<QueueMetrics[]> {
+  async getAllMetrics(options?: OptionsBase): Promise<QueueMetrics[]> {
     const sql = QueueSql.getAllMetrics
-    const res = await this.execute<QueryResponse<MetricsResp>>(sql, null, trx)
+    const res = await this.execute<QueryResponse<MetricsResp>>(sql, null, options?.trx)
     const ret = res.rows.map(parseQueueMetrics)
     return ret
   }
