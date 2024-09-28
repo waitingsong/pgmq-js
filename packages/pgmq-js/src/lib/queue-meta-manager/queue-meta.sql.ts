@@ -9,4 +9,5 @@ export enum QueueMetaSql {
   save = 'INSERT INTO pgmq.tb_queue_meta (queue_name, queue_key, json) VALUES (?,?,?) RETURNING queue_id',
   update = 'UPDATE pgmq.tb_queue_meta SET queue_key = ?, json = ?, mtime = CURRENT_TIMESTAMP WHERE queue_id = ?',
   deleteById = 'DELETE FROM pgmq.tb_queue_meta WHERE queue_id = ?',
+  truncate = 'TRUNCATE TABLE pgmq.tb_queue_meta',
 }

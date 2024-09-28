@@ -47,7 +47,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
     })
 
@@ -56,7 +56,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId, trx }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
       console.log({ route })
     })
@@ -67,7 +67,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId, trx }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
       console.log({ route })
       assert(route.queueIds.length === 1, 'queueIds.length should be 1')
@@ -85,7 +85,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId, trx }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
       console.log({ route })
       assert(route.queueIds.length === 1, 'queueIds.length should be 1')
@@ -103,7 +103,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId, trx }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
       console.log({ route })
       assert(route.queueIds.length === 3, `queueIds.length should be 3, but got ${route.queueIds.length}`)

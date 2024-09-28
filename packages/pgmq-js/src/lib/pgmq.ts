@@ -5,10 +5,11 @@ import _knex from 'knex'
 import { initDbConfigPart, initDbConnectionConfig } from './config.js'
 import { type RespCommon, parseRespCommon } from './helper.js'
 import type { Transaction } from './knex.types.js'
-import { MsgManager } from './msg-manager/msg-manager.js'
-import { QueueManager } from './queue-manager/queue-manager.js'
-import { QueueMetaManager } from './queue-meta-manager/queue-meta-manager.js'
-import { Router } from './router/router.js'
+import { MsgManager } from './msg-manager/index.msg.js'
+import { QueueManager } from './queue-manager/index.queue.js'
+import { QueueMetaManager } from './queue-meta-manager/index.queue-meta.js'
+import { RouteMsg, type SendRouteMsgOptions, type SendRouteMsgResultItem } from './route-msg/index.route-msg.js'
+import { Router } from './router/index.router.js'
 import type { DbConfig, DbConnectionConfig, QueueOptionsBase } from './types.js'
 
 
@@ -17,6 +18,7 @@ export class Pgmq {
   public readonly queueMeta: QueueMetaManager
   public readonly msg: MsgManager
   public readonly router: Router
+  public readonly routeMsg: RouteMsg
   protected readonly dbh: Knex
   protected readonly dbConfig: DbConfig
 
@@ -31,6 +33,7 @@ export class Pgmq {
     this.queue = new QueueManager(this.dbh, this.queueMeta)
     this.msg = new MsgManager(this.dbh)
     this.router = new Router(this.dbh, this.queueMeta)
+    this.routeMsg = new RouteMsg(this.dbh, this.msg, this.queueMeta, this.router)
   }
 
   async getCurrentTime(): Promise<Date> {
@@ -81,8 +84,20 @@ export class Pgmq {
     await trx.commit()
   }
 
+  /**
+   * Send route message
+   * @description Send a message to queues bind to the route
+   */
+  sendRouteMsg(options: SendRouteMsgOptions): Promise<SendRouteMsgResultItem[]> {
+    return this.routeMsg.send(options)
+  }
+
 }
 
+export interface SendRouteMsg {
+
+  trx?: Transaction | null
+}
 
 function createDbh(knexConfig: DbConfig): Knex {
   const inst = _knex.knex(knexConfig)

@@ -2,7 +2,13 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type DeleteRouteOptions, type GetRouteOptions, type RouteOptionsBase, type CreateRouteOptions } from '##/index.js'
+import {
+  Pgmq, genRandomName,
+  type DeleteRouteOptions,
+  type GetRouteOptions,
+  type RouteDto, type RouteOptionsBase,
+  type CreateRouteOptions,
+} from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 
@@ -11,6 +17,7 @@ describe(fileShortPath(import.meta.url), () => {
   const rndString = genRandomName(6)
   let routeId = 0n.toString()
   const queueIds = ['1', '2', (Math.floor(Math.random() * 100) + 1).toString()]
+  let route: RouteDto | null
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
@@ -20,12 +27,6 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   describe(`Router`, () => {
-    it(`getOne(0)`, async () => {
-      const getOpts: GetRouteOptions = { routeId }
-      const route = await mq.router.getOne(getOpts)
-      assert(! route, 'should not found route')
-    })
-
     it(`save()`, async () => {
       const saveOpts: CreateRouteOptions = { routeName: rndString, queueIds }
       const id = await mq.router.create(saveOpts)
@@ -38,12 +39,32 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(ct) > 0n, `count() failed. ct: ${ct}`)
     })
 
-    it(`getOne(${routeId})`, async () => {
+    it(`getOne(${routeId}) by routeId`, async () => {
       const opts: GetRouteOptions = { routeId }
-      const route = await mq.router.getOne(opts)
+      route = await mq.router.getOne(opts)
       assert(route, 'should found route')
-      console.log({ route })
       assert.deepStrictEqual(route?.queueIds, queueIds, 'queueIds not match')
+    })
+
+    it(`getOne(${rndString}) by routeName`, async () => {
+      assert(route, 'should found route with previous getOne()')
+      const opts: GetRouteOptions = { routeName: route.routeName }
+      const route2 = await mq.router.getOne(opts)
+      assert(route2, 'should found route')
+      assert.deepStrictEqual(route2?.queueIds, queueIds, 'queueIds not match')
+      assert.deepStrictEqual(route2, route, 'route not match')
+    })
+
+    it(`getOne() either routeId or routeName empty`, async () => {
+      const opts: GetRouteOptions = { }
+      try {
+        await mq.router.getOne(opts)
+      }
+      catch (ex) {
+        assert(ex instanceof Error, 'should throw Error')
+        return
+      }
+      assert(false, 'should throw Error')
     })
 
     it(`delete(${routeId})`, async () => {

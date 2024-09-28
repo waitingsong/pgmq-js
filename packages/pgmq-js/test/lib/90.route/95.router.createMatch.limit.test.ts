@@ -50,7 +50,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(BigInt(routeId) > 0n, 'createMatch() failed')
 
       const getOpts: GetRouteOptions = { routeId, trx }
-      const route = await mq.router.getById(getOpts)
+      const route = await mq.router.getOne(getOpts)
       assert(route, 'should found route')
       assert(route.queueIds.length === limit, `queueIds.length should be ${limit}, but got ${route.queueIds.length}`)
     })

@@ -4,7 +4,7 @@ import { camelToSnake } from '@waiting/shared-core'
 
 import { assertWithTrx } from '../helper.js'
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
-import type { QueueOptionsBase } from '../types.js'
+import type { OptionsBase, QueueOptionsBase } from '../types.js'
 
 import type { QueueMetaDo } from './db.types.js'
 import { parseQueueMeta } from './queue-meta.helpers.js'
@@ -79,7 +79,7 @@ export class QueueMetaManager {
   async create(options: CreateQueueMetaOptions): Promise<QueueId> {
     const { queue, trx } = options
     const flag = await this.hasQueueMeta(options)
-    await assertWithTrx(! flag, `Queue '${queue}' already exists`, trx)
+    await assertWithTrx(! flag, `Queue '${queue}' already exists in queue meta table`, trx)
 
     const sql = QueueMetaSql.save
     const { queueKey, json } = options
@@ -125,6 +125,12 @@ export class QueueMetaManager {
     const json = options.json ?? null
     await this.execute(sql, [queueKey, json, queue?.queueId], trx)
   }
+
+  async truncate(options?: OptionsBase): Promise<void> {
+    const sql = QueueMetaSql.truncate
+    await this.execute(sql, null, options?.trx)
+  }
+
 
   protected async execute<T = unknown>(sql: string, params: unknown[] | null, trx: Transaction | undefined | null): Promise<T> {
     if (trx) {

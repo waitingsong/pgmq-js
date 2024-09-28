@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 
-import type { Queue, QueueMetaDto } from '##/index.js'
+import type { Queue, QueueMetaDto, SendRouteMsgResultItem } from '##/index.js'
 
 
 export function assertQueueRow(queue: Queue | null): queue is Queue {
@@ -21,3 +21,14 @@ export function assertQueueMetaRow(queue: QueueMetaDto | null | undefined): queu
   assert(typeof queue.queueKey === 'string' || queue.queueKey === null, 'queueKey not string or null')
   return true
 }
+
+export function assertSendRouteMsgResultItem(item: unknown): item is SendRouteMsgResultItem {
+  assert(typeof item === 'object', 'item not object')
+  assert(typeof (item as SendRouteMsgResultItem).msgId === 'string', 'msgId not string')
+  assert(typeof (item as SendRouteMsgResultItem).routeId === 'string', 'routeId not string')
+  assert(typeof (item as SendRouteMsgResultItem).routeName === 'string', 'routeName not string')
+  assert(typeof (item as SendRouteMsgResultItem).queueId === 'string', 'queueId not string')
+  assert(typeof (item as SendRouteMsgResultItem).queue === 'string', 'queue not string')
+  return true
+}
+

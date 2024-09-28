@@ -118,7 +118,7 @@ export class MsgManager {
     const res = await this.execute<QueryResponse<DeleteResp>>(query, [queue, msgId], trx)
     const status = res.rows[0]?.delete
     const ret = status ? [msgId.toString()] : []
-    return ret as MsgId[]
+    return ret
   }
 
   async deleteBatch(options: DeleteBatchOptions): Promise<MsgId[]> {
@@ -139,7 +139,7 @@ export class MsgManager {
     const res = await this.execute<QueryResponse<ArchiveResp>>(query, [queue, msgId], trx)
     const status = res.rows[0]?.archive
     const ret = status ? [msgId.toString()] : []
-    return ret as MsgId[]
+    return ret
   }
 
   async archiveBatch(options: DeleteBatchOptions): Promise<MsgId[]> {

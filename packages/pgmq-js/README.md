@@ -1,6 +1,8 @@
 # pgmq-js
 
-Postgres Message Queue ([PGMQ]) JavaScript Client Library, supports Transaction
+Postgres Message Queue ([PGMQ]) JavaScript Client Library, 
+supports Transaction,
+supports Route routing to implement the `Exchange` functionality of the MQ queue.
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()
@@ -95,7 +97,48 @@ await pgmq.msg.archive({ queue, msgId: msg.msgId, trx })
 await trx.commit() // commit transaction
 ```
 
-[More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/test/lib)
+### Create Route and send RouteMsg
+
+#### Create Route
+
+Matching all by `*`
+```ts
+const createOpts: CreateRouteMatchOptions = { routeName: 'foo', routeRules: '*' } // default limit 1000
+const routeId = await mq.router.createMatch(createOpts)
+assert(BigInt(routeId) > 0n, 'createMatch() failed')
+```
+
+Exact string matching 
+```ts
+const createOpts: CreateRouteMatchOptions = { routeName: 'foo', routeRules: ['order'] } // default limit 1000
+const routeId = await mq.router.createMatch(createOpts)
+```
+
+Matching by Regex
+```ts
+const createOpts: CreateRouteMatchOptions = { routeName: 'foo', routeRules: [/^order.*/u] } // default limit 1000
+const routeId = await mq.router.createMatch(createOpts)
+```
+
+#### Send RouteMsg
+
+```ts
+const msg = { hello: 'foo' }
+const opts: SendRouteMsgOptions = { routeName: 'foo', msg }
+const result: SendRouteMsgResultItem[] = await mq.sendRouteMsg(opts)
+/*
+interface SendRouteMsgResultItem {
+  msgId: MsgId
+  routeId: RouteId
+  routeName: string
+  queueId: QueueId
+  queue: string
+}
+*/
+```
+
+
+[More Examples](https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/test/)
 
 
 ## Supported API

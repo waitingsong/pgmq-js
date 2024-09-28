@@ -6,7 +6,6 @@ import { fileShortPath } from '@waiting/shared-core'
 import {
   Pgmq, genRandomName,
   type CreateRouteMatchOptions,
-  type GetRouteOptions,
   type Transaction,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'

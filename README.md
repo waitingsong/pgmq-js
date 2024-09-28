@@ -1,6 +1,8 @@
 # pgmq-js 
 
-Postgres Message Queue ([PGMQ]) JavaScript Client Library
+Postgres Message Queue ([PGMQ]) JavaScript Client Library,
+supports Transaction,
+supports Route routing to implement the `Exchange` functionality of the MQ queue.
 
 
 [![GitHub tag](https://img.shields.io/github/tag/waitingsong/pgmq-js.svg)]()

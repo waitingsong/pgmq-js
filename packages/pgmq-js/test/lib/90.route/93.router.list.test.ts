@@ -5,7 +5,7 @@ import { fileShortPath } from '@waiting/shared-core'
 import {
   Pgmq, genRandomName,
   type GetAllRouteOptions,
-  type SaveRouteOptions,
+  type CreateRouteOptions,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
@@ -25,7 +25,7 @@ describe(fileShortPath(import.meta.url), () => {
 
   describe(`Router`, () => {
     it(`getAll()`, async () => {
-      const saveOpts: SaveRouteOptions = { routeName: rndString, queueIds }
+      const saveOpts: CreateRouteOptions = { routeName: rndString, queueIds }
       const id = await mq.router.create(saveOpts)
       assert(BigInt(id) > 0, 'create route failed')
       routeId = id
@@ -41,7 +41,7 @@ describe(fileShortPath(import.meta.url), () => {
     })
 
     it(`getAll() duplicate routeName`, async () => {
-      const saveOpts: SaveRouteOptions = { routeName: rndString, queueIds }
+      const saveOpts: CreateRouteOptions = { routeName: rndString, queueIds }
       try {
         await mq.router.create(saveOpts)
       }
@@ -57,7 +57,7 @@ describe(fileShortPath(import.meta.url), () => {
       const trx = await mq.startTransaction()
       assert(trx)
 
-      const saveOpts: SaveRouteOptions = { routeName: genRandomName(6), queueIds, trx }
+      const saveOpts: CreateRouteOptions = { routeName: genRandomName(6), queueIds, trx }
       const id = await mq.router.create(saveOpts)
       assert(BigInt(id) > 0, 'create route failed')
       routeId = id

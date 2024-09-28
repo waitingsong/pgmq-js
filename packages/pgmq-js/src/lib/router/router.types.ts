@@ -21,8 +21,14 @@ export interface RouteOptionsBase {
   trx?: Transaction | undefined | null
 }
 
+/**
+ * Get route by routeId or routeName,
+ * if both are provided, routeId is used,
+ * if none is provided, throw error
+ */
 export interface GetRouteOptions extends RouteOptionsBase {
-  routeId: RouteId
+  routeId?: RouteId
+  routeName?: string
 }
 
 export interface GetAllRouteOptions extends RouteOptionsBase {
@@ -41,7 +47,7 @@ export interface GetAllRouteOptions extends RouteOptionsBase {
   order?: 'asc' | 'desc'
 }
 
-export interface SaveRouteOptions extends RouteOptionsBase {
+export interface CreateRouteOptions extends RouteOptionsBase {
   /**
    * Maximum 512 characters
    */

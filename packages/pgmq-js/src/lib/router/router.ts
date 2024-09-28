@@ -14,7 +14,7 @@ import type {
   DeleteRouteOptions,
   GetAllRouteOptions, GetRouteOptions,
   RouteDto, RouteId, RouteOptionsBase,
-  SaveRouteOptions,
+  CreateRouteOptions,
 } from './router.types.js'
 
 
@@ -33,7 +33,7 @@ export class Router {
     return BigInt(ret)
   }
 
-  async create(options: SaveRouteOptions): Promise<RouteId> {
+  async create(options: CreateRouteOptions): Promise<RouteId> {
     const { routeName, queueIds, json } = options
     const sql = RouteSql.save
 
@@ -82,10 +82,29 @@ export class Router {
     return ret
   }
 
-  async getById(options: GetRouteOptions): Promise<RouteDto | null> {
+  getOne(options: GetRouteOptions): Promise<RouteDto | null> {
+    if (options.routeId) {
+      return this.getById(options)
+    }
+    return this.getByName(options)
+  }
+
+  protected async getById(options: GetRouteOptions): Promise<RouteDto | null> {
     const { routeId, trx } = options
+    assert(routeId, 'parameter routeId is empty')
+
     const sql = RouteSql.getById
     const res = await this.execute<QueryResponse<RouteDo>>(sql, [routeId], trx)
+    const ret = res.rows[0] ? parseRoute(res.rows[0]) : null
+    return ret
+  }
+
+  protected async getByName(options: GetRouteOptions): Promise<RouteDto | null> {
+    const { routeName, trx } = options
+    assert(routeName, 'parameter routeName is empty')
+
+    const sql = RouteSql.getByName
+    const res = await this.execute<QueryResponse<RouteDo>>(sql, [routeName], trx)
     const ret = res.rows[0] ? parseRoute(res.rows[0]) : null
     return ret
   }
@@ -109,7 +128,7 @@ export class Router {
 
   async truncate(options?: RouteOptionsBase): Promise<void> {
     const sql = RouteSql.truncate
-    await this.execute<QueryResponse<RouteDo>>(sql, null, options?.trx)
+    await this.execute(sql, null, options?.trx)
   }
 
   protected async execute<T = unknown>(sql: string, params: unknown[] | null, trx: Transaction | undefined | null): Promise<T> {
