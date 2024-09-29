@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
-import type { QueueMetaManager } from '../queue-meta-manager/index.queue-meta.js'
+import type { CreateQueueMetaOptions, QueueMetaManager } from '../queue-meta-manager/index.queue-meta.js'
 import type { OptionsBase, QueueOptionsBase } from '../types.js'
 
 import type {
@@ -31,8 +31,8 @@ export class QueueManager {
    * Maximum 60 characters; alphanumeric characters, underscores (_) and hyphen (-) are allowed
    * @description * Throws error if queue already exists
    */
-  async create(options: QueueOptionsBase): Promise<string> {
-    const opts: QueueOptionsBase = {
+  async create(options: CreateQueueMetaOptions): Promise<string> {
+    const opts: CreateQueueMetaOptions = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
       queue: options.queue.toLowerCase(),
@@ -59,8 +59,8 @@ export class QueueManager {
    * @param name - will be converted to lowercase
    * @description * Throws error if queue already exists
    */
-  async createUnlogged(options: QueueOptionsBase) {
-    const opts: QueueOptionsBase = {
+  async createUnlogged(options: CreateQueueMetaOptions) {
+    const opts: CreateQueueMetaOptions = {
       ...options,
       trx: options.trx ?? await this.startTransaction(),
       queue: options.queue.toLowerCase(),
