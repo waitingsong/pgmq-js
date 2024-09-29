@@ -37,8 +37,13 @@ export class Router {
     const { routeName, queueIds, json } = options
     const sql = RouteSql.save
 
+    const uniqueQueueIds = new Set(queueIds)
     const trx = options.trx ?? await this.dbh.transaction()
-    const { rows } = await this.execute<QueryResponse<{ route_id: RouteId }>>(sql, [routeName.toLowerCase(), queueIds, json ?? null], trx)
+    const { rows } = await this.execute<QueryResponse<{ route_id: RouteId }>>(
+      sql,
+      [routeName.toLowerCase(), Array.from(uniqueQueueIds), json ?? null],
+      trx,
+    )
     assert(rows[0])
     const routeId = rows[0].route_id
     if (! options.trx) {
