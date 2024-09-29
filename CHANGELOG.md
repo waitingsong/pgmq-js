@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/waitingsong/pgmq-js/compare/v6.1.0...v6.2.0) (2024-09-29)
+
+
+### Features
+
+* **pgmq:** update parameter type of create() and createUnlogged() of QueueManager ([369c564](https://github.com/waitingsong/pgmq-js/commit/369c5641376f0b341217e2d1d279a16adb485724))
+
+
+
+
+
 # [6.1.0](https://github.com/waitingsong/pgmq-js/compare/v6.0.0...v6.1.0) (2024-09-28)
 
 
