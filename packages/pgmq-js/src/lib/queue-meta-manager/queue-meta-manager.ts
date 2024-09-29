@@ -133,10 +133,6 @@ export class QueueMetaManager {
 
 
   protected async execute<T = unknown>(sql: string, params: unknown[] | null, trx: Transaction | undefined | null): Promise<T> {
-    if (trx) {
-      assert(! trx.isCompleted(), 'parameter trx is completed already')
-    }
-
     const dbh = trx ?? this.dbh
     try {
       const res = await (params ? dbh.raw(sql, params) : dbh.raw(sql)) as T
@@ -152,9 +148,6 @@ export class QueueMetaManager {
     trx: Transaction | undefined | null,
     extra?: ExtraQuery,
   ): Promise<T> {
-    if (trx) {
-      assert(! trx.isCompleted(), 'parameter trx is completed already')
-    }
 
     const dbh = trx ?? this.dbh
     try {

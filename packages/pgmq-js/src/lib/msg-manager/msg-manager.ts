@@ -168,9 +168,6 @@ export class MsgManager {
   }
 
   protected async execute<T = unknown>(sql: string, params: unknown[], trx: Transaction | undefined | null): Promise<T> {
-    if (trx) {
-      assert(! trx.isCompleted(), 'parameter trx is completed already')
-    }
     const dbh = trx ?? this.dbh
     const res = await dbh.raw(sql, params) as T
     return res
