@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/waitingsong/pgmq-js/compare/v6.2.0...v6.3.0) (2024-09-29)
+
+
+### Features
+
+* **pgmq:** do not check trx completed ([4445cbb](https://github.com/waitingsong/pgmq-js/commit/4445cbbca93b6113595caa6c48d4a4e1b6473cf4))
+
+
+### Performance Improvements
+
+* **pgmq:** parallel send route msg with RouteMsg.sendConcurrentNumber ([99b9078](https://github.com/waitingsong/pgmq-js/commit/99b9078fb04123db6092732c55e29ecc6d32e303))
+
+
+
+
+
 # [6.2.0](https://github.com/waitingsong/pgmq-js/compare/v6.1.0...v6.2.0) (2024-09-29)
 
 
