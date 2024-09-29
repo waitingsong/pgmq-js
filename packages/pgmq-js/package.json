@@ -2,7 +2,7 @@
   "name": "@waiting/pgmq-js",
   "author": "waiting",
   "version": "6.3.0",
-  "description": "Postgres Message Queue (PGMQ) JavaScript Client Library for Midway.js",
+  "description": "Postgres Message Queue (PGMQ) JavaScript Client Library, supports transaction and exchange via Route",
   "private": false,
   "keywords": [
     "pgmq",
