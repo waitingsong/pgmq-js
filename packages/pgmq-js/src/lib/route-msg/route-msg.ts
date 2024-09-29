@@ -36,11 +36,15 @@ export class RouteMsg {
     assert(route.queueIds.length > 0, `Route ${routeName} not bind to any queue`)
 
     const ret: SendRouteMsgResultItem[] = []
-    for (const queueId of route.queueIds) {
-      const items = await this._send(route, queueId, { ...options, trx })
-      for (const item of items) {
-        ret.push(item)
-      }
+    const limit = this.sendConcurrentNumber > 0 ? this.sendConcurrentNumber : 5
+    for (let i = 0; i < route.queueIds.length; i += limit) {
+      const batch: QueueId[] = route.queueIds.slice(i, i + limit)
+      const pms: SendRouteMsgResultItem[][] = await Promise.all(batch.map(queueId => this._send(route, queueId, { ...options, trx })))
+      pms.forEach((items) => {
+        for (const item of items) {
+          ret.push(item)
+        }
+      })
     }
 
     if (! options.trx) {
