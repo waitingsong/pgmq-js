@@ -13,6 +13,8 @@ supports Route routing to implement the `Exchange` functionality of the MQ queue
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
 
 
+以下所有命令行操作都在 `git-bash` 窗口中执行
+
 ## Install global deps for development
 ```sh
 npm i -g c8 lerna madge rollup tsx zx
