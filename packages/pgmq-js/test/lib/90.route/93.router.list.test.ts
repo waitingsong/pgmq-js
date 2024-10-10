@@ -3,9 +3,9 @@ import assert from 'node:assert'
 import { fileShortPath } from '@waiting/shared-core'
 
 import {
-  Pgmq, genRandomName,
-  type GetAllRouteOptions,
   type CreateRouteOptions,
+  type GetAllRouteOptions,
+  Pgmq, genRandomName,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 

@@ -10,12 +10,12 @@ import type { QueueMetaDo } from './db.types.js'
 import { parseQueueMeta } from './queue-meta.helpers.js'
 import { QueueMetaSql } from './queue-meta.sql.js'
 import type {
+  CreateQueueMetaOptions,
   DeleteQueueMetaOptions,
   GetQueueMetaByIdOptions,
   ListQueueMetaOptions,
   QueueId,
   QueueMetaDto,
-  CreateQueueMetaOptions,
   UpdateQueueMetaOptions,
 } from './queue-meta.types.js'
 

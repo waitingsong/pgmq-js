@@ -3,7 +3,7 @@ import type { Config, ConfigKey, MiddlewareConfig } from './lib/types.js'
 
 export { AutoConfiguration as Configuration } from './configuration.js'
 export * from './app/index.app.js'
-export * from './interface.js'
+export type * from './interface.js'
 export * from './lib/index.js'
 
 export { QueueApi } from './app/index.app.js'
@@ -14,8 +14,8 @@ export * from './app/msg/msg.dto.js'
 export type {
   DbConnectionConfig,
   Message,
-  MsgId,
   MsgContent,
+  MsgId,
   Queue,
   QueueMetrics,
 } from '@waiting/pgmq-js'

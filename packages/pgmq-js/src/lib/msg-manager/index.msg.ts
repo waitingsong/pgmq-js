@@ -1,4 +1,4 @@
 
 export * from './msg-manager.js'
-export * from './msg.types.js'
+export type * from './msg.types.js'
 

@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, genRandomString } from '@waiting/shared-core'
 
-import { Pgmq, type QueueOptionsBase, type ReadOptions, type SendOptions } from '##/index.js'
+import { type QueueOptionsBase, type ReadOptions, type SendOptions, Pgmq } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 

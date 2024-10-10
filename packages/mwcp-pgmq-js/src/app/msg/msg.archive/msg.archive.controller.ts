@@ -1,4 +1,4 @@
-import { Body, Controller, ContentType, Inject, Post } from '@midwayjs/core'
+import { Body, ContentType, Controller, Inject, Post } from '@midwayjs/core'
 import { ApiResponse, ApiTags } from '@midwayjs/swagger'
 import { MConfig } from '@mwcp/share'
 

@@ -1,11 +1,11 @@
-import { Body, Controller, ContentType, Inject, Post } from '@midwayjs/core'
+import { Body, ContentType, Controller, Inject, Post } from '@midwayjs/core'
 import { ApiResponse, ApiTags } from '@midwayjs/swagger'
 import { MConfig } from '@mwcp/share'
 
 import { ApiNotEnabledHttpError } from '##/app/error.js'
 import { Config, ConfigKey } from '##/lib/types.js'
 
-import { MsgApi, MessageDto } from '../msg.dto.js'
+import { MessageDto, MsgApi } from '../msg.dto.js'
 import { MsgMsg } from '../msg.types.js'
 
 import {

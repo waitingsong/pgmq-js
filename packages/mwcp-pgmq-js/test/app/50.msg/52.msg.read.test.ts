@@ -4,7 +4,7 @@ import type { QueueOptionsBase } from '@waiting/pgmq-js'
 import { fileShortPath } from '@waiting/shared-core'
 
 import type { MsgReadDto } from '##/index.js'
-import { genRandomName, MessageDto, MsgSendDto } from '##/index.js'
+import { MessageDto, MsgSendDto, genRandomName } from '##/index.js'
 import { MsgApi } from '#@/api-test.js'
 import { testConfig } from '#@/root.config.js'
 

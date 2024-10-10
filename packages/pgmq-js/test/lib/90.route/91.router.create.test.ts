@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath } from '@waiting/shared-core'
 
-import { Pgmq, genRandomName, type DeleteRouteOptions, type GetRouteOptions, type RouteOptionsBase, type CreateRouteOptions } from '##/index.js'
+import { type CreateRouteOptions, type DeleteRouteOptions, type GetRouteOptions, type RouteOptionsBase, Pgmq, genRandomName } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 
 

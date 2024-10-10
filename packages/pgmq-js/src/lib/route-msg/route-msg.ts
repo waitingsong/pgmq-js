@@ -8,7 +8,7 @@ import type { QueueMetaManager } from '../queue-meta-manager/queue-meta-manager.
 import type { Router } from '../router/router.js'
 import type { RouteDto } from '../router/router.types.js'
 
-import { RouteMsgQueueNotExistAction, type SendRouteMsgOptions, type SendRouteMsgResultItem } from './route-msg.types.js'
+import { type SendRouteMsgOptions, type SendRouteMsgResultItem, RouteMsgQueueNotExistAction } from './route-msg.types.js'
 
 
 export class RouteMsg {

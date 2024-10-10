@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop */
+
 import assert from 'node:assert'
 import { EventEmitter } from 'node:events'
 
@@ -153,7 +153,7 @@ export class PgmqServer extends EventEmitter {
             this.logger.error(err)
           })
       })
-      // eslint-disable-next-line no-await-in-loop
+
       await Promise.all(pms)
     }
   }

@@ -32,7 +32,7 @@ describe(fileShortPath(import.meta.url), () => {
 
       try {
         // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
         await mqServer.initQueue('default', mq, queue, false)
       }
       catch (ex) {
@@ -59,14 +59,14 @@ describe(fileShortPath(import.meta.url), () => {
       const queue = 'queue-' + Date.now()
 
       // @ts-expect-error
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
       await mqServer.initQueue('default', mq, queue, true)
 
       const queueExists = await mq.queue.hasQueue({ queue })
       assert(queueExists, 'queue not exists')
 
       // @ts-expect-error
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
       await mqServer.initQueue('default', mq, queue, true)
       const queueExists2 = await mq.queue.hasQueue({ queue })
       assert(queueExists2, 'queue not exists')

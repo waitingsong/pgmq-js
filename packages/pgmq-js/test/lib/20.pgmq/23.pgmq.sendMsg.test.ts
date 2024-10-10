@@ -4,12 +4,12 @@ import assert from 'node:assert'
 import { fileShortPath } from '@waiting/shared-core'
 
 import {
-  Pgmq, genRandomName,
-  type QueueOptionsBase,
-  type QueueId,
   type MsgContent,
-  type SendOptions,
   type MsgId,
+  type QueueId,
+  type QueueOptionsBase,
+  type SendOptions,
+  Pgmq, genRandomName,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 import { assertSendRouteMsgResultItem } from '#@/test.helper.js'

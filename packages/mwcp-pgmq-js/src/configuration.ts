@@ -1,7 +1,7 @@
-/* eslint-disable no-await-in-loop */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable import/max-dependencies */
+
+
 import assert from 'node:assert'
 
 import {
@@ -9,10 +9,10 @@ import {
   Configuration,
   Inject,
   Logger,
+  MS_CONSUMER_KEY,
   MidwayEnvironmentService,
   MidwayInformationService,
   MidwayWebRouterService,
-  MS_CONSUMER_KEY,
   getClassMetadata,
   listModule,
   listPropertyDataFromClass,

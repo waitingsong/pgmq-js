@@ -2,7 +2,7 @@ import assert from 'node:assert'
 
 import { fileShortPath, sleep } from '@waiting/shared-core'
 
-import { genRandomName, PgmqServer } from '##/index.js'
+import { PgmqServer, genRandomName } from '##/index.js'
 import { ConsumerTestService } from '#@/fixtures/base-app/src/consumer/300s.consumer.service.js'
 import { testConfig } from '#@/root.config.js'
 

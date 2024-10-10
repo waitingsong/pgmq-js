@@ -3,11 +3,11 @@ import assert from 'node:assert'
 import { fileShortPath } from '@waiting/shared-core'
 
 import {
-  Pgmq, genRandomName,
+  type CreateRouteOptions,
   type DeleteRouteOptions,
   type GetRouteOptions,
   type RouteDto, type RouteOptionsBase,
-  type CreateRouteOptions,
+  Pgmq, genRandomName,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 

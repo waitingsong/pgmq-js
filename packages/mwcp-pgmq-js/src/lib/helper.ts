@@ -1,6 +1,7 @@
 import assert from 'node:assert'
 
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function convertToDto<T1 extends object, T2 extends Record<keyof T1, unknown>>(input: T1): T2 {
   assert(input, 'input empty')
   Object.entries(input).forEach(([key, val]) => {

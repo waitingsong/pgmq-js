@@ -6,7 +6,7 @@ import type { Application, IMidwayContainer, JsonResp } from '@mwcp/share'
 import { genCurrentDirname } from '@waiting/shared-core'
 import type { Response, SuperTest, Test } from 'supertest'
 
-import type { PgmqManager, Pgmq } from '##/index.js'
+import type { Pgmq, PgmqManager } from '##/index.js'
 
 
 export const testDir = genCurrentDirname(import.meta.url)

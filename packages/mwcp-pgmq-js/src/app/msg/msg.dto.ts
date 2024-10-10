@@ -1,9 +1,9 @@
 import { ApiProperty } from '@midwayjs/swagger'
 import { Rule } from '@midwayjs/validate'
 import { commonValidSchemas } from '@mwcp/share'
-import { MessageDto as _MessageDto, type OptionsBase } from '@waiting/pgmq-js'
+import { type OptionsBase, MessageDto as _MessageDto } from '@waiting/pgmq-js'
 
-import { MsgId, MsgContent } from '##/index.js'
+import { MsgContent, MsgId } from '##/index.js'
 import { ConfigKey } from '##/lib/types.js'
 
 

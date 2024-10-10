@@ -1,4 +1,4 @@
-import { saveClassMetadata, saveModule, MS_CONSUMER_KEY } from '@midwayjs/core'
+import { MS_CONSUMER_KEY, saveClassMetadata, saveModule } from '@midwayjs/core'
 
 import type { ConsumerMetadata, ConsumerOptions } from './consumer.types.js'
 

@@ -1,4 +1,4 @@
-import { Controller, ContentType, Inject, Get, Param } from '@midwayjs/core'
+import { ContentType, Controller, Get, Inject, Param } from '@midwayjs/core'
 import { ApiResponse, ApiTags } from '@midwayjs/swagger'
 import { MConfig } from '@mwcp/share'
 
@@ -6,7 +6,7 @@ import { ApiNotEnabledHttpError } from '##/app/error.js'
 import { Config, ConfigKey } from '##/lib/types.js'
 
 
-import { QueueMetricsDto, QueueApi } from '../queue.dto.js'
+import { QueueApi, QueueMetricsDto } from '../queue.dto.js'
 import { QueueMsg } from '../queue.types.js'
 
 import { QueueMetricsRepo } from './queue.metrics.repo.js'

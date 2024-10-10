@@ -1,4 +1,4 @@
-import { Inject, Init, Singleton } from '@midwayjs/core'
+import { Init, Inject, Singleton } from '@midwayjs/core'
 import type { OptionsBase, QueueOptionsBase } from '@waiting/pgmq-js'
 
 import type { Pgmq, QueueMetrics, QueueMetricsDto } from '##/index.js'

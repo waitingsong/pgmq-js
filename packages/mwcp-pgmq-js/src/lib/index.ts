@@ -7,8 +7,8 @@ export * from './mq.server/server.js'
 
 export {
   type Config as PgmqConfig,
-  type PgmqSourceConfig,
   type DbConfig,
+  type PgmqSourceConfig,
   ConfigKey as PgmqConfigKey,
 } from './types.js'
 

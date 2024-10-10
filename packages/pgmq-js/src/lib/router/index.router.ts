@@ -1,3 +1,3 @@
 
 export * from './router.js'
-export * from './router.types.js'
+export type * from './router.types.js'

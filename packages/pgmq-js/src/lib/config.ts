@@ -1,4 +1,4 @@
-import type { DbConnectionConfig, DbConfig } from './types.js'
+import type { DbConfig, DbConnectionConfig } from './types.js'
 
 
 export const initDbConnectionConfig: DbConnectionConfig = {

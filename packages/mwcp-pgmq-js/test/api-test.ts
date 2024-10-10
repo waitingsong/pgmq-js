@@ -2,7 +2,8 @@ import { ConfigKey } from '##/lib/types.js'
 
 
 export {
-  QueueApi, MsgApi,
+  MsgApi,
+  QueueApi,
 } from '##/index.js'
 
 

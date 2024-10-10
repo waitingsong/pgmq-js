@@ -1,4 +1,4 @@
-import { Inject, Init, Singleton } from '@midwayjs/core'
+import { Init, Inject, Singleton } from '@midwayjs/core'
 import type { DeleteBatchOptions, DeleteOptions, QueueOptionsBase } from '@waiting/pgmq-js'
 
 import type { Message, MsgId, Pgmq } from '##/index.js'

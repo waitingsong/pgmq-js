@@ -3,9 +3,9 @@ import assert from 'node:assert'
 import { fileShortPath } from '@waiting/shared-core'
 
 import {
-  Pgmq, genRandomName,
   type GetQueueMetaOptions,
   type Transaction,
+  Pgmq, genRandomName,
 } from '##/index.js'
 import { dbConfig } from '#@/config.unittest.js'
 import { assertQueueMetaRow } from '#@/test.helper.js'

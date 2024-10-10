@@ -14,7 +14,7 @@ import { ILogger } from '@midwayjs/logger'
 import { Application, MConfig } from '@mwcp/share'
 import { Pgmq } from '@waiting/pgmq-js'
 
-import { ConfigKey, PgmqSourceConfig, DbConfig } from './types.js'
+import { ConfigKey, DbConfig, PgmqSourceConfig } from './types.js'
 
 
 @Singleton()

@@ -1,14 +1,13 @@
 import type { Knex } from 'knex'
-// eslint-disable-next-line import/default, import/no-named-as-default, import/no-named-as-default-member
 import _knex from 'knex'
 
 import { initDbConfigPart, initDbConnectionConfig } from './config.js'
 import { type RespCommon, parseRespCommon } from './helper.js'
 import type { Transaction } from './knex.types.js'
-import { MsgManager, type MsgContent, type MsgId, type SendOptions } from './msg-manager/index.msg.js'
+import { type MsgContent, type MsgId, type SendOptions, MsgManager } from './msg-manager/index.msg.js'
 import { QueueManager } from './queue-manager/index.queue.js'
 import { QueueMetaManager } from './queue-meta-manager/index.queue-meta.js'
-import { RouteMsg, type SendRouteMsgOptions, type SendRouteMsgResultItem } from './route-msg/index.route-msg.js'
+import { type SendRouteMsgOptions, type SendRouteMsgResultItem, RouteMsg } from './route-msg/index.route-msg.js'
 import { Router } from './router/index.router.js'
 import type { DbConfig, DbConnectionConfig, QueueOptionsBase } from './types.js'
 
@@ -107,6 +106,7 @@ export interface SendRouteMsg {
 }
 
 function createDbh(knexConfig: DbConfig): Knex {
+  // eslint-disable-next-line import/no-named-as-default-member
   const inst = _knex.knex(knexConfig)
   return inst
 }

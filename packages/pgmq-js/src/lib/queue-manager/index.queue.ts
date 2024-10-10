@@ -1,3 +1,3 @@
 
 export * from './queue-manager.js'
-export * from './queue.types.js'
+export type * from './queue.types.js'
