@@ -36,7 +36,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@waiting/shared-core": "23.21.0",
+    "@waiting/shared-core": "23.22.0",
     "knex": "^3.1.0",
     "pg": "^8.13.0"
   },
