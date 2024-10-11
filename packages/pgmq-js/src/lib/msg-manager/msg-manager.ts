@@ -69,11 +69,34 @@ export class MsgManager {
     return [row.send]
   }
 
+
   /**
-   * Send multiple messages to the queue
+   * Send multiple messages to the queue or queues (without creating a route)
    * @param delay Time in seconds before the message becomes visible. Defaults to 0.
    */
   async sendBatch<T extends MsgContent>(options: SendBatchOptions<T>): Promise<MsgId[]> {
+    if (Array.isArray(options.queue)) {
+      const trx = options.trx ?? await this.startTransaction()
+      const ret: MsgId[] = []
+
+      for (const qu of options.queue) {
+        const queueExists = await this.queue.hasQueue({ queue: qu, trx })
+        if (! queueExists) { continue }
+
+        const opts = { ...options, trx, queue: qu }
+        const msgIds = await this._sendBatch(opts)
+        ret.push(...msgIds)
+      }
+
+      if (! options.trx) {
+        await trx.commit()
+      }
+      return ret
+    }
+    return this._sendBatch(options)
+  }
+
+  protected async _sendBatch<T extends MsgContent>(options: SendBatchOptions<T>): Promise<MsgId[]> {
     const { queue, msgs, delay = 0, trx } = options
 
     const query = MsgSql.sendBatch
