@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.4.0](https://github.com/waitingsong/pgmq-js/compare/v6.3.3...v6.4.0) (2024-10-11)
+
+
+### Features
+
+* **pgmq:** send() a message to queues without creating a route ([2756a8e](https://github.com/waitingsong/pgmq-js/commit/2756a8ef208f4c15d96eb249a986e93965077cf4))
+* **pgmq:** sendBath() messages to queues without creating a route ([1e24b96](https://github.com/waitingsong/pgmq-js/commit/1e24b9692b8bbaa05398c523ce4cb78d2f6e1dd9))
+
+
+
+
+
 ## [6.3.3](https://github.com/waitingsong/pgmq-js/compare/v6.3.2...v6.3.3) (2024-10-10)
 
 **Note:** Version bump only for package @waiting/pgmq-js
