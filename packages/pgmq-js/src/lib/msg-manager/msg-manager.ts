@@ -4,6 +4,7 @@ import type { RecordSnakeKeys } from '@waiting/shared-types'
 
 import { assertWithTrx } from '../helper.js'
 import type { Knex, QueryResponse, Transaction } from '../knex.types.js'
+import type { QueueManager } from '../queue-manager/queue-manager.js'
 
 import type { ArchiveBatchResp, ArchiveResp, DeleteBatchResp, DeleteResp, SendBatchResp, SendResp } from './db.types.js'
 import { parseMessage } from './msg.helpers.js'
@@ -18,15 +19,45 @@ import type {
 
 
 export class MsgManager {
-  constructor(protected readonly dbh: Knex) { }
+  constructor(
+    protected readonly dbh: Knex,
+    protected readonly queue: QueueManager,
+  ) { }
 
   // #region send
 
   /**
-   * Send a message to the queue
+   * Send a message to the queue or queues (without creating a route)
+   * @description ignore queue not exist if queue is array
    * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
    */
   async send<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
+    const { queue } = options
+
+    if (Array.isArray(queue)) {
+      const trx = options.trx ?? await this.startTransaction()
+      const ret: MsgId[] = []
+
+      for (const qu of queue) {
+        const queueExists = await this.queue.hasQueue({ queue: qu, trx })
+        if (! queueExists) { continue }
+
+        const opts = { ...options, trx, queue: qu }
+        const res = await this._send(opts)
+        ret.push(...res)
+      }
+
+      if (! options.trx) {
+        await trx.commit()
+      }
+      return ret
+    }
+    else {
+      return this._send(options)
+    }
+  }
+
+  protected async _send<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
     const { queue, msg, delay = 0, trx } = options
 
     await assertWithTrx(typeof msg === 'object', 'msg must be object', trx)
@@ -54,6 +85,7 @@ export class MsgManager {
   // #region read
 
   /**
+   * Read a message from the queue
    * @param vt Time in seconds that the message become invisible after reading, defaults to 1
    */
   async read<T extends MsgContent>(options: ReadOptions): Promise<Message<T> | null> {
@@ -167,10 +199,18 @@ export class MsgManager {
     return ret as Message<T> | null
   }
 
+
   protected async execute<T = unknown>(sql: string, params: unknown[], trx: Transaction | undefined | null): Promise<T> {
     const dbh = trx ?? this.dbh
     const res = await dbh.raw(sql, params) as T
     return res
   }
+
+  protected async startTransaction(): Promise<Transaction> {
+    const ret = await this.dbh.transaction()
+    assert(ret, 'Transaction is required')
+    return ret
+  }
+
 }
 

@@ -30,7 +30,7 @@ export class Pgmq {
     this.dbh = createDbh(this.dbConfig)
     this.queueMeta = new QueueMetaManager(this.dbh)
     this.queue = new QueueManager(this.dbh, this.queueMeta)
-    this.msg = new MsgManager(this.dbh)
+    this.msg = new MsgManager(this.dbh, this.queue)
     this.router = new Router(this.dbh, this.queueMeta)
     this.routeMsg = new RouteMsg(this.dbh, this.msg, this.queueMeta, this.router)
   }

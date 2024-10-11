@@ -1,6 +1,6 @@
 import type { BigIntStr } from '@waiting/shared-types'
 
-import type { QueueOptionsBase } from '../types.js'
+import type { OptionsBase, QueueOptionsBase } from '../types.js'
 
 
 export type MsgId = string // bigint as string
@@ -29,11 +29,12 @@ export interface MessageDto<T extends MsgContent = MsgContent> {
 export type PopOptions = QueueOptionsBase
 
 /**
- * Send a message to the queue
+ * Send a message to the queue or queues (without creating a route)
  * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendOptions<T extends MsgContent = MsgContent> extends QueueOptionsBase {
+export interface SendOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+  queue: string | string[]
   msg: T
   /**
    * @default 0
@@ -42,10 +43,11 @@ export interface SendOptions<T extends MsgContent = MsgContent> extends QueueOpt
 }
 
 /**
- * Send multiple messages to the queue
+ * Send multiple messages to the queue or queues (without creating a route)
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendBatchOptions<T extends MsgContent = MsgContent> extends QueueOptionsBase {
+export interface SendBatchOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+  queue: string | string[]
   msgs: T[]
   /**
    * @default 0
