@@ -25,6 +25,13 @@ describe(fileShortPath(import.meta.url), () => {
       const flag = await mq.setTimeZone('UTC')
       assert(flag === 'UTC', 'setTimeZone failed:' + flag)
     })
+
+    it(`startTransaction()`, async () => {
+      const trx = await mq.startTransaction()
+      assert(trx)
+      assert(! trx.isCompleted())
+      await trx.rollback()
+    })
   })
 })
 
