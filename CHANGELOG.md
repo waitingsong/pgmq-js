@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1](https://github.com/waitingsong/pgmq-js/compare/v6.4.0...v6.4.1) (2024-10-13)
+
+
+### Bug Fixes
+
+* **pgmq:** result length of genRandomName() ([c118bc8](https://github.com/waitingsong/pgmq-js/commit/c118bc86ca76d0f6b8ab0e86e7f937897018e80e))
+
+
+
+
+
 # [6.4.0](https://github.com/waitingsong/pgmq-js/compare/v6.3.3...v6.4.0) (2024-10-11)
 
 
