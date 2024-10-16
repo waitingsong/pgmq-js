@@ -106,8 +106,7 @@ export interface SendRouteMsg {
 }
 
 function createDbh(knexConfig: DbConfig): Knex {
-  // eslint-disable-next-line import/no-named-as-default-member
-  const inst = _knex.knex(knexConfig)
+  const inst = _knex(knexConfig)
   return inst
 }
 
