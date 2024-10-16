@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.2](https://github.com/waitingsong/pgmq-js/compare/v6.4.1...v6.4.2) (2024-10-16)
+
+**Note:** Version bump only for package @waiting/pgmq-js
+
+
+
+
+
 ## [6.4.1](https://github.com/waitingsong/pgmq-js/compare/v6.4.0...v6.4.1) (2024-10-13)
 
 

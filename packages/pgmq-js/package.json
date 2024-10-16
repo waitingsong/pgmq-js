@@ -1,7 +1,7 @@
 {
   "name": "@waiting/pgmq-js",
   "author": "waiting",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "description": "Postgres Message Queue (PGMQ) JavaScript Client Library, supports transaction and exchange via Route",
   "private": false,
   "keywords": [
