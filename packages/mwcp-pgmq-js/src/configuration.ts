@@ -129,18 +129,12 @@ export class AutoConfiguration implements ILifeCycle {
   }
 
   async onStop(container: IMidwayContainer): Promise<void> {
-    this.logger.info(`[${ConfigKey.componentName}] stopping PgmqServer ...`)
+    this.logger.info(`[${ConfigKey.componentName}] stopping PgmqServer`)
     this.pgmqServer.close()
 
-    this.logger.info(`[${ConfigKey.componentName}] stopping PgmqManager ...`)
+    this.logger.info(`[${ConfigKey.componentName}] stopping PgmqManager`)
     const dbSourceManager = await container.getAsync(PgmqManager)
-    // void dbSourceManager.getName()
-    const dbSources = dbSourceManager.getAllDataSources()
-    await Promise.all(
-      Array.from(dbSources.values()).map(async (db) => {
-        await dbSourceManager.destroyDataSource(db)
-      }),
-    )
+    await dbSourceManager.stop()
     this.logger.info(`[${ConfigKey.componentName}] stopped`)
   }
 
