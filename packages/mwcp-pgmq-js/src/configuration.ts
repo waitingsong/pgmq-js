@@ -80,52 +80,7 @@ export class AutoConfiguration implements ILifeCycle {
       this.app,
       'this.app undefined. If start for development, please set env first like `export MIDWAY_SERVER_ENV=local`',
     )
-
-    const subscriberModules = listModule(MS_CONSUMER_KEY, (module) => {
-      const metadata: ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module)
-      return metadata.type === 'pgmq'
-    })
-
-    const moduleCache = new Map<object, unknown>()
-
-    for (const module of subscriberModules) {
-      const consumerMetadata: ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module)
-
-      const listenerMetadata = listPropertyDataFromClass(MS_CONSUMER_KEY, module) as PgmqListenerOptionsMetadata[][]
-
-      const pms: Promise<void>[] = []
-      for (const arr of listenerMetadata) {
-        // 循环绑定的方法和监听的配置信息
-        for (const listenerOptions of arr) {
-          let clzInstance = moduleCache.get(module)
-          if (! clzInstance) {
-            clzInstance = await container.getAsync(module)
-            moduleCache.set(module, clzInstance)
-          }
-          assert(clzInstance, 'clzInstance not found')
-          // @ts-ignore
-          const fn = clzInstance[listenerOptions.propertyKey] as ConsumerCallback
-          assert(typeof fn === 'function', 'fn not function')
-
-          const opts = {
-            ...initConsumerOptions,
-            ...consumerMetadata.metadata, // class level
-            ...listenerOptions, // method level
-          }
-          const pm = this.pgmqServer.registerListener(opts, fn.bind(clzInstance))
-            /* c8 ignore next 4 */
-            .catch((ex) => {
-              console.error('registerListener error on start:', ex)
-              throw ex
-            })
-          pms.push(pm)
-          // await this.pgmqServer.registerListener(opts, fn.bind(clzInstance)).catch(console.error)
-        }
-      }
-      await Promise.all(pms)
-      moduleCache.clear()
-    }
-
+    await onReady(container, this.pgmqServer)
     this.logger.info(`[${ConfigKey.componentName}] onReady`)
   }
 
@@ -141,3 +96,51 @@ export class AutoConfiguration implements ILifeCycle {
 
 }
 
+
+async function onReady(container: IMidwayContainer, pgmqServer: PgmqServer): Promise<void> {
+  const subscriberModules = listModule(MS_CONSUMER_KEY, (module) => {
+    const metadata: ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module)
+    return metadata.type === 'pgmq'
+  })
+
+  const moduleCache = new Map<object, unknown>()
+
+  for (const module of subscriberModules) {
+    const consumerMetadata: ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module)
+
+    const listenerMetadata = listPropertyDataFromClass(MS_CONSUMER_KEY, module) as PgmqListenerOptionsMetadata[][]
+
+    const pms: Promise<void>[] = []
+    for (const arr of listenerMetadata) {
+      // 循环绑定的方法和监听的配置信息
+      for (const listenerOptions of arr) {
+        let clzInstance = moduleCache.get(module)
+        if (! clzInstance) {
+          clzInstance = await container.getAsync(module)
+          moduleCache.set(module, clzInstance)
+        }
+        assert(clzInstance, 'clzInstance not found')
+        // @ts-ignore
+        const fn = clzInstance[listenerOptions.propertyKey] as ConsumerCallback
+        assert(typeof fn === 'function', 'fn not function')
+
+        const opts = {
+          ...initConsumerOptions,
+          ...consumerMetadata.metadata, // class level
+          ...listenerOptions, // method level
+        }
+        const pm = pgmqServer.registerListener(opts, fn.bind(clzInstance))
+        /* c8 ignore next 4 */
+          .catch((ex) => {
+            console.error('registerListener error on start:', ex)
+            throw ex
+          })
+        pms.push(pm)
+        // await this.pgmqServer.registerListener(opts, fn.bind(clzInstance)).catch(console.error)
+      }
+    }
+    await Promise.all(pms)
+    moduleCache.clear()
+  }
+
+}
