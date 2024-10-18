@@ -60,6 +60,7 @@ export class AutoConfiguration implements ILifeCycle {
   @MConfig(ConfigKey.config) protected readonly config: Config
   @MConfig(ConfigKey.middlewareConfig) protected readonly mwConfig: MiddlewareConfig
 
+  @Inject() protected readonly dbSourceManager: PgmqManager
   @Inject() protected readonly pgmqServer: PgmqServer
 
   async onConfigLoad(): Promise<void> {
@@ -129,12 +130,12 @@ export class AutoConfiguration implements ILifeCycle {
   }
 
   async onStop(container: IMidwayContainer): Promise<void> {
+    void container
     this.logger.info(`[${ConfigKey.componentName}] stopping PgmqServer`)
     this.pgmqServer.close()
 
     this.logger.info(`[${ConfigKey.componentName}] stopping PgmqManager`)
-    const dbSourceManager = await container.getAsync(PgmqManager)
-    await dbSourceManager.stop()
+    await this.dbSourceManager.stop()
     this.logger.info(`[${ConfigKey.componentName}] stopped`)
   }
 
