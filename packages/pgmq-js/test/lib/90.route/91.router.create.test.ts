@@ -10,7 +10,7 @@ describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
   const rndString = genRandomName(6)
   let routeId = 0n.toString()
-  const queueIds = ['1', '2', (Math.floor(Math.random() * 100) + 1).toString()]
+  const queueIds = ['1', '2', (Math.floor(Math.random() * 10000) + 1).toString()]
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
