@@ -1,7 +1,7 @@
 {
   "name": "@mwcp/pgmq",
   "author": "waiting",
-  "version": "6.4.3",
+  "version": "6.4.4",
   "description": "Postgres Message Queue (PGMQ) JavaScript Client Library for Midway.js, supports transaction and exchange via Route",
   "private": false,
   "keywords": [
@@ -38,7 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@mwcp/otel": "^38.2.1",
-    "@waiting/pgmq-js": "^6.4.2"
+    "@waiting/pgmq-js": "^6.4.4"
   },
   "engines": {
     "node": ">=18.12.0",
