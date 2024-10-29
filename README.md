@@ -94,12 +94,12 @@ psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
 <br>
 
 [`pgmq-js`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js
-[main-svg]: https://img.shields.io/npm/v/@waiting/pgmq-js.svg?maxAge=7200
+[main-svg]: https://img.shields.io/npm/v/@waiting/pgmq-js.svg?maxAge=300
 [main-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js/CHANGELOG.md
 
 
 [`@mwcp/pgmq`]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
-[cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=7200
+[cli-svg]: https://img.shields.io/npm/v/@mwcp/pgmq.svg?maxAge=300
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
 [PGMQ]: https://tembo-io.github.io/pgmq/
