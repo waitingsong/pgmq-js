@@ -27,6 +27,7 @@ export interface MessageDto<T extends MsgContent = MsgContent> {
 
 
 export type PopOptions = QueueOptionsBase
+type TimeStampStr = string
 
 /**
  * Send a message to the queue or queues (without creating a route)
@@ -39,7 +40,7 @@ export interface SendOptions<T extends MsgContent = MsgContent> extends OptionsB
   /**
    * @default 0
    */
-  delay?: number
+  delay?: number | TimeStampStr
 }
 
 /**
@@ -52,7 +53,7 @@ export interface SendBatchOptions<T extends MsgContent = MsgContent> extends Opt
   /**
    * @default 0
    */
-  delay?: number
+  delay?: number | TimeStampStr
 }
 
 export interface ReadOptions extends QueueOptionsBase {

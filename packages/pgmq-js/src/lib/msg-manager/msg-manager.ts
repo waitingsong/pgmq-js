@@ -61,7 +61,7 @@ export class MsgManager {
     const { queue, msg, delay = 0, trx } = options
 
     await assertWithTrx(typeof msg === 'object', 'msg must be object', trx)
-    const query = MsgSql.send
+    const query = typeof delay === 'number' ? MsgSql.send : MsgSql.send2
     const res = await this.execute<QueryResponse<SendResp>>(query, [queue, msg, delay], trx)
     const [row] = res.rows
     await assertWithTrx(row, 'send failed', trx)
