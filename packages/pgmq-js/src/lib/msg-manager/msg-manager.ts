@@ -144,10 +144,13 @@ export class MsgManager {
    * Read multiple messages from the queue
    */
   async readBatch<T extends MsgContent = MsgContent>(options: ReadBatchOptions): Promise<Message<T>[]> {
-    const { queue, vt = 1, qty = 1, trx } = options
+    const { queue, vt = 1, qty = 1, trx, conditional } = options
+    const hasCondition = conditional && Object.keys(conditional).length
 
-    const query = MsgSql.read
-    const res = await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue, vt, qty], trx)
+    const query = hasCondition ? MsgSql.read2 : MsgSql.read
+    const res = hasCondition
+      ? await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue, vt, qty, conditional], trx)
+      : await this.execute<QueryResponse<RecordSnakeKeys<Message<T>>>>(query, [queue, vt, qty], trx)
     const ret = res.rows.map(parseMessage)
     return ret as Message<T>[]
   }

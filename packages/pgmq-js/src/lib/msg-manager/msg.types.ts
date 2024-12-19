@@ -1,4 +1,4 @@
-import type { BigIntStr } from '@waiting/shared-types'
+import type { BigIntStr, JsonObject } from '@waiting/shared-types'
 
 import type { OptionsBase, QueueOptionsBase } from '../types.js'
 
@@ -56,11 +56,15 @@ export interface SendBatchOptions<T extends MsgContent = MsgContent> extends Opt
   delay?: number | TimeStampStr
 }
 
+/**
+ * @link https://tembo.io/pgmq/api/sql/functions/#read
+ */
 export interface ReadOptions extends QueueOptionsBase {
   /**
    * Time in seconds that the message become invisible after reading, defaults to 1
    */
   vt?: number
+  conditional?: JsonObject
 }
 
 /**
