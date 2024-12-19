@@ -42,7 +42,7 @@ npm i @mwcp/pgmq
 Start a Postgres instance with the PGMQ extension installed:
 
 ```sh
-docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg16-pgmq:latest
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg17-pgmq:latest
 ```
 
 Create the pgmq extension
