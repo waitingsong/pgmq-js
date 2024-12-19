@@ -99,7 +99,7 @@ export class MsgManager {
   protected async _sendBatch<T extends MsgContent>(options: SendBatchOptions<T>): Promise<MsgId[]> {
     const { queue, msgs, delay = 0, trx } = options
 
-    const query = MsgSql.sendBatch
+    const query = typeof delay === 'number' ? MsgSql.sendBatch : MsgSql.sendBatch2
     const res = await this.execute<QueryResponse<SendBatchResp>>(query, [queue, msgs, delay], trx)
     const ret = res.rows.map(row => row.send_batch)
     return ret
