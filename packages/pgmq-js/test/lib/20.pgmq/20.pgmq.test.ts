@@ -21,6 +21,28 @@ describe(fileShortPath(import.meta.url), () => {
       assert(ret instanceof Date, 'getCurrentTime failed:')
     })
 
+    it(`getTimestamp('10s')`, async () => {
+      const [now, ret] = await Promise.all([
+        mq.getCurrentTime(),
+        mq.getTimestamp('10s'),
+      ])
+      const diff = ret.getTime() - now.getTime()
+      console.log({ now, ret, diff })
+      assert(ret instanceof Date, 'getTimestamp failed:')
+      assert(diff >= 10_000 && diff < 10_010, 'getTimestamp failed:')
+    })
+
+    it(`getTimestamp()`, async () => {
+      const [now, ret] = await Promise.all([
+        mq.getCurrentTime(),
+        mq.getTimestamp(),
+      ])
+      const diff = ret.getTime() - now.getTime()
+      console.log({ now, ret, diff })
+      assert(ret instanceof Date, 'getTimestamp failed:')
+      assert(diff >= 0 && diff < 10, 'getTimestamp failed:')
+    })
+
     it(`setTimeZone()`, async () => {
       const flag = await mq.setTimeZone('UTC')
       assert(flag === 'UTC', 'setTimeZone failed:' + flag)

@@ -43,6 +43,18 @@ export class Pgmq {
 
   /**
    *
+   * @param delay '3s', '1 minute'
+   * @returns
+   */
+  async getTimestamp(delay?: string): Promise<Date> {
+    const intv = delay ? `+ INTERVAL '${delay}'` : ''
+    const res = await this.dbh.raw(`SELECT CURRENT_TIMESTAMP ${intv} AS currenttime;`) as unknown
+    const ret = parseRespCommon(res as RespCommon)
+    return ret
+  }
+
+  /**
+   *
    * @param zone available `SELECT pg_timezone_names()`
    */
   async setTimeZone(zone: string): Promise<string> {
