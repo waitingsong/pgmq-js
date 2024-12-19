@@ -1,7 +1,7 @@
 
 export enum MsgSql {
-  send = 'SELECT * FROM pgmq.send(?, ?, ?)',
-  sendBatch = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?)',
+  send = 'SELECT * FROM pgmq.send(?, ?, ?::int4)',
+  sendBatch = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?::int4)',
   read = 'SELECT * FROM pgmq.read(?, ?, ?)',
   pop = 'SELECT * FROM pgmq.pop(?)',
   delete = 'SELECT pgmq.delete(?, ?::bigint)',
