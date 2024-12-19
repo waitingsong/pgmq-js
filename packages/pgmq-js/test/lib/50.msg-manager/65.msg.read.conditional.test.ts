@@ -149,5 +149,20 @@ describe(fileShortPath(import.meta.url), () => {
     const msgs = await mq.msg.readBatch<MsgContent>(opts)
     assert(msgs.length === 0, 'msg.readBatch should return empty array')
   })
+
+  it(`msg.read(${rndString} with conditional 7)`, async () => {
+    const opts: ReadOptions = {
+      ...options,
+      vt: 0,
+      conditional: {
+        key: 'foo',
+        data: {
+          rnd: '1',
+        },
+      },
+    }
+    const msgs = await mq.msg.readBatch<MsgContent>(opts)
+    assert(msgs.length === 0, 'msg.readBatch should return empty array')
+  })
 })
 
