@@ -69,6 +69,9 @@ const msgIds: MsgId[] = await pgmq.msg.sendBatch({ queue, msg: [msgToSend , msgT
 const vt = 3 // Time in seconds that the message become invisible after reading, defaults to 0
 const msg: Message = await pgmq.msg.read<typeof msgToSend>({ queue, vt })
 
+// Filters the messages by their json content. Defaults to '{}' - no filtering
+const msg: Message = await pgmq.msg.read<typeof msgToSend>({ queue, vt, conditional: { id: 1 } })
+
 const numMessages = 5 // The number of messages to read from the queue, defaults to 10
 const msgs: Message[] = await pgmq.msg.readBatch({ queue, vt, numMessages })
 
