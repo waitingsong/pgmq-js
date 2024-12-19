@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/waitingsong/pgmq-js/compare/v6.5.1...v6.6.0) (2024-12-19)
+
+
+### Features
+
+* **pgmq:** add new conditional parameter for read and readBatch ([244b81b](https://github.com/waitingsong/pgmq-js/commit/244b81ba6da84797b05e4af15fd7d5aeedce9908))
+* **pgmq:** add Pgmq.getTimestamp(delay?) ([63e68b5](https://github.com/waitingsong/pgmq-js/commit/63e68b56418945abf2ffcfefee1fa7d720d0397b))
+* **pgmq:** add timestamp support in send ([2fda2b3](https://github.com/waitingsong/pgmq-js/commit/2fda2b3b40f2c1219deb8996b40f97019344b09e))
+* **pgmq:** add timestamp support in send_batch ([88720b6](https://github.com/waitingsong/pgmq-js/commit/88720b69c4e36efeed28b7fd8d5ac467b0b2d504))
+
+
+
+
+
 ## [6.5.1](https://github.com/waitingsong/pgmq-js/compare/v6.5.0...v6.5.1) (2024-12-19)
 
 **Note:** Version bump only for package @waiting/pgmq-js
