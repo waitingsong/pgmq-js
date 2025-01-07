@@ -20,6 +20,9 @@ supports Route routing to implement the `Exchange` functionality of the MQ queue
 npm i -g c8 lerna madge rollup tsx zx
 ```
 
+Tested with
+- [PGMQ] v1.5.0
+
 
 ## Packages
 

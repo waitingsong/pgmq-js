@@ -13,6 +13,9 @@ supports Route routing to implement the `Exchange` functionality of the MQ queue
 [![codecov](https://codecov.io/gh/waitingsong/pgmq-js/graph/badge.svg?token=RSoBwfxEGn)](https://codecov.io/gh/waitingsong/pgmq-js)
 
 
+Tested with
+- [PGMQ] v1.5.0
+
 ## Installation
 
 ```sh
