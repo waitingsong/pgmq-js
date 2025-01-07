@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import type { BigIntStr, JsonObject } from '@waiting/shared-types'
 
 import type { OptionsBase, QueueOptionsBase } from '../types.js'
@@ -121,3 +122,4 @@ export interface SetVtOptions extends QueueOptionsBase {
   vt: number
 }
 
+/* c8 ignore stop */
