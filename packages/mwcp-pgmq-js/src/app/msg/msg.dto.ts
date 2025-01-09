@@ -28,7 +28,7 @@ export class CommonMsgDto implements Omit<OptionsBase, 'trx'> {
   queue: string
 }
 
-export class MessageDto<T extends MsgContent = MsgContent> implements _MessageDto<T> {
+export class MessageDto<T extends MsgContent = MsgContent, H extends MsgContent = MsgContent> implements _MessageDto<T, H> {
   @ApiProperty({ example: '1', description: '消息id' })
   @Rule(commonValidSchemas.bigintString.required())
   msgId: MsgId
@@ -36,6 +36,10 @@ export class MessageDto<T extends MsgContent = MsgContent> implements _MessageDt
   @ApiProperty({ example: { foo: 'bar' }, description: '消息内容' })
   @Rule(commonValidSchemas.object.allow(null))
   message: T
+
+  @ApiProperty({ example: { foo: 'bar' }, description: '消息headers' })
+  @Rule(commonValidSchemas.object.allow(null))
+  headers: H
 
   @ApiProperty({ example: '2024-07-01T00:00:00.000Z', description: '入队时间' })
   @Rule(commonValidSchemas.isoDate.required())
