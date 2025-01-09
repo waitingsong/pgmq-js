@@ -58,11 +58,11 @@ export class MsgManager {
   }
 
   protected async _send<T extends MsgContent>(options: SendOptions<T>): Promise<MsgId[]> {
-    const { queue, msg, delay = 0, trx } = options
+    const { queue, msg, headers, delay = 0, trx } = options
 
     await assertWithTrx(typeof msg === 'object', 'msg must be object', trx)
     const query = typeof delay === 'number' ? MsgSql.send : MsgSql.send2
-    const res = await this.execute<QueryResponse<SendResp>>(query, [queue, msg, delay], trx)
+    const res = await this.execute<QueryResponse<SendResp>>(query, [queue, msg, headers ?? null, delay], trx)
     const [row] = res.rows
     await assertWithTrx(row, 'send failed', trx)
     assert(row)
@@ -97,10 +97,10 @@ export class MsgManager {
   }
 
   protected async _sendBatch<T extends MsgContent>(options: SendBatchOptions<T>): Promise<MsgId[]> {
-    const { queue, msgs, delay = 0, trx } = options
+    const { queue, msgs, headers, delay = 0, trx } = options
 
     const query = typeof delay === 'number' ? MsgSql.sendBatch : MsgSql.sendBatch2
-    const res = await this.execute<QueryResponse<SendBatchResp>>(query, [queue, msgs, delay], trx)
+    const res = await this.execute<QueryResponse<SendBatchResp>>(query, [queue, msgs, headers ?? null, delay], trx)
     const ret = res.rows.map(row => row.send_batch)
     return ret
   }

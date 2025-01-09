@@ -1,9 +1,9 @@
 
 export enum MsgSql {
-  send = 'SELECT * FROM pgmq.send(?, ?, ?::int4)',
-  send2 = 'SELECT * FROM pgmq.send(?, ?, ?::timestamp)',
-  sendBatch = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?::int4)',
-  sendBatch2 = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?::timestamp)',
+  send = 'SELECT * FROM pgmq.send(?, ?, ?, ?::int4)',
+  send2 = 'SELECT * FROM pgmq.send(?, ?, ?, ?::timestamp)',
+  sendBatch = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?::jsonb[], ?::int4)',
+  sendBatch2 = 'SELECT * FROM pgmq.send_batch(?, ?::jsonb[], ?::jsonb[], ?::timestamp)',
   read = 'SELECT * FROM pgmq.read(?, ?, ?)',
   read2 = 'SELECT * FROM pgmq.read(?, ?, ?, ?)',
   pop = 'SELECT * FROM pgmq.pop(?)',

@@ -7,6 +7,7 @@ export function parseMessage(input: RecordSnakeKeys<Message>): Message {
   const ret: Message = {
     msgId: input.msg_id,
     message: input.message,
+    headers: input.headers,
     enqueuedAt: input.enqueued_at,
     readCt: input.read_ct,
     vt: input.vt,

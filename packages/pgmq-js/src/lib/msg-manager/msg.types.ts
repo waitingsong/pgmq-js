@@ -8,22 +8,24 @@ export type MsgId = string // bigint as string
 
 export type MsgContent = object | null
 
-export interface Message<T extends MsgContent = MsgContent> {
+export interface Message<T extends MsgContent = MsgContent, H extends MsgContent = MsgContent> {
   msgId: MsgId
   message: T
   enqueuedAt: Date
   /** read count number */
   readCt: number
   vt: Date
+  headers: H
 }
 
-export interface MessageDto<T extends MsgContent = MsgContent> {
+export interface MessageDto<T extends MsgContent = MsgContent, H extends MsgContent = MsgContent> {
   msgId: MsgId
   message: T
   enqueuedAt: string
   /** read count number */
   readCt: number
   vt: string
+  headers: H
 }
 
 
@@ -35,26 +37,28 @@ type TimeStampStr = string
  * @link https://tembo-io.github.io/pgmq/api/sql/functions/#send
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+export interface SendOptions<T extends MsgContent = MsgContent, H extends MsgContent = MsgContent> extends OptionsBase {
   queue: string | string[]
   msg: T
   /**
    * @default 0
    */
   delay?: number | TimeStampStr
+  headers?: H
 }
 
 /**
  * Send multiple messages to the queue or queues (without creating a route)
  * @param delay Time in seconds before the message becomes visible. Defaults to 0.
  */
-export interface SendBatchOptions<T extends MsgContent = MsgContent> extends OptionsBase {
+export interface SendBatchOptions<T extends MsgContent = MsgContent, H extends MsgContent = MsgContent> extends OptionsBase {
   queue: string | string[]
   msgs: T[]
   /**
    * @default 0
    */
   delay?: number | TimeStampStr
+  headers?: H[]
 }
 
 /**
