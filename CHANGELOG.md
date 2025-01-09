@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.7.0](https://github.com/waitingsong/pgmq-js/compare/v6.6.1...v6.7.0) (2025-01-09)
+
+
+### Features
+
+* **mwcp:** update MessageDto ([b931d3d](https://github.com/waitingsong/pgmq-js/commit/b931d3d0d378828a3014a20acc674dcf36b45ca1))
+* **pgmq:** supports headers for pgmq v1.5.0 ([adc36da](https://github.com/waitingsong/pgmq-js/commit/adc36da5ccbfc991e854c4860f0b1d20ad177108))
+
+
+
+
+
 ## [6.6.1](https://github.com/waitingsong/pgmq-js/compare/v6.6.0...v6.6.1) (2025-01-07)
 
 **Note:** Version bump only for package pgmq-js
