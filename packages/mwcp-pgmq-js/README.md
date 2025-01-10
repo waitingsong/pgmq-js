@@ -142,9 +142,9 @@ Open url `http://127.0.0.1:7001/swagger-ui/index.html` with browser
   - [x] [purge_queue](https://tembo-io.github.io/pgmq/api/sql/functions/#purge_queue)
   - [x] [archive (single)](https://tembo-io.github.io/pgmq/api/sql/functions/#archive-single)
   - [x] [archive (batch)](https://tembo-io.github.io/pgmq/api/sql/functions/#archive-batch)
-- [ ] [Queue Management](https://tembo-io.github.io/pgmq/api/sql/functions/#queue-management)
+- [x] [Queue Management](https://tembo-io.github.io/pgmq/api/sql/functions/#queue-management)
   - [x] [create](https://tembo-io.github.io/pgmq/api/sql/functions/#create)
-  - [ ] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned)
+  - [x] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned) see `Partition` 
   - [x] [create_unlogged](https://tembo-io.github.io/pgmq/api/sql/functions/#create_unlogged)
   - [x] [detach_archive](https://tembo-io.github.io/pgmq/api/sql/functions/#detach_archive)
   - [x] [drop_queue](https://tembo-io.github.io/pgmq/api/sql/functions/#drop_queue)
@@ -153,6 +153,10 @@ Open url `http://127.0.0.1:7001/swagger-ui/index.html` with browser
   - [x] [list_queues](https://tembo-io.github.io/pgmq/api/sql/functions/#list_queues)
   - [x] [metrics](https://tembo-io.github.io/pgmq/api/sql/functions/#metrics)
   - [x] [metrics_all](https://tembo-io.github.io/pgmq/api/sql/functions/#metrics_all)
+- Partition
+  - [x] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned)
+  - [x] [show_partitions](https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#show_partitions)
+  - [x] [run_maintenance](https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#run_maintenance)
 
 
 ## License

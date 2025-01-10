@@ -7,7 +7,6 @@ dig postgres
 
 PGPASSWORD="$PGMQ_PASSWORD"
 psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SHOW TIMEZONE;"
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SELECT extname, extversion FROM pg_extension;"
 
 echo -e "\n"
 
@@ -16,5 +15,8 @@ SQL_DIR="$cwd/packages/pgmq-js/database/"
 cd "$SQL_DIR"
 . ./init-db.sh
 
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SELECT extname, extversion FROM pg_extension;"
+echo "\l" | psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d postgres
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "\d+"
 cd "$cwd"
 

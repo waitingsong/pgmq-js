@@ -5,6 +5,7 @@ import { initDbConfigPart, initDbConnectionConfig } from './config.js'
 import { type RespCommon, parseRespCommon } from './helper.js'
 import type { Transaction } from './knex.types.js'
 import { type MsgContent, type MsgId, type SendOptions, MsgManager } from './msg-manager/index.msg.js'
+import { Partition } from './partition/index.part.js'
 import { QueueManager } from './queue-manager/index.queue.js'
 import { QueueMetaManager } from './queue-meta-manager/index.queue-meta.js'
 import { type SendRouteMsgOptions, type SendRouteMsgResultItem, RouteMsg } from './route-msg/index.route-msg.js'
@@ -18,7 +19,8 @@ export class Pgmq {
   public readonly msg: MsgManager
   public readonly router: Router
   public readonly routeMsg: RouteMsg
-  protected readonly dbh: Knex
+  public readonly partition: Partition
+  public readonly dbh: Knex
   protected readonly dbConfig: DbConfig
 
   constructor(
@@ -29,6 +31,7 @@ export class Pgmq {
 
     this.dbh = createDbh(this.dbConfig)
     this.queueMeta = new QueueMetaManager(this.dbh)
+    this.partition = new Partition(this.dbh, this.queueMeta)
     this.queue = new QueueManager(this.dbh, this.queueMeta)
     this.msg = new MsgManager(this.dbh, this.queue)
     this.router = new Router(this.dbh, this.queueMeta)

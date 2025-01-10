@@ -30,12 +30,18 @@ Start a Postgres instance with the PGMQ extension installed:
 docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg17-pgmq:latest
 ```
 
-Create the pgmq extension
+Create the pgmq extension and necessary tables
 ```sh
 psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
   -f database/default/ddl/extension.sql \
   -f database/default/ddl/tb_queue_meta.sql \
   -f database/default/ddl/tb_route.sql 
+```
+
+Enable [maintenance] on the database(s)
+```sql
+ALTER SYSTEM SET pg_partman_bgw.dbname = 'postgres,db_ci_test';
+SELECT pg_reload_conf();
 ```
 
 ## Usage
@@ -165,9 +171,9 @@ interface SendRouteMsgResultItem {
   - [x] [purge_queue](https://tembo-io.github.io/pgmq/api/sql/functions/#purge_queue)
   - [x] [archive (single)](https://tembo-io.github.io/pgmq/api/sql/functions/#archive-single)
   - [x] [archive (batch)](https://tembo-io.github.io/pgmq/api/sql/functions/#archive-batch)
-- [ ] [Queue Management](https://tembo-io.github.io/pgmq/api/sql/functions/#queue-management)
+- [x] [Queue Management](https://tembo-io.github.io/pgmq/api/sql/functions/#queue-management)
   - [x] [create](https://tembo-io.github.io/pgmq/api/sql/functions/#create)
-  - [ ] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned)
+  - [x] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned) see `Partition` 
   - [x] [create_unlogged](https://tembo-io.github.io/pgmq/api/sql/functions/#create_unlogged)
   - [x] [detach_archive](https://tembo-io.github.io/pgmq/api/sql/functions/#detach_archive)
   - [x] [drop_queue](https://tembo-io.github.io/pgmq/api/sql/functions/#drop_queue)
@@ -176,6 +182,10 @@ interface SendRouteMsgResultItem {
   - [x] [list_queues](https://tembo-io.github.io/pgmq/api/sql/functions/#list_queues)
   - [x] [metrics](https://tembo-io.github.io/pgmq/api/sql/functions/#metrics)
   - [x] [metrics_all](https://tembo-io.github.io/pgmq/api/sql/functions/#metrics_all)
+- Partition
+  - [x] [create_partitioned](https://tembo-io.github.io/pgmq/api/sql/functions/#create_partitioned)
+  - [x] [show_partitions](https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#show_partitions)
+  - [x] [run_maintenance](https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#run_maintenance)
 
 
 ## License
@@ -197,3 +207,4 @@ interface SendRouteMsgResultItem {
 [cli-ch]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js/CHANGELOG.md
 
 [PGMQ]: https://tembo-io.github.io/pgmq/
+[maintenance]: https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#run_maintenance

@@ -26,7 +26,6 @@ describe(fileShortPath(import.meta.url), () => {
   })
   after(async () => {
     // await mq.queue.drop(createOpts) // queue will not be dropped case of archived
-    // @ts-expect-error
     await mq.dbh.raw(`DROP TABLE IF EXISTS pgmq.a_${createOpts.queue}`)
     // await mq.dbh.raw(`DROP TABLE IF EXISTS pgmq.q_${createOpts.queue}`) // queue will not be dropped case of archived
     await mq.destroy()
