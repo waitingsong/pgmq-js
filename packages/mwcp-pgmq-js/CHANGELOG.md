@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.8.0](https://github.com/waitingsong/pgmq-js/compare/v6.7.0...v6.8.0) (2025-01-10)
+
+
+### Features
+
+* **pgmq:** Partition Class ([b50dc6d](https://github.com/waitingsong/pgmq-js/commit/b50dc6dcabf6e8986e12687400c4cb69613893d1))
+
+
+
+
+
 # [6.7.0](https://github.com/waitingsong/pgmq-js/compare/v6.6.1...v6.7.0) (2025-01-09)
 
 
