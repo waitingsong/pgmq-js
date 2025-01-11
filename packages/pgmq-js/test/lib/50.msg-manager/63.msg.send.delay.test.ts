@@ -29,6 +29,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`msg.send(${rndString}, delay with timestamp '1.5s')`, async () => {
+    const now = await mq.getTimestamp()
     const time = await mq.getTimestamp('1.5s')
     const opts: SendOptions = {
       ...options,
@@ -39,7 +40,11 @@ describe(fileShortPath(import.meta.url), () => {
     assert(msgIds[0] === '1', 'send failed')
 
     const msg2: Message | null = await mq.msg.read({ queue: rndString })
-    assert(! msg2, 'msg2 should be null')
+    assert(
+      ! msg2,
+      'msg2 should be null: ' + JSON.stringify(msg2) + '\n msgIds: ' + msgIds.toString()
+      + `\nnow: ${now.toISOString()} time: ${time.toISOString()}`,
+    )
 
     await sleep(1_500)
     const msg3: Message | null = await mq.msg.read({ queue: rndString })
