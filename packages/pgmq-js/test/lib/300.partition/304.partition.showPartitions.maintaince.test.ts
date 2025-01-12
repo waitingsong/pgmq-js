@@ -40,7 +40,7 @@ describe(fileShortPath(import.meta.url), () => {
       await mq.partition.runMaintenance({ queue: `pgmq.q_${rndString}` })
       await sleep(2000)
       const info2 = await mq.partition.showPartitions(opts)
-      assert(info2.length === 7, 'should partitions maintained')
+      assert(info2.length === 7, 'should partitions maintained, length: ' + info2.length)
       console.log({ info2 })
 
       await mq.queue.drop(options)
