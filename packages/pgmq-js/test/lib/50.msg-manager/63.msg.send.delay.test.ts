@@ -28,9 +28,9 @@ describe(fileShortPath(import.meta.url), () => {
     await mq.destroy()
   })
 
-  it(`msg.send(${rndString}, delay with timestamp '1.5s')`, async () => {
+  it(`msg.send(${rndString}, delay with timestamp '2.8s')`, async () => {
     const now = await mq.getTimestamp()
-    const time = await mq.getTimestamp('1.5s')
+    const time = await mq.getTimestamp('2.8s')
     const opts: SendOptions = {
       ...options,
       delay: time.toISOString(),
@@ -46,7 +46,7 @@ describe(fileShortPath(import.meta.url), () => {
       + `\nnow: ${now.toISOString()} time: ${time.toISOString()}`,
     )
 
-    await sleep(1_500)
+    await sleep(2_810)
     const msg3: Message | null = await mq.msg.read({ queue: rndString })
     assert(msg3)
     assert(msg3.msgId === '1')
@@ -57,7 +57,7 @@ describe(fileShortPath(import.meta.url), () => {
   })
 
   it(`msg.send(${rndString}, delay with int 1(s))`, async () => {
-    const time = await mq.getTimestamp('1s')
+    // const time = await mq.getTimestamp('1s')
     const opts: SendOptions = {
       ...options,
       delay: 1,
