@@ -52,7 +52,7 @@ WHERE proname = 'run_maintenance'`
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     console.log({ resp4: resp4.rows })
 
-    // const sql5 = 'SELECT run_maintenance()'
+    // const sql5 = 'SELECT pgmq.run_maintenance()'
     // await mq.dbh.raw(sql5)
 
     await mq.partition.createPartitioned(createOpts)
