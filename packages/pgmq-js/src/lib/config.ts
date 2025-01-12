@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { DbConfig, DbConnectionConfig } from './types.js'
 
 
@@ -16,6 +19,18 @@ export const initDbConfigPart: Omit<DbConfig, 'connection'> = {
     min: 0,
     max: 100,
     // propagateCreateError: false,
+    afterCreate: (conn: any, done: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      conn.query('SET search_path TO pgmq, public;', (err: unknown) => {
+        if (err) {
+          // first query failed,
+          // return error and don't try to make next query
+          done(err, conn)
+          return
+        }
+        done(null, conn)
+      })
+    },
   },
   acquireConnectionTimeout: 30000,
 }
