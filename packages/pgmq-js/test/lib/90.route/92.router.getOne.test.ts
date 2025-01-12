@@ -43,7 +43,13 @@ describe(fileShortPath(import.meta.url), () => {
       const opts: GetRouteOptions = { routeId }
       route = await mq.router.getOne(opts)
       assert(route, 'should found route')
-      assert.deepStrictEqual(route?.queueIds, queueIds, 'queueIds not match')
+      assert.deepStrictEqual(
+        route?.queueIds,
+        queueIds,
+        'queueIds not match'
+        + `\nroute: ${JSON.stringify(route)}`
+        + `\nqueueIds: ${JSON.stringify(queueIds)}`,
+      )
     })
 
     it(`getOne(${rndString}) by routeName`, async () => {
