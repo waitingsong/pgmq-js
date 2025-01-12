@@ -40,7 +40,7 @@ describe(fileShortPath(import.meta.url), () => {
       const diff = ret.getTime() - now.getTime()
       console.log({ now, ret, diff })
       assert(ret instanceof Date, 'getTimestamp failed:')
-      assert(diff >= 0 && diff < 20, 'getTimestamp failed:' + diff)
+      assert(diff >= -10 && diff < 10, 'getTimestamp failed:' + diff)
     })
 
     it(`setTimeZone()`, async () => {
