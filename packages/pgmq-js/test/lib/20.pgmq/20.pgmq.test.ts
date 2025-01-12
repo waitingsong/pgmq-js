@@ -29,7 +29,7 @@ describe(fileShortPath(import.meta.url), () => {
       const diff = ret.getTime() - now.getTime()
       console.log({ now, ret, diff })
       assert(ret instanceof Date, 'getTimestamp failed:')
-      assert(diff >= 10_000 && diff < 10_010, 'getTimestamp failed:')
+      assert(diff >= 10_000 && diff < 10_010, 'getTimestamp failed:' + diff)
     })
 
     it(`getTimestamp()`, async () => {
