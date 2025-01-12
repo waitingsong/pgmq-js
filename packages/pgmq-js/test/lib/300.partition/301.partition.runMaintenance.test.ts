@@ -58,6 +58,7 @@ WHERE proname = 'run_maintenance'`
     await mq.partition.createPartitioned(createOpts)
   })
   after(async () => {
+    await sleep(3000)
     await mq.queue.drop(createOpts)
     await mq.destroy()
   })
