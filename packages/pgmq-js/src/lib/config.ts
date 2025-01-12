@@ -18,7 +18,7 @@ export const initDbConfigPart: Omit<DbConfig, 'connection'> = {
   pool: {
     min: 0,
     max: 100,
-    propagateCreateError: false,
+    // propagateCreateError: false,
     afterCreate: (conn: any, done: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       conn.query('SET search_path TO pgmq, public;', (err: unknown) => {
