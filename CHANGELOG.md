@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.1](https://github.com/waitingsong/pgmq-js/compare/v6.8.0...v6.8.1) (2025-01-12)
+
+
+### Bug Fixes
+
+* **pgmq:** case conversion use timestamptz instead of timestamp ([8b0f1d4](https://github.com/waitingsong/pgmq-js/commit/8b0f1d4a3bad40adce965931d5b0e1fb28a7561d))
+
+
+
+
+
 # [6.8.0](https://github.com/waitingsong/pgmq-js/compare/v6.7.0...v6.8.0) (2025-01-10)
 
 
