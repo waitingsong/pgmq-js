@@ -16,7 +16,7 @@ export async function mochaGlobalSetup(): Promise<void> {
       throw new Error('tb_queue_meta not empty, maybe connecting to PRODUCTION database!!!')
     }
   }
-  await mq.initEnvironment()
+  // await mq.initEnvironment()
   // await mq.SetPgPartmanBgwDbname('db_ci_test') // must via db superuser connection
 }
 
@@ -25,8 +25,8 @@ export async function mochaGlobalTeardown(): Promise<void> {
   const mq = new Pgmq('test', dbConfig)
   await mq.router.truncate()
   await mq.queueMeta.truncate()
-  await mq.dropExtension()
-  await mq.dropExtension('pg_partman')
-  await mq.dropMetaTables()
+  // await mq.dropExtension()
+  // await mq.dropExtension('pg_partman')
+  // await mq.dropMetaTables()
 }
 
