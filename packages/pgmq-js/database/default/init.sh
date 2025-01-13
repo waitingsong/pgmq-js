@@ -5,8 +5,10 @@ echo -e "\n"
 
 export PGPASSWORD="$DBUSER_PWD"
 echo 222
+echo $DBUSER
+echo $DBUSER_PWD
 echo $PGPASSWORD
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
+psql -h $PGMQ_HOST -p $PGMQ_PORT -U$DB_USER -d $PGMQ_DB -bq \
   # -f ddl/ci-config.sql \
   -f ddl/extension.sql \
   -f ddl/tb_queue_meta.sql \
