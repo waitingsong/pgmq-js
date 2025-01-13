@@ -86,6 +86,7 @@ jobs:
           POSTGRES_PORT: 5432
           POSTGRES_DB: db_ci_test
           POSTGRES_USER: postgres
+          POSTGRES_PWD: postgres
           PGPASSWORD: postgres
           PGMQ_HOST: postgres
           PGMQ_PORT: 5432
