@@ -7,7 +7,6 @@ dig postgres
 
 export PGPASSWORD="$POSTGRES_PWD"
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq -f $cwd/.scripts/ci/init-pre.sql
-# psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "SELECT usename, usecreatedb, usesuper, userepl, usebypassrls, valuntil, useconfig FROM pg_catalog.pg_user;"
 echo -e "\n"
 
 
