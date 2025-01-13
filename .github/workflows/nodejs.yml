@@ -130,6 +130,11 @@ jobs:
           CI: true
           # use `localhost` if running the job on the VM
           # use `postgres` if running the job on a container
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: dbuser
+          POSTGRES_PWD: dbuser
           PGMQ_HOST: postgres
           PGMQ_PORT: 5432
           PGMQ_DB: db_ci_test
