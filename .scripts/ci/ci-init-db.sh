@@ -6,7 +6,6 @@ psql -V
 dig postgres
 
 export PGPASSWORD="$POSTGRES_PWD"
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SHOW TIMEZONE;"
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -f $cwd/.scripts/ci/init-pre.sql
 # psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "SELECT usename, usecreatedb, usesuper, userepl, usebypassrls, valuntil, useconfig FROM pg_catalog.pg_user;"
 echo 11
@@ -19,3 +18,4 @@ cd "$SQL_DIR"
 
 export PGPASSWORD="$POSTGRES_PWD"
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -f $cwd/.scripts/ci/init-post.sql
+
