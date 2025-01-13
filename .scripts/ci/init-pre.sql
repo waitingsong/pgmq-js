@@ -5,8 +5,6 @@ CREATE USER dbuser WITH PASSWORD 'dbuser';
 GRANT CONNECT ON DATABASE db_ci_test TO dbuser;
 -- 授予 dbuser 用户对所有表的 SELECT, INSERT, UPDATE, DELETE 权限
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dbuser;
--- 授予 dbuser 用户对所有视图的 SELECT 权限
-GRANT SELECT ON ALL VIEWS IN SCHEMA public TO dbuser;
 -- 授予 dbuser 用户对所有序列的 USAGE 和 SELECT 权限
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO dbuser;
 -- 确保未来对新表、视图和序列的权限自动生效
