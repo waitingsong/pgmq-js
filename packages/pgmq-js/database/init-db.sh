@@ -8,4 +8,3 @@ cd "$SQL_DIR"
 . ./init.sh
 cd -
 
-
