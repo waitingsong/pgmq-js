@@ -138,8 +138,8 @@ jobs:
           PGMQ_HOST: postgres
           PGMQ_PORT: 5432
           PGMQ_DB: db_ci_test
-          PGMQ_USER: postgres
-          PGMQ_PASSWORD: postgres
+          PGMQ_USER: dbuser
+          PGMQ_PASSWORD: dbuser
           # redis
           REDIS_HOST: redis
           REDIS_PORT: 6379
