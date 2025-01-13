@@ -119,8 +119,6 @@ jobs:
           PGPASSWORD: postgres
           DBUSER: dbuser
           DBUSER_PWD: dbuser
-          PGMQ_USER: dbuser
-          PGMQ_USER_PWD: dbuser
 
       - name: Testing
         run: |
