@@ -6,15 +6,15 @@ echo -e "\n"
 export PGPASSWORD="$DBUSER_PWD"
 echo PGPASSWORD: $PGPASSWORD
 echo DB: $POSTGRES_DB
-echo DB_USER: $DB_USER
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -f ddl/extension.sql
+echo DB_USER: $DBUSER
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB -f ddl/extension.sql
 
 echo 10
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -d $POSTGRES_DB \
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB \
   -f ddl/tb_queue_meta.sql \
 
 echo 11
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -d $POSTGRES_DB \
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB \
   -f ddl/tb_route.sql \
 
 
