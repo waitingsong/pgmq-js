@@ -9,12 +9,9 @@ echo 100
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB \
   -f ddl/extension_user.sql \
 
-echo 101
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB \
-  -f ddl/tb_queue_meta.sql \
-
 echo 102
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB \
+  -f ddl/tb_queue_meta.sql \
   -f ddl/tb_route.sql \
 
 
