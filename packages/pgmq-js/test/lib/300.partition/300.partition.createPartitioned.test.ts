@@ -21,14 +21,6 @@ describe(fileShortPath(import.meta.url), () => {
 
   before(async () => {
     mq = new Pgmq('test', dbConfig)
-    const sql = `
-    SELECT grantee, table_name, privilege_type
-FROM information_schema.role_table_grants
-WHERE grantee = 'dbuser'
-  AND table_name = 'part_config_sub';
-    `
-    const resp = await mq.dbh.raw(sql)
-    console.log({ resp: resp.rows })
   })
   after(async () => {
     await mq.queue.drop(createOpts)
@@ -37,6 +29,14 @@ WHERE grantee = 'dbuser'
 
   describe(`Partition.createPartitioned(${rndString})`, () => {
     it(`normal`, async () => {
+      const sql = `
+    SELECT grantee, table_name, privilege_type
+FROM information_schema.role_table_grants
+WHERE grantee = 'dbuser'
+  AND table_name = 'part_config_sub';
+    `
+      const resp = await mq.dbh.raw(sql)
+      console.log({ resp: resp.rows })
       await mq.partition.createPartitioned(createOpts)
     })
   })
