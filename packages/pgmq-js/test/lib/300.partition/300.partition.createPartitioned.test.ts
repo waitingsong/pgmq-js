@@ -30,7 +30,7 @@ describe(fileShortPath(import.meta.url), () => {
   describe(`Partition.createPartitioned(${rndString})`, () => {
     it(`normal`, async () => {
       const sql = `
-    SELECT grantee, table_name, privilege_type
+    SELECT grantee, table_schema, table_name, privilege_type
 FROM information_schema.role_table_grants
 WHERE grantee = 'dbuser'
   AND table_name = 'part_config_sub';
