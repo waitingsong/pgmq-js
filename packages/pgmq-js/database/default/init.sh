@@ -7,8 +7,7 @@ export PGPASSWORD="$DBUSER_PWD"
 echo PGPASSWORD: $PGPASSWORD
 echo DB: $POSTGRES_DB
 echo DB_USER: $DB_USER
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER \
-  -f ddl/extension.sql \
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -f ddl/extension.sql
 
 echo 10
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -d $POSTGRES_DB \
