@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { DbConfig, DbConnectionConfig } from './types.js'
 
@@ -10,7 +8,7 @@ export const initDbConnectionConfig: DbConnectionConfig = {
   database: process.env['PGMQ_DB'] ? process.env['PGMQ_DB'] : 'postgres',
   user: process.env['PGMQ_USER'] ? process.env['PGMQ_USER'] : 'postgres',
   password: process.env['PGMQ_PASSWORD'] ? process.env['PGMQ_PASSWORD'] : 'postgres',
-  statement_timeout: 6000, // in milliseconds
+  // statement_timeout: 6000, // in milliseconds
 }
 
 export const initDbConfigPart: Omit<DbConfig, 'connection'> = {
@@ -19,18 +17,18 @@ export const initDbConfigPart: Omit<DbConfig, 'connection'> = {
     min: 0,
     max: 100,
     // propagateCreateError: false,
-    afterCreate: (conn: any, done: any) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      conn.query('SET search_path TO pgmq, public;', (err: unknown) => {
-        if (err) {
-          // first query failed,
-          // return error and don't try to make next query
-          done(err, conn)
-          return
-        }
-        done(null, conn)
-      })
-    },
+    // afterCreate: (conn: any, done: any) => {
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    //   conn.query('SET search_path TO pgmq, public;', (err: unknown) => {
+    //     if (err) {
+    //       // first query failed,
+    //       // return error and don't try to make next query
+    //       done(err, conn)
+    //       return
+    //     }
+    //     done(null, conn)
+    //   })
+    // },
   },
   acquireConnectionTimeout: 30000,
 }
