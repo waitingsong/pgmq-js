@@ -8,7 +8,7 @@ echo 222
 echo $DBUSER
 echo $DBUSER_PWD
 echo $PGPASSWORD
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$DB_USER -d $PGMQ_DB -bq \
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DB_USER -d $POSTGRES_DB -bq \
   # -f ddl/ci-config.sql \
   -f ddl/extension.sql \
   -f ddl/tb_queue_meta.sql \

@@ -90,6 +90,8 @@ jobs:
           PGMQ_HOST: postgres
           PGMQ_PORT: 5432
           PGMQ_DB: db_ci_test
+          PGMQ_USER: dbuser
+          PGMQ_USER_PWD: dbuser
           DBUSER: dbuser
           DBUSER_PWD: dbuser
 
