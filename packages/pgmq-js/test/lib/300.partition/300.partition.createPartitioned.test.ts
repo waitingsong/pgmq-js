@@ -9,7 +9,7 @@ import { dbConfig } from '#@/config.unittest.js'
 
 
 const rndString = genRandomName(6)
-// const rndString = 'abc0ba'
+// const rndString = 'abcdef'
 
 describe(fileShortPath(import.meta.url), () => {
   let mq: Pgmq
