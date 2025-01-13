@@ -36,7 +36,7 @@ WHERE grantee = 'dbuser'
   AND table_name = 'part_config_sub';
     `
       const resp = await mq.dbh.raw(sql)
-      console.log({ resp: resp.rows })
+      console.log({ respTable: resp.rows })
       await mq.partition.createPartitioned(createOpts)
     })
   })
