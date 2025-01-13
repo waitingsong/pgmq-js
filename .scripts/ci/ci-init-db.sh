@@ -8,9 +8,9 @@ dig postgres
 echo $DBUSER
 echo $DBUSER_PWD
 
-export PGPASSWORD="$PGPASSWORD"
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SHOW TIMEZONE;"
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "CREATE USER dbuser WITH PASSWORD 'dbuser';"
+echo 11
 echo -e "\n"
 
 
