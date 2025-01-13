@@ -19,5 +19,5 @@ echo 333
 export PGPASSWORD="$POSTGRES_PWD"
 echo $PGPASSWORD
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB \
-  -f ddl/ci-config.sql \
+  -f ddl/init-privilege.sql \
 
