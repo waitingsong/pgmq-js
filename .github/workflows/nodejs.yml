@@ -74,28 +74,6 @@ jobs:
           POSTGRES_USER: postgres
           PGPASSWORD: postgres
 
-      - name: Init Database
-        run: |
-          export cwd=`pwd`
-          . .scripts/ci/ci-env.sh
-          .scripts/ci/ci-prepare.sh
-          .scripts/ci/ci-init-db.sh
-        env:
-          CI: true
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
-          POSTGRES_DB: db_ci_test
-          POSTGRES_USER: postgres
-          POSTGRES_PWD: postgres
-          PGPASSWORD: postgres
-          PGMQ_HOST: postgres
-          PGMQ_PORT: 5432
-          PGMQ_DB: db_ci_test
-          PGMQ_USER: dbuser
-          PGMQ_USER_PWD: dbuser
-          DBUSER: dbuser
-          DBUSER_PWD: dbuser
-
       - name: Install Dependencies
         timeout-minutes: 15
         run: |
@@ -125,24 +103,27 @@ jobs:
         env:
           CI: true
 
-      # - name: Init Database
-      #   run: |
-      #     export cwd=`pwd`
-      #     . .scripts/ci/ci-env.sh
-      #     .scripts/ci/ci-prepare.sh
-      #     .scripts/ci/ci-init-db.sh
-      #   env:
-      #     CI: true
-      #     POSTGRES_HOST: postgres
-      #     POSTGRES_PORT: 5432
-      #     POSTGRES_DB: db_ci_test
-      #     POSTGRES_USER: postgres
-      #     PGPASSWORD: postgres
-      #     PGMQ_HOST: postgres
-      #     PGMQ_PORT: 5432
-      #     PGMQ_DB: db_ci_test
-      #     DBUSER: dbuser
-      #     DBUSER_PWD: dbuser
+      - name: Init Database
+        run: |
+          export cwd=`pwd`
+          . .scripts/ci/ci-env.sh
+          .scripts/ci/ci-prepare.sh
+          .scripts/ci/ci-init-db.sh
+        env:
+          CI: true
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
+          POSTGRES_PWD: postgres
+          PGPASSWORD: postgres
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: dbuser
+          PGMQ_USER_PWD: dbuser
+          DBUSER: dbuser
+          DBUSER_PWD: dbuser
 
       - name: Testing
         run: |
