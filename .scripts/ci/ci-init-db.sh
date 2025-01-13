@@ -9,7 +9,7 @@ echo $DBUSER
 echo $DBUSER_PWD
 
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SHOW TIMEZONE;"
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "CREATE USER dbuser WITH PASSWORD 'dbuser';"
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -f ./init.sql
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "\du+;"
 # psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -c "SELECT usename, usecreatedb, usesuper, userepl, usebypassrls, valuntil, useconfig FROM pg_catalog.pg_user;"
 echo 11
