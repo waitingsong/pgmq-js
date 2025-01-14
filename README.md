@@ -48,12 +48,13 @@ Start a Postgres instance with the PGMQ extension installed:
 docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io/tembo/pg17-pgmq:latest
 ```
 
-Create the pgmq extension
+Initialize the pgmq extension
 ```sh
-psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq \
-  -f packages/pgmq-js/database/default/ddl/extension.sql \
-  -f packages/pgmq-js/database/default/ddl/tb_queue_meta.sql \
-  -f packages/pgmq-js/database/default/ddl/tb_route.sql 
+import { Pgmq } from '@waiting/pgmq-js'
+
+const mq = new Pgmq('test', dbConfig)
+await mq.initEnvironment()  // Call this method **only once** for one pgmq instance
+await mq.SetPgPartmanBgwDbname('db_ci_test') // auto maintenance of partitioned tables
 ```
 
 
