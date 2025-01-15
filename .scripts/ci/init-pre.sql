@@ -23,4 +23,6 @@ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO dbuser;
 
 -- 确认当前用户是否有权限
 SELECT * FROM pg_roles WHERE rolname = 'dbuser';
+SELECT * FROM pg_catalog.pg_user;
+SELECT * FROM pg_database ;
 

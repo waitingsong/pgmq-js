@@ -134,6 +134,13 @@ jobs:
           PGPASSWORD: postgres
           DBUSER: dbuser
           DBUSER_PWD: dbuser
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: dbuser
+          PGMQ_USER_PWD: dbuser
+          DBUSER: dbuser
+          DBUSER_PWD: dbuser
 
       - name: Testing
         run: |
@@ -151,6 +158,11 @@ jobs:
           POSTGRES_DB: db_ci_test
           POSTGRES_USER: dbuser
           POSTGRES_PWD: dbuser
+          PGMQ_HOST: postgres
+          PGMQ_PORT: 5432
+          PGMQ_DB: db_ci_test
+          PGMQ_USER: dbuser
+          PGMQ_PASSWORD: dbuser
           # redis
           REDIS_HOST: redis
           REDIS_PORT: 6379
