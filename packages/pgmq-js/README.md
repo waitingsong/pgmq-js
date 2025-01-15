@@ -32,10 +32,8 @@ docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 quay.io
 
 Create the pgmq extension and necessary tables
 ```sh
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -bq \
-  -f database/default/ddl/extension.sql \
-  -f database/default/ddl/tb_queue_meta.sql \
-  -f database/default/ddl/tb_route.sql 
+export cwd=`pwd`
+.scripts/ci/ci-init-db.sh
 ```
 
 Enable [maintenance] on the database(s)
