@@ -3,20 +3,17 @@ set -e
 
 psql -V
 # netstat -tunpl
-dig postgres
+# dig postgres
 
-PGPASSWORD="$PGMQ_PASSWORD"
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SHOW TIMEZONE;"
-
+export PGPASSWORD="$POSTGRES_PWD"
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -bq -f $cwd/.scripts/ci/init-pre.sql
 echo -e "\n"
 
-
-SQL_DIR="$cwd/packages/pgmq-js/database/"
+SQL_DIR="$cwd/packages/demo/database/"
 cd "$SQL_DIR"
 . ./init-db.sh
 
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SELECT extname, extversion FROM pg_extension;"
-echo "\l" | psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d postgres
-psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "\d+"
-cd "$cwd"
+echo -e "\nInit post"
+export PGPASSWORD="$POSTGRES_PWD"
+psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -f $cwd/.scripts/ci/init-post.sql
 

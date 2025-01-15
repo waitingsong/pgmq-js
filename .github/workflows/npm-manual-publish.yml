@@ -79,23 +79,21 @@ jobs:
           npm whoami
           psql -V
           dig postgres
-          echo "\l" | psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d postgres
-          psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "\d+"
-          psql -h $PGMQ_HOST -p $PGMQ_PORT -U$PGMQ_USER -d $PGMQ_DB -c "SHOW TIMEZONE;"
+          psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$POSTGRES_USER -d $POSTGRES_DB -c "SELECT version();"
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PGMQ_HOST: postgres
-          PGMQ_PORT: 5432
-          PGMQ_DB: db_ci_test
-          PGMQ_USER: postgres
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
           PGPASSWORD: postgres
 
       - name: Install Dependencies
         timeout-minutes: 15
         run: |
           export cwd=`pwd`
-          npm i --no-audit -g lerna rollup tsx zx madge
+          npm i --no-audit -g lerna madge tsx zx rollup
           npm i --no-audit
         env:
           CI: true
@@ -128,12 +126,14 @@ jobs:
           .scripts/ci/ci-init-db.sh
         env:
           CI: true
-          PGMQ_HOST: postgres
-          PGMQ_PORT: 5432
-          PGMQ_DB: db_ci_test
-          PGMQ_USER: postgres
-          PGMQ_PASSWORD: postgres
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
+          POSTGRES_PWD: postgres
           PGPASSWORD: postgres
+          DBUSER: dbuser
+          DBUSER_PWD: dbuser
 
       - name: Testing
         run: |
@@ -146,11 +146,11 @@ jobs:
           CI: true
           # use `localhost` if running the job on the VM
           # use `postgres` if running the job on a container
-          PGMQ_HOST: postgres
-          PGMQ_PORT: 5432
-          PGMQ_DB: db_ci_test
-          PGMQ_USER: postgres
-          PGMQ_PASSWORD: postgres
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: dbuser
+          POSTGRES_PWD: dbuser
           # redis
           REDIS_HOST: redis
           REDIS_PORT: 6379
@@ -194,7 +194,7 @@ jobs:
 
     services:
       postgres:
-        image: quay.io/tembo/pg17-pgmq:latest
+        image: postgres:alpine
         ports:
           - 5432:5432
         env:
