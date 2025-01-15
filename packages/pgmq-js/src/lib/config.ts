@@ -8,7 +8,7 @@ export const initDbConnectionConfig: DbConnectionConfig = {
   database: process.env['PGMQ_DB'] ? process.env['PGMQ_DB'] : 'postgres',
   user: process.env['PGMQ_USER'] ? process.env['PGMQ_USER'] : 'postgres',
   password: process.env['PGMQ_PASSWORD'] ? process.env['PGMQ_PASSWORD'] : 'postgres',
-  // statement_timeout: 6000, // in milliseconds
+  statement_timeout: 6000, // in milliseconds
 }
 
 export const initDbConfigPart: Omit<DbConfig, 'connection'> = {

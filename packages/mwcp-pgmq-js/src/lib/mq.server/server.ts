@@ -7,7 +7,7 @@ import type { DeleteBatchOptions, ReadWithPollOptions } from '@waiting/pgmq-js'
 import { sleep } from '@waiting/shared-core'
 
 import { Message, MessageDto, Pgmq } from '##/index.js'
-import type { ConsumerCallback, ConsumerMessageDto } from '##/lib/mq.consumer/index.consumer.js'
+import { type ConsumerCallback, ConsumerMessageDto } from '##/lib/mq.consumer/index.consumer.js'
 import type { PgmqListenerOptions } from '##/lib/mq.listener/index.listener.js'
 import { PgmqManager } from '##/lib/pgmq-manager.js'
 
@@ -256,10 +256,15 @@ export class PgmqServer extends EventEmitter {
     listenerCallback: ConsumerCallback,
   ): Promise<void> {
 
-    const consumerMsg: ConsumerMessageDto = {
-      ...msg,
-      queue,
-    }
+    const consumerMsg = new ConsumerMessageDto()
+    consumerMsg.queue = queue
+    consumerMsg.msgId = msg.msgId
+    consumerMsg.message = msg.message
+    consumerMsg.headers = msg.headers
+    consumerMsg.enqueuedAt = msg.enqueuedAt
+    consumerMsg.readCt = msg.readCt
+    consumerMsg.vt = msg.vt
+
     await listenerCallback(consumerMsg)
   }
 
