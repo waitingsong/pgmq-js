@@ -20,6 +20,7 @@ jobs:
       matrix:
         node: ['lts/*']
         os: [ubuntu-latest]
+        pgmq-version: ['v1.5.0']
 
     steps:
       - uses: actions/checkout@v4
@@ -206,7 +207,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:alpine
+        image: quay.io/tembo/pg17-pgmq:${{ matrix.pgmq-version }}
         ports:
           - 5432:5432
         env:
