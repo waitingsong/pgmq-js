@@ -1,5 +1,3 @@
-import assert from 'node:assert'
-
 import type { Knex } from 'knex'
 import _knex from 'knex'
 
