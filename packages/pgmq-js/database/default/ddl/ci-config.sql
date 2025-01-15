@@ -1,6 +1,5 @@
-
 ALTER SYSTEM SET pg_partman_bgw.dbname = 'postgres,db_ci_test';
-ALTER SYSTEM SET pg_partman_bgw.interval = 7200; -- default 3600(1 hour)
+ALTER SYSTEM SET pg_partman_bgw.interval = 3600; -- default 3600(1 hour)
 SELECT pg_reload_conf();
 
 SHOW pg_partman_bgw.dbname;
