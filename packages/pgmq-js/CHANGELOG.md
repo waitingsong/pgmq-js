@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.9.0](https://github.com/waitingsong/pgmq-js/compare/v6.8.1...v6.9.0) (2025-01-15)
+
+
+### Features
+
+* **pgmq:** add Pgmq.tableExists() ([8a4954d](https://github.com/waitingsong/pgmq-js/commit/8a4954dfea2431c292c2921cddd0cffe19ae280a))
+
+
+
+
+
 ## [6.8.1](https://github.com/waitingsong/pgmq-js/compare/v6.8.0...v6.8.1) (2025-01-12)
 
 
