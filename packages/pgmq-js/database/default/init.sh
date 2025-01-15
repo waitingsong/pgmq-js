@@ -1,10 +1,10 @@
 #!/bin/bash
-set -e
+set -ex
 
 echo -e "\n"
 
 export PGPASSWORD="$DBUSER_PWD"
-# Execute with the normal user
+# Execute by the normal user
 psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U$DBUSER -d $POSTGRES_DB -bq -f ddl/extension_user.sql
 
 export PGPASSWORD="$POSTGRES_PWD"
