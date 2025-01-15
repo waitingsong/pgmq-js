@@ -38,10 +38,9 @@ describe(fileShortPath(import.meta.url), () => {
       assert(info.length === 9, 'should return partitions')
 
       await mq.partition.runMaintenance({ queue: `pgmq.q_${rndString}` })
-      await sleep(2000)
+      await sleep(3000)
       const info2 = await mq.partition.showPartitions(opts)
-      assert(info2.length === 7, 'should partitions maintained')
-      console.log({ info2 })
+      assert(info2.length === 7, 'should partitions maintained, length: ' + info2.length)
 
       await mq.queue.drop(options)
     })
@@ -53,7 +52,7 @@ describe(fileShortPath(import.meta.url), () => {
       assert(info.length === 9, 'should return partitions')
 
       await mq.partition.runMaintenance()
-      await sleep(2000)
+      await sleep(3000)
       const info2 = await mq.partition.showPartitions(opts)
       assert(info2.length === 7, 'should partitions maintained')
       console.log({ info2 })

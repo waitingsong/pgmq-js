@@ -113,6 +113,10 @@ export class Pgmq {
     return this.msg.send(options)
   }
 
+  async tableExists(tableName: string, schema = 'pgmq'): Promise<boolean> {
+    const ret = await this.dbh.schema.withSchema(schema).hasTable(tableName)
+    return ret
+  }
 }
 
 export interface SendRouteMsg {
