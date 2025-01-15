@@ -35,3 +35,9 @@ export interface QueueOptionsBase extends OptionsBase {
   queue: string
 }
 
+export enum MetaTableNames {
+  meta = 'meta',
+  queueMeta = 'tb_queue_meta',
+  route = 'tb_route',
+}
+

@@ -1,0 +1,28 @@
+
+CREATE USER dbuser WITH PASSWORD 'dbuser';
+
+-- 授予 dbuser 用户连接权限
+GRANT CONNECT ON DATABASE db_ci_test TO dbuser;
+
+-- 授予数据库的所有权限
+GRANT ALL PRIVILEGES ON DATABASE db_ci_test TO dbuser;
+
+-- 授予 dbuser 用户对所有表的 SELECT, INSERT, UPDATE, DELETE 权限
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dbuser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO dbuser;
+
+-- 授予 dbuser 用户对所有序列的 USAGE 和 SELECT 权限
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO dbuser;
+
+-- 确保未来对新表、视图和序列的权限自动生效
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO dbuser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO dbuser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO dbuser;
+
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO dbuser;
+
+-- 确认当前用户是否有权限
+SELECT * FROM pg_roles WHERE rolname = 'dbuser';
+SELECT * FROM pg_catalog.pg_user;
+SELECT * FROM pg_database ;
+

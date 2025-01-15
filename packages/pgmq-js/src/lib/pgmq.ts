@@ -38,6 +38,42 @@ export class Pgmq {
     this.routeMsg = new RouteMsg(this.dbh, this.msg, this.queueMeta, this.router)
   }
 
+  /**
+   * Call this method **only once** for one pgmq instance
+   * - Create extensions pgmq, pg_partman,
+   * - Create meta tables
+   */
+  // async initEnvironment(): Promise<void> {
+  //   // await this.dbh.raw('SET search_path TO pgmq, public;')
+  //   await this.createExtension()
+  //   await this.createExtension('pg_partman')
+
+  //   const b1 = await this.tableExists(MetaTableNames.queueMeta) && await this.tableExists(MetaTableNames.route)
+  //   if (! b1) {
+  //     await this.createMetaTables()
+  //   }
+  // }
+
+  /**
+   * For auto maintenance of partitioned tables
+   * Note: MUST call with database superuser connection!
+   * @param name dbname(s) e.g. 'test' or  ['postgres', 'test'], if empty, reset to empty
+   * @description Execute `ALTER SYSTEM SET pg_partman_bgw.dbname = '<name>,<name2>...';` and `SELECT pg_reload_conf();`
+   * @link https://github.com/pgpartman/pg_partman/blob/development/doc/pg_partman.md#run_maintenance
+   */
+  // async SetPgPartmanBgwDbname(names: string | string[]): Promise<void> {
+  //   const arr = Array.isArray(names)
+  //     ? names
+  //     : names ? [names] : []
+  //   const nameSet = arr.length ? new Set(arr) : new Set()
+  //   const txt = nameSet.size ? Array.from(nameSet).join(',') : ''
+  //   const sql = `ALTER SYSTEM SET pg_partman_bgw.dbname = '${txt}';`
+  //   await this.dbh.raw(sql)
+  //   const sql2 = 'SELECT pg_reload_conf();'
+  //   await this.dbh.raw(sql2)
+  // }
+
+
   async getCurrentTime(): Promise<Date> {
     const res = await this.dbh.raw('SELECT CURRENT_TIMESTAMP AS currenttime;') as unknown
     const ret = parseRespCommon(res as RespCommon)
@@ -113,6 +149,70 @@ export class Pgmq {
     return this.msg.send(options)
   }
 
+  /**
+   * Create extension if not exists as the same user of other operations
+   * @param extname default 'pgmq', can be 'pg_partman' for partitioning
+   */
+  // async createExtension(extname = 'pgmq'): Promise<void> {
+  //   assert(extname, 'extname is required')
+  //   if (extname === 'pgmq') {
+  //     await this.dbh.raw(`CREATE EXTENSION IF NOT EXISTS ${extname};`)
+  //   }
+  //   else {
+  //     await this.dbh.raw(`CREATE EXTENSION IF NOT EXISTS ${extname} WITH SCHEMA pgmq;`)
+  //   }
+  // }
+
+  /**
+   * Drop extension if exists as the same user of other operations
+   * @param extname default 'pgmq', can be 'pg_partman' for partitioning
+   */
+  // async dropExtension(extname = 'pgmq'): Promise<void> {
+  //   assert(extname, 'extname is required')
+  //   await this.dbh.raw(`DROP EXTENSION IF EXISTS ${extname};`)
+  //   if (extname === 'pgmq') {
+  //     await this.dropMetaTables()
+  //   }
+  // }
+
+//   protected async createMetaTables(): Promise<void> {
+//     const sql1 = `CREATE TABLE IF NOT EXISTS pgmq.tb_queue_meta (
+//   queue_id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+//   queue_name varchar(60) NOT NULL,
+//   queue_key varchar(512),
+//   json jsonb,
+//   PRIMARY KEY (queue_id),
+//   ctime TIMESTAMP(6) NOT NULL DEFAULT now(),
+//   mtime TIMESTAMP(6)
+// ); `
+//     await this.dbh.raw(sql1)
+
+//     const sql2 = `CREATE TABLE IF NOT EXISTS pgmq.tb_route (
+//   route_id int8 GENERATED ALWAYS AS IDENTITY NOT NULL,
+//   route_name varchar(512) NOT NULL,
+//   queue_ids int8[] NOT NULL,
+//   json jsonb,
+//   PRIMARY KEY (route_id),
+//   ctime TIMESTAMP(6) NOT NULL DEFAULT now(),
+//   mtime TIMESTAMP(6)
+// );
+
+// CREATE UNIQUE INDEX route_route_name_uidx ON pgmq.tb_route (LOWER(route_name));
+// CREATE INDEX route_queue_ids_idx ON pgmq.tb_route (queue_ids);
+//     `
+//     await this.dbh.raw(sql2)
+
+//   }
+
+  // async dropMetaTables(): Promise<void> {
+  //   await this.dbh.raw('DROP TABLE IF EXISTS pgmq.tb_queue_meta;')
+  //   await this.dbh.raw('DROP TABLE IF EXISTS pgmq.tb_route;')
+  // }
+
+  async tableExists(tableName: string, schema = 'pgmq'): Promise<boolean> {
+    const ret = await this.dbh.schema.withSchema(schema).hasTable(tableName)
+    return ret
+  }
 }
 
 export interface SendRouteMsg {

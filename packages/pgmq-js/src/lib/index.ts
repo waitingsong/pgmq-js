@@ -1,6 +1,6 @@
 
 export * from './config.js'
-export type * from './types.js'
+export * from './types.js'
 export * from './pgmq.js'
 export * from './queue-manager/index.queue.js'
 export * from './queue-meta-manager/index.queue-meta.js'
